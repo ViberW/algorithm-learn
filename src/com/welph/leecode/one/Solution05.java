@@ -1,9 +1,5 @@
 package com.welph.leecode.one;
 
-import com.welph.leecode.common.Print;
-
-import java.util.*;
-
 /**
  * 给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
  *
@@ -14,13 +10,16 @@ import java.util.*;
 public class Solution05 {
 
     public static void main(String[] args) {
-        String s = "babad";
+        String s = "babbad";
         System.out.println(longestPalindrome(s));
         System.out.println(longestPalindrome01(s));
         System.out.println(longestPalindrome03(s));
+        System.out.println(longestPalindrome06(s));
     }
 
-    //
+    /**
+     * 中心扩展
+     */
     public static String longestPalindrome(String s) {
         char[] chars = s.toCharArray();
         int len = chars.length;
@@ -77,8 +76,8 @@ public class Solution05 {
                 String reverse = new StringBuffer(str).reverse().toString();          //反向字符串
                 if (reverse.equals(str) && str.length() > maxStr.length()) {
                     //判断前后索引是否一致,防止因为本身字符串正反相同.但不对称
-                    for (int k = i, n = i + j; k < n; k++, n--) {
-                        if (s.charAt(i + k) != s.charAt(i + n)) {
+                    for (int k = 0, n = str.length() - 1; k < n; k++, n--) {
+                        if (str.charAt(k) != str.charAt(n)) {
                             break point;
                         }
                     }
@@ -130,15 +129,8 @@ public class Solution05 {
         //新找到1,2的回文->3的回文->4的回文..->n的回文
         // 讨论特殊情况，s的长度小于等于2，都视为特殊情况
         int length = s.length();
-        if (length == 0 || length == 1) {
+        if (length <= 1) {
             return s;
-        }
-        if (length == 2) {
-            if (s.charAt(0) == s.charAt(1)) {
-                return s;
-            } else {
-                return s.substring(0, 1);
-            }
         }
         // 讨论一般情况
         String result = s.substring(0, 1);
@@ -171,12 +163,12 @@ public class Solution05 {
         // 只有按列遍历，才能保证在计算s[left][right]前，s[left + 1][right - 1]已经被计算过
         for (int right = 2; right < length; right++) {
             for (int left = 0; left <= right - 2; left++) {
-                if (s.charAt(left) == s.charAt(right) && ((left + 2 == right) || matrix[left + 1][right - 1] > 0)) {
+                if (s.charAt(left) == s.charAt(right) && (matrix[left + 1][right - 1] > 0)) {
                     int cur_length = matrix[left + 1][right - 1] + 2; //回文子串长度增加2
                     matrix[left][right] = cur_length;
                     // 最大长度为cur_length的结果
                     if (result.length() < cur_length) {
-                        result = s.substring(left, right - left + 1);
+                        result = s.substring(left, right + 1);
                     }
                 } else {
                     //如果不是回文，则matrix[left][right]应设置为0
@@ -185,5 +177,139 @@ public class Solution05 {
             }
         }
         return result;
+    }
+
+    /**
+     * 动态规划,简化版
+     */
+    public String longestPalindrome04(String s) {
+        int len = s.length();
+        if (len <= 1) return s;
+        int st = 0, end = 0;
+        char[] chars = s.toCharArray();
+        boolean[][] dp = new boolean[len][len];
+        for (int i = 0; i < len; i++) {
+            dp[i][i] = true;
+            for (int j = 0; j < i; j++) {
+                if (j + 1 == i) {
+                    dp[j][i] = chars[j] == chars[i];
+                } else {
+                    dp[j][i] = dp[j + 1][i - 1] && chars[j] == chars[i];
+                }
+                if (dp[j][i] && i - j > end - st) {
+                    st = j;
+                    end = i;
+                }
+            }
+        }
+        return s.substring(st, end + 1);
+    }
+
+    static int st, end;
+
+    /**
+     * 中心扩展算法的简化版,
+     */
+    public static String longestPalindrome05(String s) {
+        st = 0;
+        end = 0;
+        int len = s.length();
+        if (len <= 1) return s;
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < len; i++) {
+            helper(chars, i, i);
+            helper(chars, i, i + 1);
+        }
+        return s.substring(st, end + 1);
+    }
+
+    private static void helper(char[] chars, int l, int r) {
+        while (l >= 0 && r < chars.length && chars[l] == chars[r]) {
+            --l;
+            ++r;
+        }
+        if (end - st < r - l - 2) {
+            st = l + 1;
+            end = r - 1;
+        }
+    }
+
+    /**
+     * manacher(马拉车)算法
+     * 定位到最长回文串中的右端点最大值(不一定是最长的最长回文串仅仅是需要知道最大的右端点对应的位置)
+     * 方便用于极端区分
+     *
+     * @param s
+     * @return
+     */
+    public static String longestPalindrome06(String s) {
+        String s1 = initStr(s);
+        int[] count = new int[s1.length()];
+        int pR = -1;
+        int index = 0;
+        int max = Integer.MIN_VALUE;
+        int center = 0;
+        for (int i = 0; i < s1.length(); i++) {
+            count[i] = pR > i ? Math.min(pR - i, count[2 * index - i]) : 1;
+            while (i + count[i] < s1.length() && i - count[i] > -1) {
+                if (s1.charAt(i + count[i]) == s1.charAt(i - count[i])) {
+                    count[i]++;
+                } else {
+                    break;
+                }
+            }
+            if (i + count[i] > pR) {
+                pR = i + count[i];
+                index = i;
+            }
+            if (count[i] > max) {
+                max = count[i];
+                center = i;
+            }
+        }
+        max = max - 1;
+        //因为对于填充的字符串来说, 除开第一个和最后一个索引,其他的一定存在#...#包裹住,所以除2即可
+        return s.substring((center - max) / 2, (center + max) / 2);
+    }
+
+    public static String initStr(String str) {
+        char[] chars = str.toCharArray();
+        StringBuffer sbuffer = new StringBuffer("#");
+        for (char c : chars) {
+            sbuffer.append(c).append("#");
+        }
+        return sbuffer.toString();
+    }
+
+    /**
+     * 滑动窗口,类似最长公共子串
+     *
+     * @param s
+     * @return
+     */
+    public static String longestPalindrome07(String s) {
+        int len = s.length();
+        if (len <= 1)
+            return s;
+        String longest = s.substring(0, 1);
+        for (int i = 2; i < len + 1; i++) {
+            for (int j = 0; j < len - i + 1; j++) {
+                if (isPalindromic(s.substring(j, j + i))) {
+                    longest = s.substring(j, j + i);
+                    break;
+                }
+            }
+        }
+        return longest;
+    }
+
+    private static boolean isPalindromic(String substr) {
+        int len = substr.length();
+        for (int i = 0; i < len / 2; i++) {
+            //每次都去比较
+            if (substr.charAt(i) != substr.charAt(len - i - 1))
+                return false;
+        }
+        return true;
     }
 }
