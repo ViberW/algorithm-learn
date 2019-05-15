@@ -84,4 +84,23 @@ public class Solution12 {
         String I[] = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
         return M[num / 1000] + C[(num % 1000) / 100] + X[(num % 100) / 10] + I[num % 10];
     }
+
+    /**
+     * 这个方法和上面的方法类似   哈希方法
+     */
+    public String intToRoman02(int num) {
+        int[] value = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+        String[] dic = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+        String str = "";
+        int i = 0;
+        while (num > 0 && i < dic.length) {
+            if (num >= value[i]) {
+                str += dic[i];
+                num -= value[i];
+            } else {
+                i++;
+            }
+        }
+        return str;
+    }
 }
