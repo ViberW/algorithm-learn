@@ -1,4 +1,4 @@
-package com.welph.leecode.one;
+package com.welph.leecode.part_1_20;
 
 import java.util.Arrays;
 

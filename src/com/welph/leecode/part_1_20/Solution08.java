@@ -1,4 +1,4 @@
-package com.welph.leecode.one;
+package com.welph.leecode.part_1_20;
 
 /**
  * 请你来实现一个 atoi 函数，使其能将字符串转换成整数。

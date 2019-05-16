@@ -1,4 +1,4 @@
-package com.welph.leecode.one;
+package com.welph.leecode.part_1_20;
 
 /**
  * 编写一个函数来查找字符串数组中的最长公共 [前缀]。

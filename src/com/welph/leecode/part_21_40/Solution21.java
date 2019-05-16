@@ -1,4 +1,4 @@
-package com.welph.leecode.one;
+package com.welph.leecode.part_21_40;
 
 import com.welph.leecode.common.ListNode;
 
