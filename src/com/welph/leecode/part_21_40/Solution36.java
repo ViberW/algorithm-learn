@@ -26,6 +26,7 @@ public class Solution36 {
                 {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
                 {'.', '.', '.', '.', '8', '.', '.', '7', '9'}};
         System.out.println(isValidSudoku(board));
+        System.out.println(isValidSudoku2(board));
     }
 
     public static boolean isValidSudoku(char[][] board) {
@@ -51,6 +52,33 @@ public class Solution36 {
                     }
                 }
                 ydp[i][index] = j + 1;
+                xdp[j][index] = true;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isValidSudoku2(char[][] board) {
+        //只能一步步的放
+        boolean[][] ydp = new boolean[9][9];
+        boolean[][] xdp = new boolean[9][9];
+        boolean[][][] xy = new boolean[3][3][9];
+        char ch;
+        int index;
+        int x;
+        for (int i = 0; i < 9; i++) {
+            x = i / 3;
+            for (int j = 0; j < 9; j++) {
+                ch = board[i][j];
+                if (ch == '.') {
+                    continue;
+                }
+                index = ch - '1';
+                if (ydp[i][index] || xdp[j][index] || xy[x][j / 3][index]) {
+                    return false;
+                }
+                xy[x][j / 3][index] = true;
+                ydp[i][index] = true;
                 xdp[j][index] = true;
             }
         }
