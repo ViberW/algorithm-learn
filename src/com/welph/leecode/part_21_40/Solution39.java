@@ -87,9 +87,6 @@ public class Solution39 {
 
     /**
      * 用实体感觉还是慢了，速度不快
-     * @param candidates
-     * @param target
-     * @return
      */
     public static List<List<Integer>> combinationSum2(int[] candidates, int target) {
         Arrays.sort(candidates);
