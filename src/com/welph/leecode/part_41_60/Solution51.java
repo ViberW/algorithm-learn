@@ -78,8 +78,7 @@ public class Solution51 {
             }
             if (check(arr, i, y, n)) {
                 arr[y][i] = true;
-                if (settle(arr, y + 1, n, rs)) {
-                }
+                settle(arr, y + 1, n, rs);
             }
         }
         return false;
