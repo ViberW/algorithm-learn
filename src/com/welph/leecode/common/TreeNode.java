@@ -1,5 +1,9 @@
 package com.welph.leecode.common;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * <pre>
  *     author: Blankj
@@ -10,7 +14,7 @@ package com.welph.leecode.common;
  */
 public class TreeNode {
 
-    public int      val;
+    public int val;
     public TreeNode left;
     public TreeNode right;
 
@@ -86,5 +90,29 @@ public class TreeNode {
             res.append(" ");
         }
         System.out.println(res);
+    }
+
+    public static void printFront(TreeNode node) {
+        List<Integer> results = new ArrayList<>();
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        results.add(node.val);
+        queue.add(node);
+        TreeNode pop;
+        while (queue.peek() != null) {
+            pop = queue.pop();
+            if (null != pop.left) {
+                results.add(pop.left.val);
+                queue.add(pop.left);
+            } else {
+                results.add(null);
+            }
+            if (null != pop.right) {
+                results.add(pop.right.val);
+                queue.add(pop.right);
+            } else {
+                results.add(null);
+            }
+        }
+        System.out.println(results);
     }
 }
