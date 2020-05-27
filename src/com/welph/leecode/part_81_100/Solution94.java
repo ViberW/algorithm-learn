@@ -75,4 +75,40 @@ public class Solution94 {
         }
         return result;
     }
+
+    /**
+     * 莫里斯遍历(Morris)
+     * 我们使用一种新的数据结构：线索二叉树。方法如下：
+     * Step 1: 将当前节点current初始化为根节点
+     * Step 2: While current不为空，
+     * 若current没有左子节点
+     * .   a. 将current添加到输出
+     * .   b. 进入右子树，亦即, current = current.right
+     * 否则
+     * .   a. 在current的左子树中，令current成为最右侧节点的右子节点
+     * .   b. 进入左子树，亦即，current = current.left
+     * <p>
+     * 下面这种遍历会破会树的结构, 若是需要恢复,则需要.加一层判断, 父节点,与当前的节点是否一致;
+     */
+    public static List<Integer> inorderTraversal3(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        TreeNode curr = root;
+        TreeNode pre;
+        while (curr != null) {
+            if (curr.left == null) {
+                res.add(curr.val);
+                curr = curr.right; // move to next right node
+            } else { // has a left subtree
+                pre = curr.left;
+                while (pre.right != null) { // find rightmost
+                    pre = pre.right;
+                }
+                pre.right = curr; // put cur after the pre node
+                TreeNode temp = curr; // store cur node
+                curr = curr.left; // move cur to the top of the new tree
+                temp.left = null; // original cur left be null, avoid infinite loops
+            }
+        }
+        return res;
+    }
 }
