@@ -76,7 +76,7 @@ public class Solution99 {
                 y = root;
                 //第一次找到了后 保存两者之间的数据 x =pred y = root
                 if (x == null) x = pred;
-                //第二次找到后,则 y = current-root x =若存在,则不处理.说明,是交换,最开始那两个点就好了
+                    //第二次找到后,则 y = current-root x =若存在,则不处理.说明,是交换,最开始那两个点就好了
                 else break;
             }
             pred = root;
@@ -91,4 +91,8 @@ public class Solution99 {
         a.val = b.val;
         b.val = tmp;
     }
+
+    /**
+     * 还可以使用{@link Solution94}的Morris遍历
+     */
 }
