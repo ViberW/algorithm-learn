@@ -48,7 +48,7 @@ public class Solution102 {
         queue.add(root);
         int expect = 1;
         int next = 0;
-        List<Integer> current = new ArrayList<>();
+        List<Integer> current = new ArrayList<>(expect * 4 / 3 + 2);
         result.add(current);
         while (!queue.isEmpty()) {
             if (expect == 0) {
@@ -57,7 +57,7 @@ public class Solution102 {
                 }
                 expect = next;
                 next = 0;
-                current = new ArrayList<>();
+                current = new ArrayList<>(expect * 4 / 3 + 2);
                 result.add(current);
             }
             TreeNode pop = queue.pop();
