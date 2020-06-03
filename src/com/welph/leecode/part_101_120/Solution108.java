@@ -44,4 +44,8 @@ public class Solution108 {
         root.right = sortedArrayToBST(nums, middle + 1, r);
         return root;
     }
+
+    /**
+     * 选择中间位置的左边或者右边,皆是可以的; 保证数量不超过两倍即可;
+     */
 }
