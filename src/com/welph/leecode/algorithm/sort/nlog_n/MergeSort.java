@@ -1,7 +1,6 @@
-package com.welph.leecode.algorithm.sort.log_n;
+package com.welph.leecode.algorithm.sort.nlog_n;
 
 import java.util.Arrays;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 归并排序 : 分治思想

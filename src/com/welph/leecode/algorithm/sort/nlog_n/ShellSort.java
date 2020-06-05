@@ -1,4 +1,4 @@
-package com.welph.leecode.algorithm.sort.log_n;
+package com.welph.leecode.algorithm.sort.nlog_n;
 
 import java.util.Arrays;
 
@@ -37,7 +37,6 @@ public class ShellSort {
         }
         //按增量序列个数 k，对序列进行 k 趟排序；
         while (gap > 0) {
-            System.out.println(gap);
             //每趟排序，根据对应的增量 ti，将待排序列分割成若干长度为 m 的子序列，
             for (int i = gap; i < arr.length; i++) {
                 //插入排序的逻辑
