@@ -20,7 +20,7 @@ public class BinaryQuery {
         int mid;
         int index = -1;
         while (l <= r) {
-            mid = (l + r) / 2;
+            mid = l + ((r - l) >> 1);
             if (arr[mid] > target) {
                 r = mid - 1;
             } else if (arr[mid] < target) {
@@ -41,7 +41,7 @@ public class BinaryQuery {
         int mid;
         int index = -1;
         while (l <= r) {
-            mid = (l + r) / 2;
+            mid = l + ((r - l) >> 1);
             if (arr[mid] > target) {
                 r = mid - 1;
             } else if (arr[mid] < target) {
@@ -62,7 +62,7 @@ public class BinaryQuery {
         int mid;
         int index = -1;
         while (l <= r) {
-            mid = (l + r) / 2;
+            mid = l + ((r - l) >> 1);
             if (arr[mid] > target) {
                 index = mid;
                 r = mid - 1;
@@ -83,7 +83,7 @@ public class BinaryQuery {
         int mid;
         int index = -1;
         while (l <= r) {
-            mid = (l + r) / 2;
+            mid = l + ((r - l) >> 1);
             if (arr[mid] > target) {
                 index = mid;
                 r = mid - 1;
