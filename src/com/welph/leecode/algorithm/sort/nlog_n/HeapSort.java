@@ -14,10 +14,12 @@ import java.util.Arrays;
  * 3.把堆的尺寸缩小 1，并调用 shift_down(0)，目的是把新的数组顶端数据调整到相应位置；
  * .
  * 4.重复步骤 2，直到堆的尺寸为 1。
+ * <p>
+ * 注意: 堆并不一意味着排好序了.
  */
 public class HeapSort {
     public static void main(String[] args) {
-        int[] arr = {4, 5, 6, 3, 2, 1};
+        int[] arr = {4, 5, 3, 2, 1, 6};
         sort(arr);
         System.out.println(Arrays.toString(arr));
     }
@@ -25,9 +27,12 @@ public class HeapSort {
     public static void sort(int[] arr) {
         int len = arr.length;
         buildMaxHeap(arr, len);
+        //但本身还没有排好序,所以此案有这一步操作;
+        //将第一元素放到最后,之后只需要处理len-1范围内的数据,重复如此
         for (int i = len - 1; i > 0; i--) {
             swap(arr, 0, i);
             len--;
+            //每个元素从上往下堆化;
             heapify(arr, 0, len);
         }
     }
@@ -40,7 +45,7 @@ public class HeapSort {
 
     //构建堆
     private static void heapify(int[] arr, int i, int r) {
-        int left = 2 * i + 1;
+        int left = 2 * i + 1;   //因为是完全二叉树,所有,左右子节点,分别为2*i+1, 2*i+2.若是使用1作为起始索引,则2*i和2*i+1ß
         int right = 2 * i + 2;
         int largest = i;
 
