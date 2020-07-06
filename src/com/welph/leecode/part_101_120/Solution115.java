@@ -47,11 +47,36 @@ public class Solution115 {
         System.out.println(numDistinct("rabbbit", "rabbit"));
     }
 
+
     /**
-     * 需要依靠字符串的匹配的相关算法.
+     * 使用二维数组bp[i][j] i为t的长度 j为s的长度, 信息
+     * bp[i][j]  :
+     * //每一次的匹配,都等于上一次可能的匹配次数, 加上(若当前s[i-1]=t[j-1],则额外的dp[i-1][j-1])
+     * 当s[i-1] = t[j-1]  时 bp[i][j] = bp[i-1][j-1] + dp[i][j-1]
+     * 当s[i] !=t[j]  时 bp[i][j] = dp[i][j-1]
+     * <p>
+     * explain: {@author 在处理的时候, 这类需要动态规划, 首先想到多条多维, 再逐次看看能够缩减}
      */
     public static int numDistinct(String s, String t) {
+        int m = s.length();
+        int n = t.length();
+        int[][] dp = new int[n + 1][m + 1]; //t放在一维.为了充分利用缓存行
 
-        return 0;
+        for (int j = 0; j <= m; j++) {
+            dp[0][j] = 1;
+        }
+
+        char cur;
+        for (int i = 1; i <= n; i++) {
+            cur = t.charAt(i - 1);
+            for (int j = 1; j <= m; j++) {
+                if (cur == s.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + dp[i][j - 1];
+                } else {
+                    dp[i][j] = dp[i][j - 1];
+                }
+            }
+        }
+        return dp[n][m];
     }
 }
