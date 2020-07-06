@@ -11,6 +11,8 @@ import com.welph.leecode.algorithm.string.common.Trie;
  * -- 当然可以使用跳表,红黑树,散列表类替换子节点数组;
  * -- 当然还有trie树的变种
  * > 比如. 缩点优化，就是对只有一个子节点的节点，而且此节点不是一个串的结束节点,可以将此节点与子节点合并(节省空间)
+ * <p>
+ * Apache Commons 提供了trie的实现
  */
 public class TrieDemo {
 
