@@ -35,6 +35,7 @@ public class DijkstraDemo {
         public boolean isEmpty() { // TODO: 留给读者实现...
             return false;
         }
+
     }
 
     /**
@@ -78,6 +79,60 @@ public class DijkstraDemo {
         System.out.print(s);
         print(s, t, predecessor);
     }
+
+    /**
+     * A*算法
+     */
+    public void astar(int s, int t, int v, LinkedList<Edge> adj[]) { // 从顶点s到顶点t的路径
+        Vertex[] vertexes = new Vertex[v];
+        for (int i = 0; i < v; ++i) {
+            vertexes[i] = new Vertex(i, Integer.MAX_VALUE);
+        }
+
+        int[] predecessor = new int[v]; // 用来还原路径
+        // 按照vertex的f值构建的小顶堆，而不是按照dist
+        PriorityQueue queue = new PriorityQueue(v);  //todo dijkstra变动4. 使用f值作为优先级的判断
+        boolean[] inqueue = new boolean[v]; // 标记是否进入过队列
+        vertexes[s].dist = 0;
+        vertexes[s].f = 0;  //todo dijkstra变动1
+        queue.add(vertexes[s]);
+        inqueue[s] = true;
+        LABEL:
+        while (!queue.isEmpty()) {
+            Vertex minVertex = queue.poll(); // 取堆顶元素并删除
+            for (int i = 0; i < adj[minVertex.id].size(); ++i) {
+                Edge e = adj[minVertex.id].get(i); // 取出一条minVetex相连的边
+                Vertex nextVertex = vertexes[e.tid]; // minVertex-->nextVertex
+                if (minVertex.dist + e.w < nextVertex.dist) { // 更新next的dist,f
+                    nextVertex.dist = minVertex.dist + e.w;
+                    nextVertex.f = nextVertex.dist + hManhattan(nextVertex, vertexes[t]);//todo dijkstra变动2
+                    predecessor[nextVertex.id] = minVertex.id;
+                    if (inqueue[nextVertex.id]) {
+                        queue.update(nextVertex);
+                    } else {
+                        queue.add(nextVertex);
+                        inqueue[nextVertex.id] = true;
+                    }
+                }
+                //todo dijkstra变动3
+                if (nextVertex.id == t) { // 只要到达t就可以结束while了 ,不像dijkstra算法那样求最优解
+                    //queue.clear(); // 清空queue，才能推出while循环
+                    break LABEL;
+                }
+            }
+        }
+        // 输出路径
+        System.out.print(s);
+        print(s, t, predecessor); // print函数请参看Dijkstra算法的实现
+    }
+
+    /**
+     * 曼哈顿记录
+     */
+    private int hManhattan(Vertex nextVertex, Vertex vertex) {
+        return Math.abs(nextVertex.x - vertex.x) + Math.abs(nextVertex.y - vertex.y);
+    }
+
 
     private void print(int s, int t, int[] predecessor) {
         if (s == t) return;
