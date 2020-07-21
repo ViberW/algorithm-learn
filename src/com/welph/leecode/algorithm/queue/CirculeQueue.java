@@ -1,7 +1,7 @@
 package com.welph.leecode.algorithm.queue;
 
 /**
- * 循环队列代码
+ * 循环队列代码 Disruptor
  */
 public class CirculeQueue {
     private int head = 0;
