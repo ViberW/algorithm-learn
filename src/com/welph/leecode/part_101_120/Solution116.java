@@ -3,7 +3,7 @@ package com.welph.leecode.part_101_120;
 import com.welph.leecode.common.Node;
 
 /**
- * 给定一个完美二叉树，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：
+ * 给定一个[完美二叉树]，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：
  * <p>
  * struct Node {
  * int val;
@@ -34,12 +34,45 @@ public class Solution116 {
         Node.print(newNode);
     }
 
-    /**
-     * 填充它的每个 next 指针.对应于同一层, 像是前序遍历的方式
-     */
     public static Node connect(Node root) {
-        //常量级额外空间!
+        connected(root);
+        return root;
+    }
 
-        return null;
+    public static void connected(Node root) {
+        if (root == null || root.left == null) {
+            return;
+        }
+        root.left.next = root.right;//因为是完美二叉树
+        if (root.next != null) {
+            root.right.next = root.next.left; //因为是完美二叉树
+        }
+        connect(root.left);
+        connect(root.right);
+    }
+
+    /**
+     * 不用递归
+     *
+     * @param root
+     * @return
+     */
+    public Node connect2(Node root) {
+        if (root == null) {
+            return root;
+        }
+        Node leftmost = root;
+        while (leftmost.left != null) {
+            Node head = leftmost;
+            while (head != null) {
+                head.left.next = head.right;
+                if (head.next != null) {
+                    head.right.next = head.next.left;
+                }
+                head = head.next;
+            }
+            leftmost = leftmost.left;
+        }
+        return root;
     }
 }
