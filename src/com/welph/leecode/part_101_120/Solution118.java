@@ -30,6 +30,10 @@ public class Solution118 {
         }
     }
 
+    /**
+     * 除了上一层的相加
+     * 也可以理解为： 当前层 = 【上一层前加0 】+【上一层的后加0】
+     */
     public static List<List<Integer>> generate(int numRows) {
         List<List<Integer>> results = new ArrayList<>();
         List<Integer> list;
