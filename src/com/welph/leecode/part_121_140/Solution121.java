@@ -29,7 +29,7 @@ public class Solution121 {
     }
 
     /**
-     * 寻找相差最大的两个值，至少保证前后区分开来
+     * 寻找相差最大的两个值，至少保证前后区分开来.
      */
     public static int maxProfit(int[] prices) {
         int len = prices.length;
