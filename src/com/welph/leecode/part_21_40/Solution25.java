@@ -1,6 +1,5 @@
 package com.welph.leecode.part_21_40;
 
-import com.sun.org.apache.regexp.internal.RE;
 import com.welph.leecode.common.ListNode;
 
 /**
