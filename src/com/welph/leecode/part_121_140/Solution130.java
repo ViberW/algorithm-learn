@@ -1,68 +1,128 @@
 package com.welph.leecode.part_121_140;
 
-import com.welph.leecode.common.TreeNode;
+import java.util.Arrays;
 
 /**
- * .给定一个二叉树，它的每个结点都存放一个0-9的数字，每条从根到叶子节点的路径都代表一个数字。
- * .例如，从根到叶子节点路径 1->2->3 代表数字 123。
- * .计算从根到叶子节点生成的所有数字之和。
- * .说明:叶子节点是指没有子节点的节点。
- * .示例 1:
- * .
- * .输入: [1,2,3]
- * .    1
- * .   / \
- * .  2   3
- * .输出: 25
- * .解释:
- * .从根到叶子节点路径 1->2 代表数字 12.
- * .从根到叶子节点路径 1->3 代表数字 13.
- * .因此，数字总和 = 12 + 13 = 25.
- * .示例 2:
- * .输入: [4,9,0,5,1]
- * .    4
- * .   / \
- * .  9   0
- * . / \
- * .5   1
- * .输出: 1026
- * .解释:
- * .从根到叶子节点路径 4->9->5 代表数字 495.
- * .从根到叶子节点路径 4->9->1 代表数字 491.
- * .从根到叶子节点路径 4->0 代表数字 40.
- * .因此，数字总和 = 495 + 491 + 40 = 1026.
+ * 给定一个二维的矩阵，包含'X'和'O'（字母 O）。
+ * <p>
+ * 找到所有被 'X' 围绕的区域，并将这些区域里所有的'O' 用 'X' 填充。
+ * <p>
+ * 示例:
+ * <p>
+ * 'X','X','X','X'
+ * 'X','O','O','X'
+ * 'X','X','O','X'
+ * 'X','O','X','X'
+ * 运行你的函数后，矩阵变为：
+ * <p>
+ * X X X X
+ * X X X X
+ * X X X X
+ * X O X X
+ * 解释:
+ * <p>
+ * 被围绕的区间不会存在于边界上，
+ * 换句话说，任何边界上的'O'都不会被填充为'X'。
+ * 任何不在边界上，或不与边界上的'O'相连的'O'最终都会被填充为'X'。
+ * 如果两个元素在水平或垂直方向相邻，则称它们是“相连”的。
  */
 public class Solution130 {
 
     public static void main(String[] args) {
-        TreeNode testData = TreeNode.createTestData("[]");
+        char[][] board = {
+                {'X', 'X', 'X', 'X'},
+                {'X', 'O', 'O', 'X'},
+                {'X', 'X', 'O', 'X'},
+                {'X', 'O', 'X', 'X'},
+        };
 
-        System.out.println(sumNumbers(testData));
+        char[][] board1 = {
+                {'O', 'X', 'O'},
+                {'X', 'O', 'X'},
+                {'O', 'X', 'O'},
+        };
+
+        char[][] board2 = {
+                {'O', 'O', 'O', 'O', 'X', 'X'},
+                {'O', 'O', 'O', 'O', 'O', 'O'},
+                {'O', 'X', 'O', 'X', 'O', 'O'},
+                {'O', 'X', 'O', 'O', 'X', 'O'},
+                {'O', 'X', 'O', 'X', 'O', 'O'},
+                {'O', 'X', 'O', 'O', 'O', 'O'}
+        };
+
+
+        char[][] board3 = {
+                {'X', 'O', 'O', 'X', 'X', 'X', 'O', 'X', 'O', 'O'},
+                {'X', 'O', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
+                {'X', 'X', 'X', 'X', 'O', 'X', 'X', 'X', 'X', 'X'},
+                {'X', 'O', 'X', 'X', 'X', 'O', 'X', 'X', 'X', 'O'},
+                {'O', 'X', 'X', 'X', 'O', 'X', 'O', 'X', 'O', 'X'},
+                {'X', 'X', 'O', 'X', 'X', 'O', 'O', 'X', 'X', 'X'},
+                {'O', 'X', 'X', 'O', 'O', 'X', 'O', 'X', 'X', 'O'},
+                {'O', 'X', 'X', 'X', 'X', 'X', 'O', 'X', 'X', 'X'},
+                {'X', 'O', 'O', 'X', 'X', 'O', 'X', 'X', 'O', 'O'},
+                {'X', 'X', 'X', 'O', 'O', 'X', 'O', 'X', 'X', 'O'}};
+
+        char[][] board4 = {
+                {'O', 'X', 'O', 'O', 'X', 'X'},
+                {'O', 'X', 'X', 'X', 'O', 'X'},
+                {'X', 'O', 'O', 'X', 'O', 'O'},
+                {'O', 'O', 'X', 'O', 'X', 'X'},
+                {'X', 'X', 'O', 'O', 'O', 'O'}};
+
+
+        char[][] board5 = {
+                {'X', 'X', 'X', 'X', 'X'},
+                {'X', 'O', 'O', 'O', 'X'},
+                {'X', 'X', 'O', 'O', 'X'},
+                {'X', 'X', 'X', 'O', 'X'},
+                {'X', 'O', 'X', 'X', 'X'}};
+        solve(board);
+        for (char[] chars : board) {
+            System.out.println(Arrays.toString(chars));
+        }
     }
 
     /**
-     * 深度优先搜索就可以了
+     * 找出所有同边界相连的'O',其他的都可以调整'X'
+     * <p>
      */
-    public static int sumNumbers(TreeNode root) {
-        if (root == null) {
-            return 0;
+    public static void solve(char[][] board) {
+        if (board.length == 0) {
+            return;
         }
-        return sumNumbers(root, 0);
+        int xl = board.length;
+        int yl = board[0].length;
+        boolean[][] crossed = new boolean[xl][yl];
+        //从四周出发,找到所有和边相连的点并进行标记
+        for (int i = 0; i < xl; i++) {
+            closed(board, crossed, i, 0, xl, yl);
+            closed(board, crossed, i, yl - 1, xl, yl);
+        }
+        for (int i = 0; i < yl; i++) {
+            closed(board, crossed, 0, i, xl, yl);
+            closed(board, crossed, xl - 1, i, xl, yl);
+        }
+        for (int x = 1; x < xl - 1; x++) {
+            for (int y = 1; y < yl - 1; y++) {
+                if ('O' == board[x][y] && !crossed[x][y]) {
+                    board[x][y] = 'X';
+                }
+            }
+        }
     }
 
-    public static int sumNumbers(TreeNode root, int val) {
-        int total = 0;
-        if (root.left == null && root.right == null) {
-            //叶子节点
-            total += val + root.val;
-        } else {
-            if (root.left != null) {
-                total += sumNumbers(root.left, (val + root.val) * 10);
-            }
-            if (root.right != null) {
-                total += sumNumbers(root.right, (val + root.val) * 10);
+    public static void closed(char[][] board, boolean[][] crossed,
+                              int x, int y, int xl, int yl) {
+        if (x >= 0 && x < xl && y >= 0 && y < yl) {
+            if (!crossed[x][y] && board[x][y] == 'O') {
+                crossed[x][y] = true;
+                closed(board, crossed, x + 1, y, xl, yl);
+                closed(board, crossed, x - 1, y, xl, yl);
+                closed(board, crossed, x, y + 1, xl, yl);
+                closed(board, crossed, x, y - 1, xl, yl);
             }
         }
-        return total;
     }
 }
