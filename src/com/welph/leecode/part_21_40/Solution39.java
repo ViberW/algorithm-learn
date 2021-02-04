@@ -41,6 +41,34 @@ public class Solution39 {
         System.out.println(combinationSum2(nums, target));
     }
 
+    /**
+     * 回溯算法
+     */
+    public List<List<Integer>> combinationSum3(int[] candidates, int target) {
+        List<List<Integer>> ans = new ArrayList<List<Integer>>();
+        List<Integer> combine = new ArrayList<Integer>();
+        dfs(candidates, target, ans, combine, 0);
+        return ans;
+    }
+
+    public void dfs(int[] candidates, int target, List<List<Integer>> ans, List<Integer> combine, int idx) {
+        if (idx == candidates.length) {
+            return;
+        }
+        if (target == 0) {
+            ans.add(new ArrayList<Integer>(combine));
+            return;
+        }
+        // 直接跳过
+        dfs(candidates, target, ans, combine, idx + 1);
+        // 选择当前数
+        if (target - candidates[idx] >= 0) {
+            combine.add(candidates[idx]);
+            dfs(candidates, target - candidates[idx], ans, combine, idx);
+            combine.remove(combine.size() - 1);
+        }
+    }
+
     public static List<List<Integer>> combinationSum(int[] candidates, int target) {
         //注意，数字可以是无限次数选取，这个数组不一定是有序的
         //先假设都已经排好序了
