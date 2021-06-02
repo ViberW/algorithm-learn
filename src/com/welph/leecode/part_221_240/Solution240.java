@@ -56,8 +56,9 @@ public class Solution240 {
             } else {
                 r = mid - 1;
             }
+            //还可以改进--  再通过row进行一次二分查找
             if (l > r) {
-                r = mid ;
+                r = mid;
                 l = 0;
                 i++;
             }

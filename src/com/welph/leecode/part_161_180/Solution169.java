@@ -30,13 +30,13 @@ public class Solution169 {
         int count = 0;
         int target = nums[0];
         for (int i = 0; i < nums.length; i++) {
+            if (count == 0) { //应为数量大于一半, 所以在x到i段 为上一次的目标值的一半. 那么接下的结果一定在一半之内;
+                target = nums[i];
+            }
             if (nums[i] == target) {
                 count++;
             } else {
                 count--;
-                if (count == 0) { //应为数量大于一半, 所以在x到i段 为上一次的目标值的一半. 那么接下的结果一定在一半之内;
-                    target = nums[i + 1];
-                }
             }
         }
         return target;
