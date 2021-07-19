@@ -81,8 +81,8 @@ public class Solution322 {
     }
 
     /**
-     * 广度优先搜索, 尽量选择最大的面值
-     * todo 还是超出时间的限制了  --这样的广度搜索不是最好的, 使用queue保存总计的值
+     * 深度优先搜索, 尽量选择最大的面值
+     * todo 还是超出时间的限制了  --用广度搜索不是最好的, 使用queue保存总计的值
      */
     public static int coinChange1(int[] coins, int amount) {
         Arrays.sort(coins);

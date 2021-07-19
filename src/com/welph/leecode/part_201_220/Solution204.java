@@ -26,6 +26,9 @@ public class Solution204 {
     }
 
     //todo 这里还有个[线性筛] .....
+    /**
+     * {@link com.welph.leecode.algorithm.thinking.PrimeSieve_17} 线性筛
+     */
 
     /**
      * 厄拉多塞筛法，简称埃氏筛。 --666
