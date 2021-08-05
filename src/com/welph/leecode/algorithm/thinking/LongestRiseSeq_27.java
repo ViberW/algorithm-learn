@@ -16,7 +16,7 @@ public class LongestRiseSeq_27 {
     }
 
     /**
-     * 使用动态规划
+     * 贪心+二分
      */
     public static int longestRiseSeq(int[] nums) {
         int length = nums.length;
@@ -26,19 +26,15 @@ public class LongestRiseSeq_27 {
         int[] dp = new int[length];
         int index = 0;
         dp[0] = nums[0];
-        int res = 1;
         for (int i = 1; i < length; i++) {
             if (dp[index] < nums[i]) {
                 dp[++index] = nums[i];
             } else {
-                //二分法查找法. dp本身已经是上升的
-                //查找到第一个大于或等于 num[i] 的位置, 并替换.
-                index = binarySearch(dp, 0, index, nums[i]);
-                dp[index] = nums[i];
+                //这里一定不能去修改index, 因为保证原dp的存在用于后面的校验
+                dp[binarySearch(dp, 0, index, nums[i])] = nums[i];
             }
-            res = Math.max(res, index + 1);
         }
-        return res;
+        return index + 1;
     }
 
     /**
@@ -48,15 +44,12 @@ public class LongestRiseSeq_27 {
         int mid;
         while (l <= r) {
             mid = l + (r - l) / 2;
-            if (dp[mid] < v) {
+            if (dp[mid] <= v) {
                 l = mid + 1;
             } else if (dp[mid] > v) {
                 r = mid - 1;
-            } else {
-                return mid;
             }
         }
-        //找到它该放入的index
-        return l + (r - l) / 2;
+        return l;
     }
 }
