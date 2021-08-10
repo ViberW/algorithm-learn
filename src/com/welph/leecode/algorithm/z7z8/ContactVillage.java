@@ -104,13 +104,15 @@ public class ContactVillage {
         int res = 0;
         // 并查集根结点，初始为-1，合并之后为-num,num表示集合中的个数
         int[] father = new int[l];
+        int[] treeSize = new int[l];
         for (int i = 0; i < l; i++) {
-            father[i] = -1;
+            father[i] = i;
+            treeSize[i] = 1;
         }
         for (int i = 0; i < l; i++) {
             //说明不是同一个集合
             if (findFather(father, edges[i].sid) != findFather(father, edges[i].tid)) {
-                unionSet(father, edges[i].sid, edges[i].tid);
+                unionSet(father, treeSize, edges[i].sid, edges[i].tid);
                 res += edges[i].w;
                 edgeNum++;
                 if (edgeNum == l - 1) {
@@ -125,7 +127,7 @@ public class ContactVillage {
     public static int findFather(int[] father, int s) {
         int root = s, temp;
         // 查找s的最顶层根
-        while (father[root] >= 0) {
+        while (father[root] != root) {
             root = father[root];
         }
         // 路径压缩，提高后续查找效率
@@ -138,18 +140,18 @@ public class ContactVillage {
     }
 
     //这里可以使用单独的rank[]数组用于保存集合的大小, 而并非root值的大小
-    public static void unionSet(int[] father, int s, int e) {
+    public static void unionSet(int[] father, int[] treeSize, int s, int e) {
         int rootS = findFather(father, s);
         int rootE = findFather(father, e);
 
-        int weight = father[rootS] + father[rootE];
+        int weight = treeSize[rootS] + treeSize[rootE];
         // 将结点数少的集合作为结点数多的集合的儿子节点
-        if (father[rootS] > father[rootE]) {
+        if (treeSize[rootS] > treeSize[rootE]) {
             father[rootS] = rootE;
-            father[rootE] = weight;
+            treeSize[rootE] = weight;
         } else {
             father[rootE] = rootS;
-            father[rootS] = weight;
+            treeSize[rootS] = weight;
         }
     }
 

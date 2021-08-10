@@ -48,7 +48,7 @@ public class Solution300 {
             return 0;
         }
         int[] dp = new int[len];
-        int max = dp[0] = 1;
+        int max = dp[0] = 1;  //表示以num[i]作为最长上升子序列的结尾的长度
         for (int i = 1; i < len; i++) {
             dp[i] = 1;
             for (int j = 0; j < i; j++) {
