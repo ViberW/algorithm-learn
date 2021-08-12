@@ -1,5 +1,8 @@
 package com.welph.leecode.algorithm.string;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Sunday算法和BM算法稍有不同的是，Sunday算法是从前往后匹配，在匹配失败时关注的是主串中参加匹配的最末位字符的下一位字符。
  * <p>
@@ -20,6 +23,37 @@ package com.welph.leecode.algorithm.string;
 public class Sunday {
 
     public static void main(String[] args) {
+        String s1 = "cababc";
+        String s2 = "ab";
+        System.out.println(sunday(s1.toCharArray(), s2.toCharArray()));
+    }
 
+    static int sunday(char[] total, char[] part) {
+        int tSize = total.length;
+        int pSize = part.length;
+
+        Map<Character, Integer> move = new HashMap<>();
+
+        //主串参与匹配最末位字符移动到该位需要移动的位数
+        for (int i = 0; i < pSize; i++) {
+            move.put(part[i], pSize - i);
+        }
+
+        int s = 0;//模式串头部在字符串位置
+        int j;//模式串已经匹配了的长度
+        while (s <= tSize - pSize) {//到达末尾之前
+            j = 0;
+            while (total[s + j] == part[j]) {
+                j++;
+                if (j >= pSize) {
+                    return s;
+                }
+            }
+            if (s + pSize >= total.length) {
+                return -1;
+            }
+            s += move.getOrDefault(total[s + pSize], pSize + 1);
+        }
+        return -1;
     }
 }
