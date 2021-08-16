@@ -58,4 +58,13 @@ public class Solution326 {
         }
         return isPowerOfThree(n / 3);
     }
+
+    /**
+     * 这里的1162261467为3的N次幂 在Integer范围内的最大值: 3^19次方
+     * @param n
+     * @return
+     */
+    public boolean isPowerOfThree3(int n) {
+        return n > 0 && 1162261467 % n == 0;
+    }
 }
