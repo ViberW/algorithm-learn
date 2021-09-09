@@ -11,6 +11,8 @@ public class PowerDemo {
     public static void main(String[] args) {
         System.out.println(power(3, 2));
         System.out.println(power1(3, 2));
+        //3的2次幂值为9对11取模后的结果
+        System.out.println(power2(3, 2, 11));
     }
 
     /**
