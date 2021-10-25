@@ -1,0 +1,12 @@
+//01背包
+for (int i = 0; i < n; i++) {
+    for (int j = m; j >= V[i]; j--) {
+        f[j] = max(f[j], f[j-V[i]] + W[i]);
+    }
+}
+//完全背包
+for (int i = 0; i < n; i++) {
+    for (int j = V[i]; j <= m; j++) {
+        f[j] = max(f[j], f[j-V[i]] + W[i]);
+    }
+}

@@ -61,7 +61,10 @@ public class AcTrie {
                     pc.fail = root;
                 } else {
                     AcNode q = p.fail;
-                    while (q != null) {
+                    while (q != null) {// 按层遍历, p的子节点pc, q的子节点qc,
+                        //当p的失败指针指向q, 若是能够找得到q中存在pc的相同字符的qc节点, 则把pc的失败指针指向qc
+                        //若是不存在, 则q=q.fail, 继续向上层的节点寻找qc
+                        //------ 最长可匹配后缀子串的长度不断底层, 直到找到目标值
                         AcNode qc = q.children[pc.data - 'a'];
                         if (qc != null) {
                             pc.fail = qc;
