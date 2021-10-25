@@ -4,7 +4,7 @@ package com.welph.leecode.algorithm.thinking;
  * @author Viber
  * @version 1.0
  * @apiNote [最长上升子序列] (不一定连续)
- * -- 有点类似{@link com.welph.leecode.part_121_140.Solution128}
+ * -- 有点类似{@link com.welph.leecode.part_1_500.part_121_140.Solution128}
  * -- 这个要严格满足上升且原元素位置相对不变, 但不要求顺序
  * @since 2021/7/19 18:03
  */

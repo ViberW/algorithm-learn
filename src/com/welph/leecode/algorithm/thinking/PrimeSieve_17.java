@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 素数筛 {@link com.welph.leecode.part_201_220.Solution204}
+ * 素数筛 {@link com.welph.leecode.part_1_500.part_201_220.Solution204}
  * 埃氏筛时间复杂度: O(nloglogn)
  * 线性筛时间复杂度: O(n) 但会利用到空间
  */

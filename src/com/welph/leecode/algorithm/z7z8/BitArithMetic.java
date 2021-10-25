@@ -10,7 +10,7 @@ public class BitArithMetic {
 
     /**
      * 两数之和, 不使用+-
-     * {@link com.welph.leecode.part_361_380.Solution371}
+     * {@link com.welph.leecode.part_1_500.part_361_380.Solution371}
      */
     public int add(int num1, int num2) {
         int a = num1 ^ num2;
