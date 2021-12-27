@@ -1,5 +1,7 @@
 package com.welph.leecode.part_1_500.part_141_160;
 
+import java.util.Stack;
+
 /**
  * 设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。
  * <p>
@@ -14,16 +16,97 @@ public class Solution155 {
     public static void main(String[] args) {
         //["MinStack","push","push","push","getMin","pop","top","getMin"]
         //[[],[-2],[0],[-3],[],[],[],[]]
-        MinStack obj = new MinStack();
+        MinStack2 obj = new MinStack2();
         obj.push(-2);
         obj.push(0);
         obj.push(-3);
-        System.out.println(obj.getMin());
+        System.out.println(obj.getMin());//-3
         obj.pop();
-        System.out.println(obj.top());
-        System.out.println(obj.getMin());
+        System.out.println(obj.top());//0
+        System.out.println(obj.getMin());//-2
     }
 
+    /**
+     * 最优解: stack保存差值(保存栈顶与最小值的差值,初始值为0)
+     * 特别条件: 数值范围在[-100000, 100000]内
+     */
+    static class MinStack2 {
+        private Stack<Integer> stack = new Stack<Integer>();
+        private int min;
+
+        public void push(int x) {
+            if (stack.isEmpty()) {
+                min = x;
+                stack.push(0);
+            } else {
+                // 计算差值
+                int compare = x - min;
+                stack.push(compare);
+                // 如果差值小于0，显然 x 成为最小值，否则最小值不变
+                min = compare < 0 ? x : min;
+            }
+        }
+
+        public Integer pop() {
+            int top = stack.peek();
+            // 如果top小于0，显然最小值也一并会被删除，此时更新最小值
+            int origin = min;
+            min = top < 0 ? (min - top) : min;
+            stack.pop();
+            return top < 0 ? min : origin + top;
+        }
+
+        public Integer top() {
+            int top = stack.peek();
+            return top < 0 ? min : min + top;
+        }
+
+        public int getMin() {
+            return min;
+        }
+    }
+
+    /**
+     * 时间 O(1) + 空间 O(n)
+     * ----------
+     * 优化方式1: 仅仅使用stack保存,通过Long的前32位保存原始数据,后32位保存最小值
+     */
+    static class MinStack1 {
+        // 定义两个栈
+        public static Stack<Integer> stack = new Stack<>();
+        //始终保存到当前的最小值
+        public static Stack<Integer> helper = new Stack<>();
+
+        /**
+         * stack=> {2, 1, 3}
+         * helper=>{2, 1, 1}
+         */
+        public static void push(Integer data) {
+            // 目标栈正常入栈
+            stack.push(data);
+            if (helper.isEmpty()) {
+                helper.push(data);
+            }
+            // 判断栈顶与要 push 元素的大小
+            else if (helper.peek() <= data) {
+                helper.push(data);
+            } else {
+                helper.push(helper.peek());
+            }
+        }
+
+        public static Integer pop() {
+            if (stack.isEmpty()) {
+                return null;
+            }
+            helper.pop();
+            return stack.pop();
+        }
+
+        public static Integer getMin() {
+            return helper.isEmpty() ? null : helper.peek();
+        }
+    }
 
     static class MinStack {
 
