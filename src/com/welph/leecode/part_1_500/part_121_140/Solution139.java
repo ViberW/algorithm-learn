@@ -29,6 +29,7 @@ public class Solution139 {
     public static void main(String[] args) {
         Solution139 solution139 = new Solution139();
         List<String> wordDict = new ArrayList<>(Arrays.asList("cats", "dog", "sand", "and", "cat"));
+        System.out.println(solution139.wordBreak("dogcatsdog", wordDict));
         System.out.println(solution139.wordBreak("catsandog", wordDict));
         wordDict = new ArrayList<>(Arrays.asList("leet", "code"));
         System.out.println(solution139.wordBreak("leetcode", wordDict));
