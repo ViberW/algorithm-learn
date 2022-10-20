@@ -1,7 +1,7 @@
 package com.welph.leecode.algorithm.search;
 
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
+//import com.sun.org.slf4j.internal.Logger;
+//import com.sun.org.slf4j.internal.LoggerFactory;
 
 import java.util.Set;
 import java.util.concurrent.*;
@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class LRUAbstractMap extends java.util.AbstractMap {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(LRUAbstractMap.class);
+//    private final static Logger LOGGER = LoggerFactory.getLogger(LRUAbstractMap.class);
 
     /**
      * 检查是否超期线程
@@ -310,7 +310,7 @@ public class LRUAbstractMap extends java.util.AbstractMap {
     }
 
     private void lruCallback() {
-        LOGGER.debug("lruCallback");
+//        LOGGER.debug("lruCallback");
     }
 
 
@@ -330,7 +330,7 @@ public class LRUAbstractMap extends java.util.AbstractMap {
                         remove(node.key);
                     }
                 } catch (Exception e) {
-                    LOGGER.error("InterruptedException");
+//                    LOGGER.error("InterruptedException");
                 }
             }
         }
