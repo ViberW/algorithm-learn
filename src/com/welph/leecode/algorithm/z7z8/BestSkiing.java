@@ -20,9 +20,40 @@ public class BestSkiing {
 
     /**
      * 记忆化搜索
+     * 针对下面暴力解法的重复性路线, 可以使用f[i][j]为起点的最长路径, 初始值为-1,代表未走过
      */
     private static int skiing(int[][] area) {
-        return 0;
+        int n = area.length;
+        int m = area[0].length;
+        int max = 0;
+        int[][] f = new int[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                max = Math.max(findSkiMemory(f, area, i, j, n, m), max);
+            }
+        }
+        return max;
+    }
+
+    private static int findSkiMemory(int[][] f, int[][] area, int i, int j, int n, int m) {
+        if (f[i][j] != 0) {
+            return f[i][j];
+        }
+        int ret = 0;
+        if (i > 0 && area[i][j] > area[i - 1][j]) {
+            ret = Math.max(ret, findSkiMemory(f, area, i - 1, j, n, m));
+        }
+        if (i < n - 1 && area[i][j] > area[i + 1][j]) {
+            ret = Math.max(ret, findSkiMemory(f, area, i + 1, j, n, m));
+        }
+        if (j > 0 && area[i][j] > area[i][j - 1]) {
+            ret = Math.max(ret, findSkiMemory(f, area, i, j - 1, n, m));
+        }
+        if (j < m - 1 && area[i][j] > area[i][j + 1]) {
+            ret = Math.max(ret, findSkiMemory(f, area, i, j + 1, n, m));
+        }
+        f[i][j] = ret + 1;
+        return ret + 1;
     }
 
     /**
