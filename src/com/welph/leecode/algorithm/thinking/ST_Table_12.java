@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * @author Viber
  * @version 1.0
- * @apiNote [ST表] 数据结构
+ * @apiNote [ST表] 数据结构 稀疏表
  * ---------主要用来解决RMQ（Range Maximum/Minimum Query，区间最大/最小值查询）
  * 应用倍增的思想，可以实现O(nlogn) 预处理、 O(1) 查询
  * @since 2021/6/11 15:46

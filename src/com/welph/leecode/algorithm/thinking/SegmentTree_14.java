@@ -43,6 +43,9 @@ public class SegmentTree_14 {
             return a + b;
         }
 
+        /**
+         * 节点的全更新 , 这里的p应该是属于一个逻辑总和节点
+         */
         private void upd(int p, int d, int len) {
             tree[p] += d * len;
             if (mark[p] == NA) {
@@ -54,7 +57,7 @@ public class SegmentTree_14 {
 
         private void build(int[] iterable, int l, int r, int p) {
             if (l == r) {
-                tree[p] = iterable[l - 1];
+                tree[p] = iterable[l - 1];  //这里意味着仅仅叶子节点存储数据, 中间节点存储相加值,理解起来方便点
                 return;
             }
             int mid = (l + r) / 2;
@@ -63,6 +66,9 @@ public class SegmentTree_14 {
             tree[p] = op(tree[p * 2], tree[p * 2 + 1]);
         }
 
+        /**
+         * 将mark中的值覆盖到子节点上
+         */
         private void push_down(int p, int len) {
             if (mark[p] == NA) return;
             upd(p * 2, mark[p], len - len / 2);
@@ -71,12 +77,14 @@ public class SegmentTree_14 {
         }
 
         private void update(int l, int r, int d, int p, int cl, int cr) {
-            if (cl >= l && cr <= r) {
-                upd(p, d, cr - cl + 1);
+            if (cl >= l && cr <= r) {  //说明需要更新的范围大于节点的范围
+                upd(p, d, cr - cl + 1); //那么就全更新
                 return;
             }
+            //填充以前遗留下来的变更数据值
             push_down(p, cr - cl + 1);
             int mid = (cl + cr) / 2;
+            //下沉到左右两个节点
             if (mid >= l) update(l, r, d, p * 2, cl, mid);
             if (mid < r) update(l, r, d, p * 2 + 1, mid + 1, cr);
             tree[p] = op(tree[p * 2], tree[p * 2 + 1]);
