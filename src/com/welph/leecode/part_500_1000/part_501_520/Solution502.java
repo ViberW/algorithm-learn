@@ -1,5 +1,7 @@
 package com.welph.leecode.part_500_1000.part_501_520;
 
+import java.util.PriorityQueue;
+
 /**
  * 假设 力扣（LeetCode）即将开始 IPO 。为了以更高的价格将股票卖给风险投资公司，
  * 力扣 希望在 IPO 之前开展一些项目以增加其资本。 由于资源有限，它只能在 IPO 之前完成最多 k 个不同的项目。
@@ -36,16 +38,63 @@ package com.welph.leecode.part_500_1000.part_501_520;
 public class Solution502 {
 
     public static void main(String[] args) {
-        System.out.println(findMaximizedCapital(2, 0,
+        System.out.println(findMaximizedCapital(11, 11,
                 new int[]{1, 2, 3},
-                new int[]{0, 1, 1}));
+                new int[]{11, 12, 13}));
     }
 
     /**
-     * 在可选的范围中选择一个利润最大的数据信息
+     * 在可选的范围中选择一个利润最大的数据信息  666
      */
     public static int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
+        //按照capital的排序 若相同则按照profits倒序, 构建的最大堆
+        PriorityQueue<Integer> heap = new PriorityQueue<>((o1, o2) -> o2 - o1);
+        //对profits和capital 进行排序
+        quickSort(profits, capital, 0, profits.length - 1);
+        int i = 0;
+        while (k > 0) {
+            while (i < capital.length && capital[i] <= w) {//每次将所有可能符合预算的加入进去
+                heap.add(profits[i]);
+                i++;
+            }
+            if (heap.isEmpty()) {
+                break;
+            } else {
+                w += heap.poll(); //从中找到或得到的最大一次的利润
+            }
+            k--;
+        }
+        return w;
+    }
 
-        return 0;
+    private static void quickSort(int[] profits, int[] capital, int l, int r) {
+        if (l < r) {
+            int pivot = partition(profits, capital, l, r);
+            quickSort(profits, capital, l, pivot - 1);
+            quickSort(profits, capital, pivot + 1, r);
+        }
+    }
+
+    //根据capital
+    private static int partition(int[] profits, int[] capital, int l, int r) {
+        int pivot = capital[r];
+        int target = l;
+        for (; l < r; l++) {
+            if (capital[l] < pivot) {
+                swap(capital, profits, l, target);
+                target++;
+            }
+        }
+        swap(capital, profits, target, r);
+        return target;
+    }
+
+    private static void swap(int[] capital, int[] profits, int i, int j) {
+        int temp = capital[i];
+        capital[i] = capital[j];
+        capital[j] = temp;
+        temp = profits[i];
+        profits[i] = profits[j];
+        profits[j] = temp;
     }
 }
