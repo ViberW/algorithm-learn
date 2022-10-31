@@ -15,7 +15,7 @@ package com.welph.leecode.part_500_1000.part_501_520;
  * 输出：3
  * 解释：
  * 第一步:    1     0 <-- 5    =>    1     1     4
- * 第二步:    1 <-- 1 <-- 4    =>    2     1     3
+ * 第二步:    1 <-- 1 <-- 4    =>    2     1
  * 第三步:    2     1 <-- 3    =>    2     2     2
  * <p>
  * 示例 2：
@@ -39,13 +39,57 @@ package com.welph.leecode.part_500_1000.part_501_520;
 public class Solution517 {
 
     public static void main(String[] args) {
-        System.out.println(findMinMoves(new int[]{1, 0, 5}));
-        System.out.println(findMinMoves(new int[]{0, 3, 0}));
+//        System.out.println(findMinMoves(new int[]{1, 0, 5}));
+//        System.out.println(findMinMoves(new int[]{0, 3, 0}));
+//        System.out.println(findMinMoves(new int[]{4, 0, 0, 4}));
+//        System.out.println(findMinMoves(new int[]{0, 0, 14, 0, 10, 0, 0, 0}));
+        System.out.println(findMinMoves(new int[]{0, 0, 11, 5}));
     }
 
 
+    /**
+     * {@link com.welph.leecode.algorithm.z7z8.DivideCards}
+     * --- 注意 这里仅仅只能移动一件
+     */
     public static int findMinMoves(int[] machines) {
+        int total = 0;
+        for (int machine : machines) {
+            total += machine;
+        }
+        if (total % machines.length != 0) {
+            return -1;
+        }
+        int avg = total / machines.length;
+        int ret = Integer.MIN_VALUE;
+        int last = machines[0] - avg;
+        for (int i = 0; i < machines.length - 1; i++) {
+            ret = Math.max(Math.max(ret, Math.abs(last)), machines[i + 1] - avg);
+            //这里需要把控好,能够迁移的最大值
+            last = machines[i + 1] - avg + last;
+        }
+        return Math.max(ret, machines[machines.length - 1] - avg);
+        //只能相邻移动  这方式不行,
+        /*int last = -1;
+        int sum = 0;
+        int ret = 0;
+        int over = 0;
+        for (int i = 0; i < machines.length; i++) {
+            if (machines[i] == avg) { //这个没问题
+                last++;
+                continue;
+            }
+            sum += machines[i];
+            if (machines[i] > avg) {
+                over = Math.max(machines[i] - avg, over);
+            }
+            if (sum == (i - last) * avg) {
+                ret = Math.max(ret, over);
+                last = i;
+                sum = 0;
+                over = 0;
+            }
+        }
+          return ret;*/
 
-        return 0;
     }
 }
