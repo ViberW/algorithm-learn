@@ -1,6 +1,8 @@
 package com.welph.leecode.part_500_1000.part_501_520;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -41,61 +43,78 @@ import java.util.Random;
 public class Solution519 {
 
     public static void main(String[] args) {
-        Solution1 obj = new Solution1(3, 1);
+        Solution2 obj = new Solution2(3, 1);
         System.out.println(Arrays.toString(obj.flip()));
         System.out.println(Arrays.toString(obj.flip()));
         System.out.println(Arrays.toString(obj.flip()));
         obj.reset();
     }
 
+    static class Solution2 {
+        static Random random = new Random();
+        int len;
+        int m;
+        int n;
+        Map<Integer, Integer> map = new HashMap<>();
+
+        public Solution2(int m, int n) {
+            this.m = m;
+            this.n = n;
+            this.len = m * n;
+        }
+
+        //仅仅存储len-1和i两个即可
+        public int[] flip() {
+            int i = random.nextInt(len);
+            Integer actual = map.getOrDefault(i, i);
+            map.put(i, map.getOrDefault(len - 1, len - 1));
+            len--;
+            return new int[]{actual / n, actual % n};
+        }
+
+        public void reset() {
+            this.len = m * n;
+            map.clear();
+        }
+    }
+
+
     /**
      * 这里试图将boolean 转化为int 存储的是下一个节点的位置?
+     * //超出内存.... 因为调用不到那么多的索引
      */
     static class Solution1 {
         static Random random = new Random();
-        int[][] dp;
+        int[] dp;
+        int len;
         int m;
         int n;
-        int len;
 
         public Solution1(int m, int n) {
             this.m = m;
             this.n = n;
-            len = m * n + 1;
-            dp = new int[len + 1][4];
+            this.len = m * n;
+            dp = new int[len];
             reset();
+            //那么 i/m = i   i%n = j
         }
 
         public int[] flip() {
-            //水塘抽样
-            int ret = 1;
-            int k;
-            int t = 0;
-            for (int i = dp[0][1]; i < len; i = dp[i][1]) {
-                k = random.nextInt(ret);
-                if (k == 0) {
-                    t = i;
-                }
-                ret++;
-            }
-            dp[dp[t][0]][1] = dp[t][1];
-            dp[dp[t][1]][0] = dp[t][0];
-            return new int[]{dp[t][2], dp[t][3]};
+            //每次获取就移动
+            int i = random.nextInt(len);
+            int actual = dp[i];
+            //交换最后一个和当前index位置
+            dp[i] = dp[len - 1];
+            dp[len - 1] = actual;
+            len--;
+            return new int[]{actual / n, actual % n};
         }
 
         public void reset() {
-            dp[0][1] = 1;
-            int k = 1;
-            for (int i = 0; i < m; i++) {
-                for (int j = 0; j < n; j++) {
-                    dp[k][0] = k - 1;
-                    dp[k][1] = k + 1;
-                    dp[k][2] = i;
-                    dp[k][3] = j;
-                    k++;
-                }
+            this.len = m * n;
+            for (int i = 0; i < len; i++) {
+                dp[i] = i;
             }
-            dp[dp.length - 1][0] = k - 1;
         }
     }
 
