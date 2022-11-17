@@ -60,40 +60,30 @@ public class BinaryQuery {
         int l = 0;
         int r = arr.length - 1;
         int mid;
-        int index = -1;
-        while (l <= r) {
-            mid = l + ((r - l) >> 1);
-            if (arr[mid] > target) {
-                index = mid;
-                r = mid - 1;
-            } else if (arr[mid] < target) {
-                l = mid + 1;
+        while (l < r) {
+            mid = (l + r - 1) / 2;
+            if (arr[mid] >= target) {
+                r = mid;
             } else {
-                index = mid;
-                r = mid - 1;
+                l = mid + 1;
             }
         }
-        return index;
+        return r;
     }
 
     //最后一个大于等于
     public static int lastGreate(int[] arr, int target) {
+        int mid;
         int l = 0;
         int r = arr.length - 1;
-        int mid;
-        int index = -1;
-        while (l <= r) {
-            mid = l + ((r - l) >> 1);
-            if (arr[mid] > target) {
-                index = mid;
-                r = mid - 1;
-            } else if (arr[mid] < target) {
-                l = mid + 1;
+        while (l < r) {
+            mid = (l + r + 1) / 2;
+            if (arr[mid] <= target) {
+                l = mid;
             } else {
-                index = mid;
-                l = mid + 1;
+                r = mid - 1;
             }
         }
-        return index;
+        return l;
     }
 }
