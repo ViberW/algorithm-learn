@@ -67,7 +67,7 @@ public class Solution72 {
             } else if (i != 0) {
                 min[0][i] = min[0][i - 1] + 1;
             } else {
-                min[i][0] = 1;
+                min[0][i] = 1;
             }
         }
 
