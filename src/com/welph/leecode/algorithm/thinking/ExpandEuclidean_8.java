@@ -42,4 +42,44 @@ public class ExpandEuclidean_8 {
         else
             return gcd(b, a % b);
     }
+
+    /**
+     * 九章算术
+     */
+    public static int gcd1(int a, int b) {
+        if (b == a)
+            return a;
+        else if (a < b)
+            return gcd1(b - a, a);
+        else
+            return gcd1(a - b, b);
+    }
+
+    /**
+     * 欧几里得算法 针对两数相差较大时, 取模运算性能较低
+     * 九章算术     相减的次数随两数差值变大而增多
+     * --------------------
+     * 两者结合: 由于位运算快
+     * 当a和b均为偶数，gcb(a,b) = 2*gcb(a/2, b/2) = 2*gcb(a>>1, b>>1)
+     * 当a为偶数，b为奇数，gcb(a,b) = gcb(a/2, b) = gcb(a>>1, b)
+     * 当a为奇数，b为偶数，gcb(a,b) = gcb(a, b/2) = gcb(a, b>>1)
+     * 当a和b均为奇数，利用九章算术运算一次，gcb(a,b) = gcb(b, a-b) 此时(a-b)一定为偶数
+     */
+    public static int gcd2(int a, int b) {
+        if (b == a)
+            return a;
+        else if (a < b)
+            return gcd2(b, a);
+        else {
+            if (((a & 1) != 1) && ((b & 1) != 1)) {//都是偶数
+                return gcd2(a >> 1, b >> 1) << 1;
+            } else if (((a & 1) != 1) && ((b & 1) == 1)) {//a偶数 b奇数
+                return gcd2(a >> 1, b);
+            } else if (((a & 1) == 1) && ((b & 1) != 1)) {//a奇数 b偶数
+                return gcd2(a, b >> 1);
+            } else {
+                return gcd2(a, a - b);
+            }
+        }
+    }
 }
