@@ -45,7 +45,7 @@ public class Solution632 {
      * 至少是两个列表的两个不同的点
      */
     public static int[] smallestRange(List<List<Integer>> nums) {
-
+        //todo
         return null;
     }
 }
