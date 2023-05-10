@@ -55,6 +55,22 @@ public class BinaryQuery {
         return index;
     }
 
+    //第一个小于等于
+    public static int firstLess(int[] arr, int target) {
+        int l = 0;
+        int r = arr.length - 1;
+        int mid;
+        while (l < r) {
+            mid = (l + r + 1) / 2;
+            if (arr[mid] >= target) {
+                r = mid - 1;
+            } else {
+                l = mid;
+            }
+        }
+        return l;
+    }
+
     //第一个大于等于
     public static int firstGreate(int[] arr, int target) {
         int l = 0;
