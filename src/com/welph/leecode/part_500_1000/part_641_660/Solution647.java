@@ -23,8 +23,8 @@ package com.welph.leecode.part_500_1000.part_641_660;
 public class Solution647 {
 
     public static void main(String[] args) {
-        System.out.println(countSubstrings("abc"));
-        System.out.println(countSubstrings("aaa"));
+        System.out.println(countSubstrings2("abc"));
+        System.out.println(countSubstrings2("aaa"));
     }
 
     public static int countSubstrings(String s) {
@@ -45,6 +45,32 @@ public class Solution647 {
                     dp[j][i] = dp[j + 1][i - 1] && chars[j] == chars[i];
                 }
                 if (dp[j][i]) {
+                    ret++;
+                }
+            }
+        }
+        return ret;
+    }
+
+    //优化空间 87%时间  85%空间
+    public static int countSubstrings2(String s) {
+        int n = s.length();
+        if (n <= 1) {
+            return n;
+        }
+        int ret = 0;
+        char[] chars = s.toCharArray();
+        boolean[] dp = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            dp[i] = true;
+            ret++;
+            for (int j = 0; j < i; j++) {
+                if (j + 1 == i) {
+                    dp[j] = chars[j] == chars[i];
+                } else {
+                    dp[j] = dp[j + 1] && chars[j] == chars[i];
+                }
+                if (dp[j]) {
                     ret++;
                 }
             }
