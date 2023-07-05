@@ -37,10 +37,10 @@ public class Solution546 {
     /**
      * {@link com.welph.leecode.part_1_500.part_301_320.Solution312} 戳气球
      * 这里是需要连续的k个想通过数值
-     * dp[i][j]  这k是代表和j处相等的连续的最近的一个k
-     * 1. dp[i][k][p] + (j-k)*(j-k)
-     * 2. dp[i][m][p] + dp[m+1][j][p] 这里的m是承接j处相同盒子  这里有个关键点 就是层级往下找, 一定是和j处一样的盒子
-     * ---- p 代表有多少个和j处相同的的值, 参与到了k*k的计算
+     * dp[i][j][k]  这k是代表和j处相等的连续的最近的一个k [i....j jjjj] 后面
+     * 1. dp[i][j-1][0] + (k+1)*(k+1)   计算j以及后面k个j
+     * 2. max(dp[i][m][k+1] + dp[m+1][j-1][0]) 说明: m为i到j范围内存在box[m] = box[j]
+     *      即i到m 以及后面存在k+1个相等于m的值,   加上消除m+1到j-1的盒子(这里就不涉及后面k个等于box[j]的数据)
      * ------------------------------------------------------好动态规划
      */
     public static int removeBoxes(int[] boxes) {
@@ -58,7 +58,7 @@ public class Solution546 {
         }
         int or = r; //必须代替一下 否则会重复计算很多次
         int ok = k;
-        while (l < or && boxes[or] == boxes[or - 1]) {
+        while (l < or && boxes[or] == boxes[or - 1]) { //[l  or or r] 缩小范围, 找到等于r的相连的值
             ok++;
             or--;
         }
