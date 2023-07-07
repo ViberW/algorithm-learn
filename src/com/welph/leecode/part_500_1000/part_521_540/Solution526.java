@@ -1,8 +1,6 @@
 package com.welph.leecode.part_500_1000.part_521_540;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 假设有从 1 到 n 的 n 个整数。用这些整数构造一个数组 perm（下标从 1 开始），
@@ -114,5 +112,62 @@ public class Solution526 {
         public int hashCode() {
             return Objects.hash(i, press);
         }
+    }
+    //////////////////////////以下为官方题解///////////////////////
+
+    /**
+     * 回溯------------------------------------------------------
+     */
+    List<Integer>[] match;
+    boolean[] vis;
+    int num;
+
+    public int countArrangement2(int n) {
+        vis = new boolean[n + 1];//标记哪些值是否使用过
+        match = new List[n + 1];
+        for (int i = 0; i <= n; i++) {
+            match[i] = new ArrayList<Integer>();
+        }
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (i % j == 0 || j % i == 0) {
+                    match[i].add(j); //存放i位置能够放的那些值
+                }
+            }
+        }
+        backtrack(1, n);
+        return num;
+    }
+
+    public void backtrack(int index, int n) {
+        if (index == n + 1) {
+            num++;
+            return;
+        }
+        for (int x : match[index]) {//尝试填充每一合法个值
+            if (!vis[x]) {
+                vis[x] = true;
+                backtrack(index + 1, n);
+                vis[x] = false;
+            }
+        }
+    }
+
+    /**
+     * 状态压缩 + 动态规划------------------------------------------------------
+     */
+    public int countArrangement3(int n) {
+        int[] f = new int[1 << n];//记录每种中间段可能
+        f[0] = 1;
+        for (int mask = 1; mask < (1 << n); mask++) {
+            int num = Integer.bitCount(mask);
+            for (int i = 0; i < n; i++) {
+                //当前点未选择过
+                if ((mask & (1 << i)) != 0 && ((num % (i + 1)) == 0 || (i + 1) % num == 0)) {
+                    f[mask] += f[mask ^ (1 << i)];
+                }
+            }
+        }
+        return f[(1 << n) - 1];
     }
 }
