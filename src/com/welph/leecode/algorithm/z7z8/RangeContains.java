@@ -48,7 +48,7 @@ public class RangeContains {
             }
         });
 //        System.out.println(Arrays.toString(points));
-        int[] sum = new int[max], ans = new int[sum.length]; //这里应该是y的最大值
+        int[] sum = new int[max], ans = new int[n]; //这里应该是y的最大值
         for (int i = 0; i < n; ++i) { //每次遍历, 这样就代表从x小于或等于的位置, 找到左右比y大的地方
             if (i > 0 && cow[i].x == cow[i - 1].x && cow[i].y == cow[i - 1].y) {
                 ans[cow[i].index] = ans[cow[i - 1].index];
@@ -57,9 +57,7 @@ public class RangeContains {
             }
             add(sum, cow[i].y, 1);
         }
-        int[] ret = new int[n];
-        System.arraycopy(ans, 0, ret, 0, n);
-        return ret;
+        return ans;
     }
 
     /**
