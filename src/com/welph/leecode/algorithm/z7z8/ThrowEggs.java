@@ -43,7 +43,7 @@ public class ThrowEggs {
         for (int i = 2; i <= n; i++) {
             for (int j = 1; j <= m; j++) {
                 for (int x = 1; x < j; x++) {
-                    dp[i][j] = Math.min(dp[i][j], 1 + Math.max(dp[n - 1][x - 1], dp[n][j - x]));
+                    dp[i][j] = Math.min(dp[i][j], 1 + Math.max(dp[i - 1][x - 1], dp[i][j - x]));
                 }
             }
         }
