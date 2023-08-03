@@ -1,13 +1,13 @@
 package com.welph.leecode.part_1_500.part_81_100;
 
 /**
- * 给定三个字符串 s1, s2, s3, 验证 s3 是否是由 s1 和 s2 交错组成的。
+ * 给定三个字符串s1, s2, s3, 验证s3是否是由s1和s2 交错组成的。
  * <p>
  * 示例 1:
  * <p>
  * 输入: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbcbcac"
  * 输出: true
- * 示例 2:
+ * 示例2:
  * <p>
  * 输入: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbbaccc"
  * 输出: false

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 给定一个单词数组和一个长度 maxWidth，重新排版单词，使其成为每行恰好有 maxWidth 个字符，且左右两端对齐的文本。
+ * 给定一个单词数组和一个长度maxWidth，重新排版单词，使其成为每行恰好有maxWidth个字符，且左右两端对齐的文本。
  * <p>
- * 你应该使用“贪心算法”来放置给定的单词；也就是说，尽可能多地往每行中放置单词。必要时可用空格 ' ' 填充，使得每行恰好有 maxWidth 个字符。
+ * 你应该使用“贪心算法”来放置给定的单词；也就是说，尽可能多地往每行中放置单词。必要时可用空格' '填充，使得每行恰好有 maxWidth个字符。
  * <p>
  * 要求尽可能均匀分配单词间的空格数量。如果某一行单词间的空格不能均匀分配，则左侧放置的空格数要多于右侧的空格数。
  * <p>
@@ -15,8 +15,8 @@ import java.util.List;
  * 说明:
  * <p>
  * 单词是指由非空格字符组成的字符序列。
- * 每个单词的长度大于 0，小于等于 maxWidth。
- * 输入单词数组 words 至少包含一个单词。
+ * 每个单词的长度大于 0，小于等于maxWidth。
+ * 输入单词数组 words至少包含一个单词。
  * 示例:
  * <p>
  * 输入:
@@ -24,38 +24,38 @@ import java.util.List;
  * maxWidth = 16
  * 输出:
  * [
- *    "This    is    an",
- *    "example  of text",
- *    "justification.  "
+ *  "This  is  an",
+ *  "example of text",
+ *  "justification. "
  * ]
- * 示例 2:
+ * 示例2:
  * <p>
  * 输入:
  * words = ["What","must","be","acknowledgment","shall","be"]
  * maxWidth = 16
  * 输出:
  * [
- *   "What   must   be",
- *   "acknowledgment  ",
- *   "shall be        "
+ *  "What  must  be",
+ *  "acknowledgment ",
+ *  "shall be    "
  * ]
  * 解释: 注意最后一行的格式应为 "shall be    " 而不是 "shall     be",
- *      因为最后一行应为左对齐，而不是左右两端对齐。
+ *     因为最后一行应为左对齐，而不是左右两端对齐。
  * 第二行同样为左对齐，这是因为这行只包含一个单词。
- * 示例 3:
+ * 示例3:
  * <p>
  * 输入:
  * words = ["Science","is","what","we","understand","well","enough","to","explain",
- *          "to","a","computer.","Art","is","everything","else","we","do"]
+ *         "to","a","computer.","Art","is","everything","else","we","do"]
  * maxWidth = 20
  * 输出:
  * [
- *   "Science  is  what we",
- * "understand      well",
- *   "enough to explain to",
- *   "a  computer.  Art is",
- *   "everything  else  we",
- *   "do                  "
+ *  "Science is what we",
+ * "understand   well",
+ *  "enough to explain to",
+ *  "a computer. Art is",
+ *  "everything else we",
+ *  "do         "
  * ]
  * ["My","momma","always","said,","\"Life","was","like","a","box","of","chocolates.","You","never","know","what","you're","gonna","get."]
  * 20

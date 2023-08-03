@@ -10,11 +10,11 @@ import java.util.Stack;
  *
  * @see com.welph.leecode.part_1_500.part_81_100.images/histogram1.png
  * <p>
- * 以上是柱状图的示例，其中每个柱子的宽度为 1，给定的高度为 [2,1,5,6,2,3]。
+ * 以上是柱状图的示例，其中每个柱子的宽度为 1，给定的高度为[2,1,5,6,2,3]。
  * <p>
  * @see com.welph.leecode.part_1_500.part_81_100.images/histogram2.png
  * <p>
- * 图中阴影部分为所能勾勒出的最大矩形面积，其面积为 10 个单位。
+ * 图中阴影部分为所能勾勒出的最大矩形面积，其面积为10个单位。
  */
 public class Solution84 {
 
