@@ -30,6 +30,48 @@ public class Solution30 {
     }
 
     /**
+     * 官方题解, 每个批次进行滑动
+     */
+    public List<Integer> findSubstring2(String s, String[] words) {
+        List<Integer> res = new ArrayList<Integer>();
+        int m = words.length, n = words[0].length(), ls = s.length();
+        for (int i = 0; i < n; i++) {//每种代表着不同的(0~n)的开头有数据保留
+            if (i + m * n > ls) {
+                break;
+            }
+            Map<String, Integer> differ = new HashMap<String, Integer>();
+            for (int j = 0; j < m; j++) {
+                String word = s.substring(i + j * n, i + (j + 1) * n);
+                differ.put(word, differ.getOrDefault(word, 0) + 1);
+            }
+            for (String word : words) {//当前开始的differ初始化
+                differ.put(word, differ.getOrDefault(word, 0) - 1);
+                if (differ.get(word) == 0) {
+                    differ.remove(word);
+                }
+            }
+            for (int start = i; start < ls - m * n + 1; start += n) {//开始不断向后滑
+                if (start != i) {//跳过第一次
+                    String word = s.substring(start + (m - 1) * n, start + m * n);//添加一个右边的新单词
+                    differ.put(word, differ.getOrDefault(word, 0) + 1);
+                    if (differ.get(word) == 0) {
+                        differ.remove(word);
+                    }
+                    word = s.substring(start - n, start);//减去一个左边的老单词
+                    differ.put(word, differ.getOrDefault(word, 0) - 1);
+                    if (differ.get(word) == 0) {
+                        differ.remove(word);
+                    }
+                }
+                if (differ.isEmpty()) {//differ为空则说明匹配了
+                    res.add(start);
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
      * 在处理这个题目时，，又多次的超出时间限制，一开始思路一致，只是没有过滤掉不必要的便利。
      * 之后不断改进
      * 执行用时 : 27ms。 内存消耗 45.6MB
