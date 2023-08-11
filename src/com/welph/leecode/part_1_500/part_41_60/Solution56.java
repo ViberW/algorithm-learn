@@ -2,6 +2,7 @@ package com.welph.leecode.part_1_500.part_41_60;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -21,9 +22,9 @@ import java.util.List;
 public class Solution56 {
 
     public static void main(String[] args) {
-        int[][] intervals = {{1, 3}, {2, 6}, {8, 10}, {15, 18}};
-        int[][] dsfa = {{2, 3}, {4, 5}, {6, 7}, {8, 9}, {1, 10}};
-        int[][] dfa = {{1, 4}, {1, 5}};
+        int[][] intervals = { { 1, 3 }, { 2, 6 }, { 8, 10 }, { 15, 18 } };
+        int[][] dsfa = { { 2, 3 }, { 4, 5 }, { 6, 7 }, { 8, 9 }, { 1, 10 } };
+        int[][] dfa = { { 1, 4 }, { 1, 5 } };
         int[][] merge = merge(dfa);
         System.out.println("---------------");
         for (int i = 0; i < merge.length; i++) {
@@ -33,6 +34,8 @@ public class Solution56 {
 
     public static int[][] merge(int[][] intervals) {
         List<int[]> list = new ArrayList<>();
+        // 这部分代码起始用下面官方题解, 就能解释, 其实就是个排序操作
+        // 单纯的这部分合并没必要, 下面起始已经有一份合并操作了
         for (int[] arr : intervals) {
             int i = binaryIndex(list, arr[0]);
             if (i >= 0) {
@@ -85,5 +88,27 @@ public class Solution56 {
             }
         }
         return -(r + 1);
+    }
+
+    /* 官方题解 */
+    public int[][] merge2(int[][] intervals) {
+        if (intervals.length == 0) {
+            return new int[0][2];
+        }
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            public int compare(int[] interval1, int[] interval2) {
+                return interval1[0] - interval2[0];
+            }
+        });
+        List<int[]> merged = new ArrayList<int[]>();
+        for (int i = 0; i < intervals.length; ++i) {
+            int L = intervals[i][0], R = intervals[i][1];
+            if (merged.size() == 0 || merged.get(merged.size() - 1)[1] < L) {
+                merged.add(new int[] { L, R });
+            } else {
+                merged.get(merged.size() - 1)[1] = Math.max(merged.get(merged.size() - 1)[1], R);
+            }
+        }
+        return merged.toArray(new int[merged.size()][]);
     }
 }

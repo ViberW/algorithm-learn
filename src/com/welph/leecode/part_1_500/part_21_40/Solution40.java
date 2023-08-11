@@ -29,14 +29,14 @@ import java.util.List;
  * 输入: candidates =[2,5,2,1,2], target =5,
  * 所求解集为:
  * [
- *  [1,2,2],
- *  [5]
+ * [1,2,2],
+ * [5]
  * ]
  */
 public class Solution40 {
 
     public static void main(String[] args) {
-        int[] nums = {10, 1, 2, 7, 6, 1, 5};
+        int[] nums = { 10, 1, 2, 7, 6, 1, 5 };
         int target = 8;
         System.out.println(combinationSum2(nums, target));
     }
@@ -45,7 +45,7 @@ public class Solution40 {
      * 和上一题思路差不多，只不过考虑到下一次的索引应该+1，且保证从index开始后的重复数据不再读取
      */
     public static List<List<Integer>> combinationSum2(int[] candidates, int target) {
-        //注意，这个题目是存在重复数值的数组的且每个值使用一次
+        // 注意，这个题目是存在重复数值的数组的且每个值使用一次
         Arrays.sort(candidates);
         int len = candidates.length;
         List<List<Integer>> result = new ArrayList<>();
@@ -88,5 +88,47 @@ public class Solution40 {
             }
         } while (!list.isEmpty());
         return result;
+    }
+
+    /*
+     * 官方题解
+     */
+    List<int[]> freq = new ArrayList<int[]>();
+    List<List<Integer>> ans = new ArrayList<List<Integer>>();
+    List<Integer> sequence = new ArrayList<Integer>();
+
+    public List<List<Integer>> combinationSum2Two(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        for (int num : candidates) {// 标记每个数据的个数
+            int size = freq.size();
+            if (freq.isEmpty() || num != freq.get(size - 1)[0]) {
+                freq.add(new int[] { num, 1 });
+            } else {
+                ++freq.get(size - 1)[1];
+            }
+        }
+        dfs(0, target);
+        return ans;
+    }
+
+    public void dfs(int pos, int rest) {
+        if (rest == 0) {
+            ans.add(new ArrayList<Integer>(sequence));
+            return;
+        }
+        if (pos == freq.size() || rest < freq.get(pos)[0]) {// 说明用完了数值,或者数值已经无法满足
+            return;
+        }
+
+        dfs(pos + 1, rest);// 放弃当前数值
+
+        int most = Math.min(rest / freq.get(pos)[0], freq.get(pos)[1]);
+        for (int i = 1; i <= most; ++i) {// 使用当前值时, 用到值的最多次数 -- 能够保证不会过多的创建sequence
+            sequence.add(freq.get(pos)[0]);
+            dfs(pos + 1, rest - i * freq.get(pos)[0]);
+        }
+        for (int i = 1; i <= most; ++i) {
+            sequence.remove(sequence.size() - 1);
+        }
     }
 }

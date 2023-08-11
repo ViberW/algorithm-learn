@@ -18,6 +18,7 @@ public class Solution42 {
     public static void main(String[] args) {
         int[] height = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
         System.out.println(trap(height));
+        System.out.println(trap2(height));
     }
 
 
@@ -108,7 +109,7 @@ public class Solution42 {
                     //使用max
                     ans += right_max - height[right];
                 }
-                right++;
+                right--;
             }
         }
         return ans;

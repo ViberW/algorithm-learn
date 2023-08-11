@@ -16,7 +16,7 @@ import com.welph.leecode.common.ListNode;
 public class Solution86 {
 
     public static void main(String[] args) {
-        ListNode listNode = ListNode.createTestData("[1,4,3,2,5,2]");
+        ListNode listNode = ListNode.createTestData("[1,2,4,3,2,5,2]");
         ListNode.print(partition(listNode, 3));
     }
 
@@ -46,4 +46,28 @@ public class Solution86 {
         }
         return parent.next;
     }
+
+    /**
+     * 对上面方法的时间优化 主要是较少了很多判断以及指针的调换
+     */
+    public ListNode partition2(ListNode head, int x) {
+        ListNode small = new ListNode(0);
+        ListNode smallHead = small;
+        ListNode large = new ListNode(0);
+        ListNode largeHead = large;
+        while (head != null) {
+            if (head.val < x) {
+                small.next = head;
+                small = small.next;
+            } else {
+                large.next = head;
+                large = large.next;
+            }
+            head = head.next;
+        }
+        large.next = null;
+        small.next = largeHead.next;
+        return smallHead.next;
+    }
+
 }

@@ -29,10 +29,16 @@ package com.welph.leecode.part_1_500.part_61_80;
  */
 public class Solution72 {
 
-    //这个题目能够解决协同文档的类似操作
+    // 这个题目能够解决协同文档的类似操作
     public static void main(String[] args) {
         System.out.println(minDistance("horse", "ros"));
         System.out.println(minDistance2("horse", "ros"));
+        System.out.println(minDistance("", ""));
+        System.out.println(minDistance2("", ""));
+        System.out.println(minDistance("sea ", "eat"));
+        System.out.println(minDistance2("sea", "eat"));
+        System.out.println(minDistance("a", "ab"));
+        System.out.println(minDistance2("a", "ab"));
     }
 
     /**
@@ -49,39 +55,41 @@ public class Solution72 {
         char[] b = word2.toCharArray();
         int m = word1.length();
         int n = word2.length();
-        int[][] min = new int[m][n];//a为i,b为j时的最小编辑距离
-        //初始化
-        for (int i = 0; i < m; i++) {
-            if (a[i] == b[0]) {
-                min[i][0] = i;
-            } else if (i != 0) {
-                min[i][0] = min[i - 1][0] + 1;
-            } else {
-                min[i][0] = 1;
-            }
+        int[][] min = new int[m + 1][n + 1];// a为i,b为j时的最小编辑距离
+        // 初始化
+        for (int i = 0; i <= m; i++) {
+            min[i][0] = i;
+            // if (a[i] == b[0]) {
+            // min[i][0] = i;
+            // } else if (i != 0) {
+            // min[i][0] = min[i - 1][0] + 1;
+            // } else {
+            // min[i][0] = 1;
+            // }
         }
 
-        for (int i = 0; i < n; i++) {
-            if (a[0] == b[i]) {
-                min[0][i] = i;//在a[0]前添加多个元素
-            } else if (i != 0) {
-                min[0][i] = min[0][i - 1] + 1;
-            } else {
-                min[0][i] = 1;
-            }
+        for (int i = 0; i <= n; i++) {
+            min[0][i] = i;
+            // if (a[0] == b[i]) {
+            // min[0][i] = i;// 在a[0]前添加多个元素
+            // } else if (i != 0) {
+            // min[0][i] = min[0][i - 1] + 1;
+            // } else {
+            // min[0][i] = 1;
+            // }
         }
 
-        for (int i = 1; i < m; i++) {
-            for (int j = 1; j < n; j++) {
-                if (a[i] == b[j]) {
-                    min[i][j] = Math.min(min[i - 1][j] + 1, min[i - 1][j - 1]);
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (a[i - 1] == b[j - 1]) {
+                    min[i][j] = Math.min(Math.min(min[i - 1][j], min[i][j - 1]) + 1, min[i - 1][j - 1]);
                 } else {
-                    min[i][j] = Math.min(min[i - 1][j] + 1, min[i - 1][j - 1] + 1);
+                    min[i][j] = Math.min(Math.min(min[i - 1][j], min[i][j - 1]), min[i - 1][j - 1]) + 1;
                 }
             }
         }
 
-        return min[m - 1][n - 1];
+        return min[m][n];
     }
 
     static int minDist = Integer.MAX_VALUE;
@@ -90,8 +98,9 @@ public class Solution72 {
      * 使用回溯算法去实现
      */
     public static int minDistance2(String word1, String word2) {
-        //如果ai =bj 则尝试ai+1 = bj=1
-        //如果ai!=bj 则 删除ai | 替换ai | 新增ai
+        minDist = Integer.MAX_VALUE;
+        // 如果ai =bj 则尝试ai+1 = bj=1
+        // 如果ai!=bj 则 删除ai | 替换ai | 新增ai
         char[] a = word1.toCharArray();
         char[] b = word2.toCharArray();
         minDistance2(0, 0, 0, a, a.length, b, b.length);
@@ -100,8 +109,10 @@ public class Solution72 {
 
     public static void minDistance2(int i, int j, int min, char[] a, int m, char[] b, int n) {
         if (i == m || j == n) {
-            if (i < m) min += (m - i); //说明还有剩余,需要删除掉剩余
-            if (j < n) min += (n - j); //说明匹配缺少,需要新增额外
+            if (i < m)
+                min += (m - i); // 说明还有剩余,需要删除掉剩余
+            if (j < n)
+                min += (n - j); // 说明匹配缺少,需要新增额外
             if (minDist > min) {
                 minDist = min;
             }
@@ -110,9 +121,9 @@ public class Solution72 {
         if (a[i] == b[j]) {
             minDistance2(i + 1, j + 1, min, a, m, b, n);
         } else {
-            minDistance2(i, j + 1, min + 1, a, m, b, n);//新增b[j] .之后考察a[i]和b[j+1]
-            minDistance2(i + 1, j, min + 1, a, m, b, n);//删除a[i] .之后考察a[i+1]和b[j]
-            minDistance2(i + 1, j + 1, min + 1, a, m, b, n);//a[i]替换为b[j] .之后考察a[i+1]和b[j+1]
+            minDistance2(i, j + 1, min + 1, a, m, b, n);// 新增b[j] .之后考察a[i]和b[j+1]
+            minDistance2(i + 1, j, min + 1, a, m, b, n);// 删除a[i] .之后考察a[i+1]和b[j]
+            minDistance2(i + 1, j + 1, min + 1, a, m, b, n);// a[i]替换为b[j] .之后考察a[i+1]和b[j+1]
         }
     }
 }

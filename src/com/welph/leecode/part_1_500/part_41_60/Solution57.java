@@ -1,6 +1,8 @@
 package com.welph.leecode.part_1_500.part_41_60;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 给出一个无重叠的 ，按照区间起始端点排序的区间列表。
@@ -20,22 +22,24 @@ import java.util.Arrays;
 public class Solution57 {
 
     public static void main(String[] args) {
-       /* int[][] arr = {{1, 2}, {4, 5}, {6, 9}};
-        int[] newInterval = {3, 5};
-        int[][] insert = insert(arr, newInterval);
-        for (int[] a : insert) {
-            System.out.println(Arrays.toString(a));
-        }*/
+        /*
+         * int[][] arr = {{1, 2}, {4, 5}, {6, 9}};
+         * int[] newInterval = {3, 5};
+         * int[][] insert = insert(arr, newInterval);
+         * for (int[] a : insert) {
+         * System.out.println(Arrays.toString(a));
+         * }
+         */
 
-        int[][] arr1 = {{1, 2}, {3, 5}, {6, 7}, {8, 10}, {12, 16}};
-        int[] newInterval1 = {4, 8};
+        int[][] arr1 = { { 1, 2 }, { 3, 5 }, { 6, 7 }, { 8, 10 }, { 12, 16 } };
+        int[] newInterval1 = { 4, 8 };
         int[][] insert1 = insert(arr1, newInterval1);
         for (int[] a : insert1) {
             System.out.println(Arrays.toString(a));
         }
 
-        int[][] arr2 = {{1, 5}};
-        int[] newInterval2 = {0, 3};
+        int[][] arr2 = { { 1, 5 } };
+        int[] newInterval2 = { 0, 3 };
         int[][] insert2 = insert(arr2, newInterval2);
         for (int[] a : insert2) {
             System.out.println(Arrays.toString(a));
@@ -43,7 +47,7 @@ public class Solution57 {
     }
 
     public static int[][] insert(int[][] intervals, int[] newInterval) {
-        //一次二分法找到最开始的位置点，再从断电找对应位置，最终合并
+        // 一次二分法找到最开始的位置点，再从断电找对应位置，最终合并
         int lv = newInterval[1];
         int rv = newInterval[0];
         int r = 0;
@@ -87,5 +91,32 @@ public class Solution57 {
             }
         }
         return ((l + r + add) / 2);
+    }
+
+    /* 参考官方题解 */
+    public static int[][] insert2(int[][] intervals, int[] newInterval) {
+        int l = newInterval[0];
+        int r = newInterval[1];
+        boolean insert = false;
+        List<int[]> ans = new ArrayList<>();
+        for (int[] interval : intervals) {
+            if (interval[0] > r) {
+                if (!insert) {
+                    ans.add(new int[] { l, r });
+                    insert = true;
+                }
+                ans.add(interval);
+            } else if (interval[1] < l) {
+                ans.add(interval);
+            } else {
+                l = Math.min(l, interval[0]);
+                r = Math.max(interval[1], r);
+            }
+        }
+        int[][] ret = new int[ans.size()][2];
+        for (int i = 0; i < ans.size(); i++) {
+            ret[i] = ans.get(i);
+        }
+        return ret;
     }
 }

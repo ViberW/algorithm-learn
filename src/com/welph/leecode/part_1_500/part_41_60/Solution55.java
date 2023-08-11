@@ -21,10 +21,11 @@ package com.welph.leecode.part_1_500.part_41_60;
 public class Solution55 {
 
     public static void main(String[] args) {
-        int[] nums = {2,3,1,1,4};
+        int[] nums = { 2, 3, 1, 1, 4 };
         System.out.println(jump2(nums));
     }
 
+    /* {@link Solution45} */
     public static boolean canJump(int[] nums) {
         int end = 0;
         int maxPosition = 0;
@@ -46,15 +47,16 @@ public class Solution55 {
 
     public static boolean jump2(int[] nums) {
         int position = nums.length - 1;
-        while (position != 0) reset:{
-            for (int i = 0; i < position; i++) {
-                if (nums[i] >= position - i) {
-                    position = i;
-                    break reset;
+        while (position != 0)
+            reset: {
+                for (int i = 0; i < position; i++) {
+                    if (nums[i] >= position - i) {
+                        position = i;
+                        break reset;
+                    }
                 }
+                return false;
             }
-            return false;
-        }
         return true;
     }
 }
