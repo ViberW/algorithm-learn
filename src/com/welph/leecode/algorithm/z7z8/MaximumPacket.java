@@ -7,10 +7,11 @@ package com.welph.leecode.algorithm.z7z8;
 public class MaximumPacket {
 
     public static void main(String[] args) {
-        int[] w = {1, 2, 1, 4, 2, 3};
-        int[] v = {10, 20, 30, 10, 15, 5};
-        //背包重5kg, 求最大装载价值
+        int[] w = { 1, 2, 1, 4, 2, 3 };
+        int[] v = { 10, 20, 30, 10, 15, 5 };
+        // 背包重5kg, 求最大装载价值
         System.out.println(maximumValue(w, v, 5));
+        System.out.println(maximumValue2(w, v, 5));
     }
 
     /**
@@ -32,5 +33,18 @@ public class MaximumPacket {
             }
         }
         return f[m][n];
+    }
+
+    public static int maximumValue2(int[] w, int[] v, int n) {
+        int m = w.length;
+        int[] f = new int[n + 1];
+        for (int i = 0; i < m; ++i) {
+            // 由于上面方法里面计算i行仅仅需要i-1行的数据, 而且需要的j是比当前小的, 所以倒序即可
+            // 小于w[i] 的值不做变更 等同于f[i][j] = f[i - 1][j]
+            for (int j = n; j >= w[i]; --j) {
+                f[j] = Math.max(f[j], f[j - w[i]] + v[i]);
+            }
+        }
+        return f[n];
     }
 }

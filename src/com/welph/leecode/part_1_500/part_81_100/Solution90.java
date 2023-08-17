@@ -48,6 +48,7 @@ public class Solution90 {
             boolean illegal = false;
             for (int j = 0; j < nums.length; j++) {
                 if ((i >> j & 1) == 1) {
+                    //若前面没选择 后面也同样不选择,说明跳过当前值
                     if (j > 0 && nums[j] == nums[j - 1] && (i >> (j - 1) & 1) == 0) {
                         illegal = true;
                         break;

@@ -15,16 +15,15 @@ package com.welph.leecode.part_1_500.part_81_100;
 public class Solution97 {
 
     public static void main(String[] args) {
-        //System.out.println(isInterleave("aabcc", "dbbca", "aadbbbaccc"));
+        // System.out.println(isInterleave("aabcc", "dbbca", "aadbbbaccc"));
         System.out.println(isInterleave2("a", "", "a"));
     }
-
 
     /**
      * 需要用到动态规划, 因为相同1-j的位置可能已经是校验处理过的.
      * boolean i3 = dp[ii-1][i2] && s1[i1]==s3[i3]
-     * .       || dp[ii][i2-1] && s1[i2]==s3[i3]
-     * //动态规划有效  时间95% 空间 14%   其实 每一次仅仅会用到上一次的一组数据. --思考 可以进一步缩减空间消耗
+     * . || dp[ii][i2-1] && s1[i2]==s3[i3]
+     * //动态规划有效 时间95% 空间 14% 其实 每一次仅仅会用到上一次的一组数据. --思考 可以进一步缩减空间消耗
      */
     public static boolean isInterleave2(String s1, String s2, String s3) {
         int len1 = s1.length();
@@ -48,7 +47,7 @@ public class Solution97 {
             c = s3.charAt(i - 1);
             min = Math.min(i, len1);
             for (int j = Math.max(0, i - len2 - 1); j < min; j++) {
-                //保证 [1,0] 能够进来做判断  //若 i> len1 则需要用dp[len1][i-len1] 此时不需要判断第一个
+                // 保证 [1,0] 能够进来做判断 //若 i> len1 则需要用dp[len1][i-len1] 此时不需要判断第一个
                 if (dp[j][i - j - 1]) {
                     if (j != min && s1.charAt(j) == c) {
                         dp[j + 1][i - j - 1] = true;
@@ -69,11 +68,11 @@ public class Solution97 {
     }
 
     /**
-     * 啥也不说  上来就暴力递归法给处理看看
+     * 啥也不说 上来就暴力递归法给处理看看
      * 贼慢 耗时5% 空间14%
      */
     public static boolean isInterleave(String s1, String s2, String s3) {
-        //如果暴力法的话 能结果,深度匹配
+        // 如果暴力法的话 能结果,深度匹配
         if (s1.length() + s2.length() != s3.length()) {
             return false;
         }
@@ -97,5 +96,55 @@ public class Solution97 {
         return false;
     }
 
+    /* 官方题解 代码精简 */
+    public boolean isInterleave3(String s1, String s2, String s3) {
+        int n = s1.length(), m = s2.length(), t = s3.length();
 
+        if (n + m != t) {
+            return false;
+        }
+
+        boolean[][] f = new boolean[n + 1][m + 1];
+
+        f[0][0] = true;
+        for (int i = 0; i <= n; ++i) {
+            for (int j = 0; j <= m; ++j) {
+                int p = i + j - 1;
+                if (i > 0) {
+                    f[i][j] = f[i][j] || (f[i - 1][j] && s1.charAt(i - 1) == s3.charAt(p));
+                }
+                if (j > 0) {
+                    f[i][j] = f[i][j] || (f[i][j - 1] && s2.charAt(j - 1) == s3.charAt(p));
+                }
+            }
+        }
+
+        return f[n][m];
+    }
+
+    // 上述方法的精简
+    public boolean isInterleave4(String s1, String s2, String s3) {
+        int n = s1.length(), m = s2.length(), t = s3.length();
+
+        if (n + m != t) {
+            return false;
+        }
+
+        boolean[] f = new boolean[m + 1];
+
+        f[0] = true;
+        for (int i = 0; i <= n; ++i) {
+            for (int j = 0; j <= m; ++j) {
+                int p = i + j - 1;
+                if (i > 0) {
+                    f[j] = f[j] && s1.charAt(i - 1) == s3.charAt(p);
+                }
+                if (j > 0) {
+                    f[j] = f[j] || (f[j - 1] && s2.charAt(j - 1) == s3.charAt(p));
+                }
+            }
+        }
+
+        return f[m];
+    }
 }

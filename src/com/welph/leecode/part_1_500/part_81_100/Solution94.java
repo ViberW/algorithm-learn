@@ -5,11 +5,11 @@ import com.welph.leecode.common.TreeNode;
 import java.util.*;
 
 /**
- * 给定一个二叉树，返回它的中序遍历。  左-中-右
+ * 给定一个二叉树，返回它的中序遍历。 左-中-右
  * <p>
  * 示例:
  * <p>
- * 输入: [1,null,2,3]   --tips 这里面leetcode写的有点问题 应该按照 数组树的写: [1,null,2,null,null,3]
+ * 输入: [1,null,2,3] --tips 这里面leetcode写的有点问题 应该按照 数组树的写: [1,null,2,null,null,3]
  * ***1
  * **** \
  * **** 2
@@ -48,8 +48,8 @@ public class Solution94 {
     /**
      * 迭代算法处理 减少入栈的资源消耗和处理
      * <p>
-     * -- 不太好保存线程的数据信息  --
-     * 好像执行时间长了  -_-.....
+     * -- 不太好保存线程的数据信息 --
+     * 好像执行时间长了 -_-.....
      */
     public static List<Integer> inorderTraversal2(TreeNode root) {
         LinkedList<Integer> result = new LinkedList<>();
@@ -82,11 +82,11 @@ public class Solution94 {
      * Step 1: 将当前节点current初始化为根节点
      * Step 2: While current不为空，
      * 若current没有左子节点
-     * .   a. 将current添加到输出
-     * .   b. 进入右子树，亦即, current = current.right
+     * . a. 将current添加到输出
+     * . b. 进入右子树，亦即, current = current.right
      * 否则
-     * .   a. 在current的左子树中，令current成为最右侧节点的右子节点
-     * .   b. 进入左子树，亦即，current = current.left
+     * . a. 在current的左子树中，令current成为最右侧节点的右子节点
+     * . b. 进入左子树，亦即，current = current.left
      * <p>
      * 下面这种遍历会破会树的结构, 若是需要恢复,则需要.加一层判断, 父节点,与当前的节点是否一致;
      */
@@ -105,6 +105,41 @@ public class Solution94 {
                 }
                 pre.right = curr; // put cur after the pre node
                 TreeNode temp = curr; // store cur node
+                curr = curr.left; // move cur to the top of the new tree
+                temp.left = null; // original cur left be null, avoid infinite loops
+            }
+        }
+        return res;
+    }
+
+    // 结合上面的morris遍历, 简单处理树结构的恢复
+    public static List<Integer> inorderTraversal4(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        TreeNode curr = root;
+        TreeNode pre = null;
+        Map<TreeNode, TreeNode> map = new HashMap<>();
+        while (curr != null) {
+            if (curr.left == null) {
+                res.add(curr.val);
+                if (map.containsKey(curr)) {
+                    curr.left = map.remove(curr);// recover
+                    // 将right->curr的指向关系给断开
+                    TreeNode tmp = pre;
+                    pre = curr;
+                    curr = curr.right; // move to next right node
+                    tmp.right = null;
+                } else {
+                    pre = curr;
+                    curr = curr.right; // move to next right node
+                }
+            } else { // has a left subtree
+                pre = curr.left;
+                while (pre.right != null) { // find rightmost
+                    pre = pre.right;
+                }
+                pre.right = curr; // put cur after the pre node
+                TreeNode temp = curr; // store cur node
+                map.put(curr, curr.left);
                 curr = curr.left; // move cur to the top of the new tree
                 temp.left = null; // original cur left be null, avoid infinite loops
             }

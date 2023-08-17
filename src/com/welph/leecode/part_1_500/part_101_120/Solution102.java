@@ -5,6 +5,7 @@ import com.welph.leecode.common.TreeNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * . 给你一个二叉树，请你返回其按 层序遍历 得到的节点值。 （即逐层地，从左到右访问所有节点）。
@@ -14,17 +15,17 @@ import java.util.List;
  * . 示例：
  * . 二叉树：[3,9,20,null,null,15,7],
  * .
- * .     3
- * .    / \
- * .   9  20
- * .     /  \
- * .    15   7
+ * . 3
+ * . / \
+ * . 9 20
+ * . / \
+ * . 15 7
  * . 返回其层次遍历结果：
  * .
  * . [
- * .   [3],
- * .   [9,20],
- * .   [15,7]
+ * . [3],
+ * . [9,20],
+ * . [15,7]
  * . ]
  */
 public class Solution102 {
@@ -36,7 +37,7 @@ public class Solution102 {
 
     /**
      * 遍历感觉太消耗了;需要维护的有点多
-     * 迭代可能好些
+     * 迭代可能好些----早期的不熟练
      */
     public static List<List<Integer>> levelOrder(TreeNode root) {
         List<List<Integer>> result = new ArrayList<>();
@@ -75,4 +76,31 @@ public class Solution102 {
         return result;
     }
 
+    /* 官方题解 */
+    public List<List<Integer>> levelOrder2(TreeNode root) {
+        List<List<Integer>> ret = new ArrayList<List<Integer>>();
+        if (root == null) {
+            return ret;
+        }
+
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            List<Integer> level = new ArrayList<Integer>();
+            int currentLevelSize = queue.size();
+            for (int i = 1; i <= currentLevelSize; ++i) {
+                TreeNode node = queue.poll();
+                level.add(node.val);
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
+                }
+            }
+            ret.add(level);
+        }
+
+        return ret;
+    }
 }
