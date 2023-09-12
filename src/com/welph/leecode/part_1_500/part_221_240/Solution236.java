@@ -1,5 +1,10 @@
 package com.welph.leecode.part_1_500.part_221_240;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import com.welph.leecode.common.TreeNode;
 
 /**
@@ -36,9 +41,9 @@ public class Solution236 {
         TreeNode.print(lowestCommonAncestor(root, p, q));
     }
 
-    //这里是二叉树!!!
+    // 这里是二叉树!!!
     public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        //两种情况, 有其他公共节点  有两者之一的节点
+        // 两种情况, 有其他公共节点 有两者之一的节点
         node = null;
         find(root, p, q);
         return node;
@@ -56,7 +61,7 @@ public class Solution236 {
             q = null;
             result++;
         }
-        //找到同时为true的节点
+        // 找到同时为true的节点
         if (root.left != null) {
             result += find(root.left, p, q);
             if (result == 2) {
@@ -95,5 +100,55 @@ public class Solution236 {
             }
         }
         return null;
+    }
+
+    /* 官方题解 */
+    private TreeNode ans;
+
+    // 递归方式
+    public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+        this.dfs(root, p, q);
+        return this.ans;
+    }
+
+    private boolean dfs(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null)
+            return false;
+        boolean lson = dfs(root.left, p, q);
+        boolean rson = dfs(root.right, p, q);
+        if ((lson && rson) || ((root.val == p.val || root.val == q.val) && (lson || rson))) {
+            ans = root;
+        }
+        return lson || rson || (root.val == p.val || root.val == q.val);
+    }
+
+    // 存储父子节点
+    Map<Integer, TreeNode> parent = new HashMap<Integer, TreeNode>();
+    Set<Integer> visited = new HashSet<Integer>();
+
+    public TreeNode lowestCommonAncestor3(TreeNode root, TreeNode p, TreeNode q) {
+        dfs(root);
+        while (p != null) {
+            visited.add(p.val);
+            p = parent.get(p.val);
+        }
+        while (q != null) {
+            if (visited.contains(q.val)) {
+                return q;
+            }
+            q = parent.get(q.val);
+        }
+        return null;
+    }
+
+    public void dfs(TreeNode root) {
+        if (root.left != null) {
+            parent.put(root.left.val, root);
+            dfs(root.left);
+        }
+        if (root.right != null) {
+            parent.put(root.right.val, root);
+            dfs(root.right);
+        }
     }
 }

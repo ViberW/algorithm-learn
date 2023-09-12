@@ -33,7 +33,7 @@ public class Solution301 {
         System.out.println(removeInvalidParentheses("()())()"));
     }
 
-    //todo 看了题解 广度优先算法
+    //todo 看了题解 广度优先算法  因为是删除最小数量, 所以广度算法最好
     public static List<String> removeInvalidParentheses(String s) {
         List<String> res = new ArrayList<>();
         if (s == null) {

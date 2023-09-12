@@ -1,5 +1,7 @@
 package com.welph.leecode.part_1_500.part_161_180;
 
+import java.util.Arrays;
+
 /**
  * 一些恶魔抓住了公主（P）并将她关在了地下城的右下角。
  * 地下城是由 M x N 个房间组成的二维网格。
@@ -15,9 +17,9 @@ package com.welph.leecode.part_1_500.part_161_180;
  * <p>
  * 编写一个函数来计算确保骑士能够拯救到公主所需的最低初始健康点数。
  * 例如，考虑到如下布局的地下城，如果骑士遵循最佳路径 右 -> 右 -> 下 -> 下，则骑士的初始健康点数至少为 7。
- * -2 (K)	-3	   3
- * -5	   -10	   1
- * 10	   30	  -5 (P)
+ * -2 (K) -3 3
+ * -5 -10 1
+ * 10 30 -5 (P)
  * <p>
  * 说明:
  * 骑士的健康点数没有上限。
@@ -26,23 +28,45 @@ package com.welph.leecode.part_1_500.part_161_180;
 public class Solution174 {
 
     public static void main(String[] args) {
-        int[][] dungeon = {{-2, -3, 3}, {-5, -10, 1}, {10, 30, -5}};
+        int[][] dungeon = { { -2, -3, 3 }, { -5, -10, 1 }, { 10, 30, -5 } };
         System.out.println(calculateMinimumHP(dungeon));
     }
 
+    /**
+     * 这个逻辑有问题, 因为路径上的最小达到某个点时, 后面还需要考虑当前剩余
+     * //todo 不如官方题解.从结果推导, 但想法先保留
+     */
     public static int calculateMinimumHP(int[][] dungeon) {
         int m = dungeon.length;
         int n = dungeon[0].length;
-        int[][] dp = new int[m + 1][n + 1]; //到达m,n点时的最低健康点数
-        //上/左单独处理下好些.
+        int[][] dp = new int[m + 1][n + 1]; // 到达m,n点时的最低健康点数
+        // 上/左单独处理下好些.
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                //还需要想办法 给记录到线路上的最少使用健康点....
-                //应当记录 到达 i,j 点当前剩余的, 以及最少使用健康点数 最少剩余1, 最大是多出来的.
+                // 还需要想办法 给记录到线路上的最少使用健康点....
+                // 应当记录 到达 i,j 点当前剩余的, 以及最少使用健康点数 最少剩余1, 最大是多出来的.
                 dp[i + 1][j + 1] = Math.max(1, dungeon[i][j] + Math.min(dp[i][j + 1], dp[i + 1][j]));
             }
         }
         return Math.max(0, dp[m][n]);
     }
+
+    /* 官方题解 */
+    public int calculateMinimumHP2(int[][] dungeon) {
+        int n = dungeon.length, m = dungeon[0].length;
+        int[][] dp = new int[n + 1][m + 1];// 这里记录到i,j剩余量
+        for (int i = 0; i <= n; ++i) {
+            Arrays.fill(dp[i], Integer.MAX_VALUE);
+        }
+        dp[n][m - 1] = dp[n - 1][m] = 1;
+        for (int i = n - 1; i >= 0; --i) {
+            for (int j = m - 1; j >= 0; --j) {
+                int minn = Math.min(dp[i + 1][j], dp[i][j + 1]);
+                dp[i][j] = Math.max(minn - dungeon[i][j], 1);
+            }
+        }
+        return dp[0][0];
+    }
+
 }

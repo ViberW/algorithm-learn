@@ -57,4 +57,15 @@ public class Solution162 {
         return -1;
     }
 
+    /*官方题解 第一种解法, 并不意味者比二分法好*/
+    public int findPeakElement1(int[] nums) {
+        int idx = 0;
+        for (int i = 1; i < nums.length; ++i) {
+            if (nums[i] > nums[idx]) {
+                idx = i;
+            }
+        }
+        return idx;
+    }
+
 }

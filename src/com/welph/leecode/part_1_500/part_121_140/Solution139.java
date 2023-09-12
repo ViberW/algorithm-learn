@@ -2,7 +2,9 @@ package com.welph.leecode.part_1_500.part_121_140;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 给定一个非空字符串 s 和一个包含非空单词的列表 wordDict，判定s 是否可以被空格拆分为一个或多个在字典中出现的单词。
@@ -55,7 +57,7 @@ public class Solution139 {
             maxLen = Math.max(i, maxLen);
         }
 
-        boolean[][] dp = new boolean[length][length + 1]; //左闭右开
+        boolean[][] dp = new boolean[length][length + 1]; //左闭右开 这里简化为1维数组
         dp[0][0] = true;
         for (int i = 0; i < length; i++) {
             for (int j = minLen; j <= maxLen; j++) {
@@ -103,5 +105,21 @@ public class Solution139 {
         public Trie(char data) {
             this.data = data;
         }
+    }
+
+    /* 官方题解 */
+    public boolean wordBreak2(String s, List<String> wordDict) {
+        Set<String> wordDictSet = new HashSet<>(wordDict);
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && wordDictSet.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[s.length()];
     }
 }

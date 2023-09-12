@@ -2,7 +2,9 @@ package com.welph.leecode.part_1_500.part_201_220;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * 现在你总共有 n 门课需要选，记为 0 到 n-1。
@@ -36,10 +38,10 @@ public class Solution210 {
      * 类同{@link Solution207}
      */
     public static void main(String[] args) {
-        int[][] prerequisites = {{1, 0}, {2, 0}, {3, 1}, {3, 2}};
+        int[][] prerequisites = { { 1, 0 }, { 2, 0 }, { 3, 1 }, { 3, 2 } };
         System.out.println(Arrays.toString(findOrder(4, prerequisites)));
 
-        int[][] prerequisites1 = {{1, 0}, {0, 1}};
+        int[][] prerequisites1 = { { 1, 0 }, { 0, 1 } };
         System.out.println(Arrays.toString(findOrder(2, prerequisites1)));
     }
 
@@ -86,4 +88,53 @@ public class Solution210 {
         visited[i] = 2;
         result[index++] = i;
     }
+
+    /* 官网题解 另一种方式BFS */
+    // 存储有向图
+    List<List<Integer>> edges;
+    // 存储每个节点的入度
+    int[] indeg;
+
+    //具体查看 {@link Solution207} 基于Kahn算法
+    public int[] findOrder2(int numCourses, int[][] prerequisites) {
+        edges = new ArrayList<List<Integer>>();
+        for (int i = 0; i < numCourses; ++i) {
+            edges.add(new ArrayList<Integer>());
+        }
+        indeg = new int[numCourses];
+        result = new int[numCourses];
+        index = 0;
+        for (int[] info : prerequisites) {
+            edges.get(info[1]).add(info[0]);
+            ++indeg[info[0]];
+        }
+
+        Queue<Integer> queue = new LinkedList<Integer>();
+        // 将所有入度为 0 的节点放入队列中
+        for (int i = 0; i < numCourses; ++i) {
+            if (indeg[i] == 0) {
+                queue.offer(i);
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            // 从队首取出一个节点
+            int u = queue.poll();
+            // 放入答案中
+            result[index++] = u;
+            for (int v : edges.get(u)) {
+                --indeg[v];
+                // 如果相邻节点 v 的入度为 0，就可以选 v 对应的课程了
+                if (indeg[v] == 0) {
+                    queue.offer(v);
+                }
+            }
+        }
+
+        if (index != numCourses) {
+            return new int[0];
+        }
+        return result;
+    }
+
 }

@@ -46,7 +46,7 @@ public class Solution121 {
                 maxV = v;
                 profit = Math.max(profit, maxV - minV);
             }
-            if (v < minV) {
+            if (v < minV) {//相当于贪心的逻辑
                 maxV = minV = v;
             }
         }

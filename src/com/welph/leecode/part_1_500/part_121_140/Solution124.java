@@ -48,15 +48,16 @@ public class Solution124 {
     public static int maxLeafPathSum(TreeNode node, int[] max) {
         int l = 0;
         if (null != node.left) {
-            l = maxLeafPathSum(node.left, max);
+            l = maxLeafPathSum(node.left, max);//分治
         }
         int r = 0;
         if (null != node.right) {
             r = maxLeafPathSum(node.right, max);
         }
         int clr;
+        //因为必须包含一个节点, 所以不用管node.val的正反值
         if (r > 0 && l > 0) {
-            clr = node.val + l + r;
+            clr = node.val + l + r; 
             if (clr > max[0]) {
                 max[0] = clr;
             }
@@ -68,5 +69,36 @@ public class Solution124 {
             }
             return clr;
         }
+    }
+
+    /*官方题解 */
+    int maxSum = Integer.MIN_VALUE;
+
+    /*
+     * 相当于我的题解的代码简化 去除那些个判断逻辑
+     */
+    public int maxPathSum2(TreeNode root) {
+        maxGain(root);
+        return maxSum;
+    }
+
+    public int maxGain(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        
+        // 递归计算左右子节点的最大贡献值
+        // 只有在最大贡献值大于 0 时，才会选取对应子节点
+        int leftGain = Math.max(maxGain(node.left), 0);
+        int rightGain = Math.max(maxGain(node.right), 0);
+
+        // 节点的最大路径和取决于该节点的值与该节点的左右子节点的最大贡献值
+        int priceNewpath = node.val + leftGain + rightGain;
+
+        // 更新答案
+        maxSum = Math.max(maxSum, priceNewpath);
+
+        // 返回节点的最大贡献值
+        return node.val + Math.max(leftGain, rightGain);
     }
 }

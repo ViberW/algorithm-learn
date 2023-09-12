@@ -28,11 +28,11 @@ public class Solution306 {
         System.out.println(isAdditiveNumber("0235813"));///
         System.out.println(isAdditiveNumber("121474836472147483648"));
         System.out.println(isAdditiveNumber("199001200"));
-        //2147483647
+        // 2147483647
     }
 
-    //首先确定好最前面的两个数据值, 之后就不断叠加就可以了
-    //碰到了0就往后叠加
+    // 首先确定好最前面的两个数据值, 之后就不断叠加就可以了
+    // 碰到了0就往后叠加
     public static boolean isAdditiveNumber(String num) {
         int length = num.length();
         int l = length / 2;
@@ -88,4 +88,66 @@ public class Solution306 {
         }
         return r + 1 == length;
     }
+
+    /* 官方题解 --和我的思路一样的*/
+    public boolean isAdditiveNumber2(String num) {
+        int n = num.length();
+        for (int secondStart = 1; secondStart < n - 1; ++secondStart) {
+            if (num.charAt(0) == '0' && secondStart != 1) {
+                break;
+            }
+            for (int secondEnd = secondStart; secondEnd < n - 1; ++secondEnd) {
+                if (num.charAt(secondStart) == '0' && secondStart != secondEnd) {
+                    break;
+                }
+                if (valid(secondStart, secondEnd, num)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean valid(int secondStart, int secondEnd, String num) {
+        int n = num.length();
+        int firstStart = 0, firstEnd = secondStart - 1;
+        while (secondEnd <= n - 1) {
+            String third = stringAdd(num, firstStart, firstEnd, secondStart, secondEnd);
+            int thirdStart = secondEnd + 1;
+            int thirdEnd = secondEnd + third.length();
+            if (thirdEnd >= n || !num.substring(thirdStart, thirdEnd + 1).equals(third)) {
+                break;
+            }
+            if (thirdEnd == n - 1) {
+                return true;
+            }
+            firstStart = secondStart;
+            firstEnd = secondEnd;
+            secondStart = thirdStart;
+            secondEnd = thirdEnd;
+        }
+        return false;
+    }
+
+    public String stringAdd(String s, int firstStart, int firstEnd, int secondStart, int secondEnd) {
+        StringBuffer third = new StringBuffer();
+        int carry = 0, cur = 0;
+        while (firstEnd >= firstStart || secondEnd >= secondStart || carry != 0) {
+            cur = carry;
+            if (firstEnd >= firstStart) {
+                cur += s.charAt(firstEnd) - '0';
+                --firstEnd;
+            }
+            if (secondEnd >= secondStart) {
+                cur += s.charAt(secondEnd) - '0';
+                --secondEnd;
+            }
+            carry = cur / 10;
+            cur %= 10;
+            third.append((char) (cur + '0'));
+        }
+        third.reverse();
+        return third.toString();
+    }
+
 }

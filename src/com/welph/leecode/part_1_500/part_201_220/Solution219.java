@@ -1,7 +1,9 @@
 package com.welph.leecode.part_1_500.part_201_220;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 给定一个整数数组和一个整数k，判断数组中是否存在两个不同的索引i和j，
@@ -22,7 +24,7 @@ import java.util.Map;
 public class Solution219 {
 
     public static void main(String[] args) {
-        int[] nums = {1, 2, 3, 1, 2, 3};
+        int[] nums = { 1, 2, 3, 1, 2, 3 };
         System.out.println(containsNearbyDuplicate(nums, 2));
     }
 
@@ -38,4 +40,20 @@ public class Solution219 {
         }
         return false;
     }
+
+    /* 另一种解法(滑动窗口) */
+    public boolean containsNearbyDuplicate2(int[] nums, int k) {
+        Set<Integer> set = new HashSet<Integer>();
+        int length = nums.length;
+        for (int i = 0; i < length; i++) {
+            if (i > k) {
+                set.remove(nums[i - k - 1]);
+            }
+            if (!set.add(nums[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

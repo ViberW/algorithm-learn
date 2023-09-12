@@ -48,7 +48,7 @@ package com.welph.leecode.part_1_500.part_161_180;
 public class Solution165 {
 
     public static void main(String[] args) {
-        System.out.println(compareVersion("1.01", "1.001"));
+        System.out.println(compareVersion("1.01", "1.01"));
     }
 
     //可能包含 前导零

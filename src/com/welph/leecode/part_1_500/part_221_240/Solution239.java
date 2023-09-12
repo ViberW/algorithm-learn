@@ -14,14 +14,14 @@ import java.util.TreeMap;
  * 输入：nums = [1,3,-1,-3,5,3,6,7], k = 3
  * 输出：[3,3,5,5,6,7]
  * 解释：
- * 滑动窗口的位置                最大值
- * ---------------               -----
- * [1  3  -1] -3  5  3  6  7       3
- * .1 [3  -1  -3] 5  3  6  7       3
- * .1  3 [-1  -3  5] 3  6  7       5
- * .1  3  -1 [-3  5  3] 6  7       5
- * .1  3  -1  -3 [5  3  6] 7       6
- * .1  3  -1  -3  5 [3  6  7]      7
+ * 滑动窗口的位置 最大值
+ * --------------- -----
+ * [1 3 -1] -3 5 3 6 7 3
+ * .1 [3 -1 -3] 5 3 6 7 3
+ * .1 3 [-1 -3 5] 3 6 7 5
+ * .1 3 -1 [-3 5 3] 6 7 5
+ * .1 3 -1 -3 [5 3 6] 7 6
+ * .1 3 -1 -3 5 [3 6 7] 7
  * <p>
  * 示例 2：
  * 输入：nums = [1], k = 1
@@ -47,17 +47,17 @@ import java.util.TreeMap;
 public class Solution239 {
 
     public static void main(String[] args) {
-        int[] nums = {1, -1};
+        int[] nums = { 1, -1 };
         System.out.println(Arrays.toString(maxSlidingWindow(nums, 1)));
     }
 
-    //尴尬: 时间: 5.01%   空间:30.56%   也算是自己的思路吧
+    // 尴尬: 时间: 5.01% 空间:30.56% 也算是自己的思路吧
     public static int[] maxSlidingWindow(int[] nums, int k) {
         int len = nums.length;
         int[] res = new int[len - k + 1];
         int reK = k - 1;
 
-        //使用最大栈  每次获取最大栈的最大值, 并去除最前一个值, 添加当前值
+        // 使用最大栈 每次获取最大栈的最大值, 并去除最前一个值, 添加当前值
         TreeMap<Integer, Integer> tree = new TreeMap<>();
         int num;
         for (int i = 0; i < len; i++) {
@@ -73,7 +73,7 @@ public class Solution239 {
                         tree.put(num, orDefault);
                     }
                 }
-                //....
+                // ....
                 res[i - reK] = tree.lastKey();
             }
         }
@@ -82,13 +82,13 @@ public class Solution239 {
 
     /**
      * 官方的题解:
-     * 1. 滑动窗口  --- 类似我这的treeMap  使用了PriorityQueue来代替
+     * 1. 滑动窗口 --- 类似我这的treeMap 使用了PriorityQueue来代替
      * 2.单调队列
      * 3.分块+预处理
      */
 
     /**
-     * 单调队列 ..  想象nums[i] 为k-j范围内的最大值,  此时向右移动一位, 仅仅需要比较num[j]与num[i]的大小关系
+     * 单调队列 .. 想象nums[i] 为k-j范围内的最大值, 此时向右移动一位, 仅仅需要比较num[j]与num[i]的大小关系
      * <p>
      * 只需要保证到达 j 处时, 单调队列中存在大于num[j]的数据值即可.
      */
@@ -118,7 +118,7 @@ public class Solution239 {
     }
 
     /**
-     * 分块+预处理   --- 牛
+     * 分块+预处理 --- 牛
      * <p>
      * 1. 如果 i 是 k 的倍数，那么 nums[i] 到 nums[i+k−1]
      * 恰好是一个分组。我们只要预处理出每个分组中的最大值，即可得到答案；
@@ -130,27 +130,27 @@ public class Solution239 {
      */
     /**
      * .prefixMax[i] :
-     * .    1. nums[i]   i是k的倍数
-     * .    2. max(prefixMax[i-1], nums[i])
+     * . 1. nums[i] i是k的倍数
+     * . 2. max(prefixMax[i-1], nums[i])
      * .suffixMax[i] :
-     * .    1. nums[i]   i+1是k的倍数
-     * .    2.max(suffixMax[i+1], nums[i])
+     * . 1. nums[i] i+1是k的倍数
+     * . 2.max(suffixMax[i+1], nums[i])
      * <p>
-     * ////  i ... (suffix) (prefix)... i+k-1
+     * //// i ... (suffix) (prefix)... i+k-1
      */
     public static int[] maxSlidingWindow3(int[] nums, int k) {
         int n = nums.length;
         int[] prefixMax = new int[n];
         int[] suffixMax = new int[n];
         for (int i = 0; i < n; ++i) {
-            if (i % k == 0) {
+            if (i % k == 0) {// 以i(被k整除)开始, 向后的一小段.
                 prefixMax[i] = nums[i];
             } else {
                 prefixMax[i] = Math.max(prefixMax[i - 1], nums[i]);
             }
         }
         for (int i = n - 1; i >= 0; --i) {
-            if (i == n - 1 || (i + 1) % k == 0) {
+            if (i == n - 1 || (i + 1) % k == 0) {//以i(被k整除)结束,向前的一小段
                 suffixMax[i] = nums[i];
             } else {
                 suffixMax[i] = Math.max(suffixMax[i + 1], nums[i]);
@@ -159,7 +159,14 @@ public class Solution239 {
 
         int[] ans = new int[n - k + 1];
         for (int i = 0; i <= n - k; ++i) {
-            ans[i] = Math.max(suffixMax[i], prefixMax[i + k - 1]);
+            /*
+             *  | -------- | ---------|  这里假设一个窗口(m,n)=k 此时j%k=0
+             *  m          j          n 
+             *  那么(m,j)的最大值为 suffixMax[m]
+             *  同时(j,n)的最大值为 prefixMax[m + k - 1] = prefixMax[n]
+             *  可以得出结果为 两者的最大值
+             */
+            ans[i] = Math.max(suffixMax[i], prefixMax[i + k - 1]); 
         }
         return ans;
     }

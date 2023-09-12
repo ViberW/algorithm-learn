@@ -6,11 +6,15 @@ package com.welph.leecode.part_1_500.part_221_240;
  * 每列的元素从上到下升序排列。
  * <p>
  * 示例 1：
- * 输入：matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 5
+ * 输入：matrix =
+ * [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]],
+ * target = 5
  * 输出：true
  * <p>
  * 示例 2：
- * 输入：matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 20
+ * 输入：matrix =
+ * [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]],
+ * target = 20
  * 输出：false
  * <p>
  * 提示：
@@ -26,11 +30,11 @@ public class Solution240 {
 
     public static void main(String[] args) {
         int[][] matrix = {
-                {1, 4, 7, 11, 15},
-                {2, 5, 8, 12, 19},
-                {3, 6, 9, 16, 22},
-                {10, 13, 14, 17, 24},
-                {18, 21, 23, 26, 30}};
+                { 1, 4, 7, 11, 15 },
+                { 2, 5, 8, 12, 19 },
+                { 3, 6, 9, 16, 22 },
+                { 10, 13, 14, 17, 24 },
+                { 18, 21, 23, 26, 30 } };
         System.out.println(searchMatrix(matrix, 25));
         System.out.println(searchMatrix(matrix, 5));
         System.out.println(searchMatrix(matrix, 9));
@@ -56,11 +60,28 @@ public class Solution240 {
             } else {
                 r = mid - 1;
             }
-            //还可以改进--  再通过row进行一次二分查找
+            // 还可以改进-- 再通过row进行一次二分查找
             if (l > r) {
                 r = mid;
                 l = 0;
                 i++;
+            }
+        }
+        return false;
+    }
+
+    /* 官方题解 */
+    public boolean searchMatrix2(int[][] matrix, int target) {
+        int m = matrix.length, n = matrix[0].length;
+        int x = 0, y = n - 1; // 一开始从右上角 进而缩小范围.牛的
+        while (x < m && y >= 0) {
+            if (matrix[x][y] == target) {
+                return true;
+            }
+            if (matrix[x][y] > target) {
+                --y;
+            } else {
+                ++x;
             }
         }
         return false;

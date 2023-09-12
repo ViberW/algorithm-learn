@@ -38,7 +38,7 @@ public class Solution299 {
     //使用数组保存char更好^_^
     public static String getHint(String secret, String guess) {
         int length = secret.length();
-        Map<Character, Integer> map = new HashMap<>();
+        Map<Character, Integer> map = new HashMap<>();//这里可以使用长度为10的数组 更好
         char c;
         int a = 0;
         int b = 0;

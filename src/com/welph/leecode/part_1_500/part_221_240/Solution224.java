@@ -25,19 +25,20 @@ import java.util.Stack;
 public class Solution224 {
 
     public static void main(String[] args) {
-       // System.out.println(calculate("1 + 1"));
+        // System.out.println(calculate("1 + 1"));
         System.out.println(calculate("2-1 + 2"));
-       // System.out.println(calculate("(1+(4+5+2)-3)+(6+8)"));
+        // System.out.println(calculate("(1+(4+5+2)-3)+(6+8)"));
     }
 
-    //解析 并使用栈
+    // 解析 并使用栈
     public static int calculate(String s) {
         Stack<Integer> sign = new Stack<>();
         sign.push(1);
         int ans = 0, num = 0, op = 1;
         char[] chars = s.toCharArray();
         for (char c : chars) {
-            if (c == ' ') continue;
+            if (c == ' ')
+                continue;
             if ('0' <= c && c <= '9') {
                 num = num * 10 + (c - '0');
                 continue;
@@ -45,13 +46,13 @@ public class Solution224 {
             ans += op * num;
             num = 0;
             if (c == '+') {
-                op = sign.peek();
+                op = sign.peek(); // 这里本质上是 是否翻转
             } else if (c == '-') {
-                op = -sign.peek();
+                op = -sign.peek(); // 这里本质上是 是否翻转
             } else if (c == '(') {
-                sign.push(op);
+                sign.push(op); // op用于后续的 + 和 - 的翻转
             } else if (c == ')') {
-                sign.pop();
+                sign.pop(); // 弹出运算符
             }
         }
         ans += op * num;

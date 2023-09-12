@@ -17,8 +17,8 @@ public class Solution201 {
         System.out.println(rangeBitwiseAnd(5, 7));
     }
 
-    //从m到n   m+1, m+2 ... n  所有数字的与
-    //只需要考虑到.最小位的  -- x&(x+1) 最大前缀
+    // 从m到n m+1, m+2 ... n 所有数字的与
+    // 只需要考虑到.最小位的 -- x&(x+1) 最大前缀
     public static int rangeBitwiseAnd(int m, int n) {
         int offset = 0;
         for (; m != n; ++offset) {
@@ -27,4 +27,14 @@ public class Solution201 {
         }
         return n << offset;
     }
+
+    /* 官方题解 */
+    public int rangeBitwiseAnd2(int m, int n) {
+        while (m < n) {
+            // 抹去最右边的 1
+            n = n & (n - 1);
+        }
+        return n;
+    }
+
 }

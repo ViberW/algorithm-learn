@@ -16,7 +16,7 @@ package com.welph.leecode.part_1_500.part_201_220;
  * 输入：nums = [1,2,3,1]
  * 输出：4
  * 解释：你可以先偷窃 1 号房屋（金额 = 1），然后偷窃 3 号房屋（金额 = 3）。
- * .     偷窃到的最高金额 = 1 + 3 = 4 。
+ * . 偷窃到的最高金额 = 1 + 3 = 4 。
  * <p>
  * 示例 3：
  * 输入：nums = [0]
@@ -32,7 +32,7 @@ public class Solution213 {
      * 类同{@link com.welph.leecode.part_1_500.part_181_200.Solution198}
      */
     public static void main(String[] args) {
-        int[] nums = {2, 3, 2};
+        int[] nums = { 2, 3, 2 };
         System.out.println(rob(nums));
     }
 
@@ -40,7 +40,7 @@ public class Solution213 {
      * 还要考虑最后一个和最开始的相连问题
      * //若是最后一个选择的时候, 不包含最开始就可以了
      * <p>
-     * 最后一次的判断 =  val2,   val(不包含nums[0])的之间的最大值
+     * 最后一次的判断 = val2, val(不包含nums[0])的之间的最大值
      * -- 一次算好包含和不包含的最大值
      */
     public static int rob(int[] nums) {
@@ -53,8 +53,9 @@ public class Solution213 {
         }
         int val1 = nums[0];
         int val2 = Math.max(nums[0], nums[1]);
-        int val3 = 0;
-        int val4 = nums[1];
+        // 相当于不选择0号位的房屋
+        int val3 = 0; // 等同于v1, 由于不选择0号位,则该值为0
+        int val4 = nums[1];// 等同于v2, 由于不选择0号位,则该值为Math.max(0, nums[1])= nums[1]
         int tmp;
         int i = 2;
         for (; i < len; i++) {
@@ -63,7 +64,7 @@ public class Solution213 {
             val3 = tmp;
 
             tmp = val2;
-            val2 = i == len - 1 ? Math.max(val4, Math.max(val1, val2))
+            val2 = i == len - 1 ? Math.max(val4, Math.max(val1, val2))// 最后时,则val4为选择最后一位的, val1和val2位不选择到最后位
                     : Math.max(val1 + nums[i], val2);
             val1 = tmp;
         }
@@ -76,8 +77,10 @@ public class Solution213 {
      * 2. 不包含第一个房间的最大值
      */
     public static int rob2(int[] nums) {
-        if (nums.length == 0) return 0;
-        if (nums.length == 1) return nums[0];
+        if (nums.length == 0)
+            return 0;
+        if (nums.length == 1)
+            return nums[0];
         return Math.max(robCross(nums, 0, nums.length - 1),
                 robCross(nums, 1, nums.length));
     }

@@ -37,26 +37,27 @@ public class Solution222 {
 
     public static int countNodes(TreeNode root) {
         //查找到当前存在的位置上
-        int r = depth(root, true);
-        int l = depth(root, false);
-        int count = (int) Math.pow(2, r + 1) - 1;
+        int r = depth(root, true); //找到最右边
+        int l = depth(root, false);//找到最左边
+        int count = (int) Math.pow(2, r + 1) - 1; //最右边肯定最短, 统计数量
         TreeNode target = root;
-        int stepCount = (int) Math.pow(2, r + 1);
+        int stepCount = (int) Math.pow(2, r + 1); //这里是最底下一层满员的总数
         while (r < l) {
             l--;
             r--;
             int tmp = l;
-            l = depth(target.right, false);
-            if (r < l) {
-                count += stepCount / 2;
-                target = target.right;
+            l = depth(target.right, false); //二分查询右节点是否长度小,
+            if (r < l) { //若是根节点的右节点本身形成了高度差
+                count += stepCount / 2;  //加上最底层的左半部分
+                target = target.right; //当前节点变为右节点
             } else {
+                //由于在左边
                 l = tmp;
                 r = depth(target.left, true);
-                if (r == l) {
+                if (r == l) {//此时是正好相等的.
                     count += stepCount / 2;
                 }
-                target = target.left;
+                target = target.left;//若r<l.则说明左半部分
             }
             stepCount = stepCount / 2;
         }

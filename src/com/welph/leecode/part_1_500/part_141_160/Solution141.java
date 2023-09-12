@@ -36,7 +36,7 @@ public class Solution141 {
 
     public static void main(String[] args) {
         ListNode node1 = ListNode.createTestData("[3,2,0,-4]");
-        System.out.println(new Solution141().hasCycle(node1));
+        System.out.println(new Solution141().hasCycle(node1)); 
     }
 
     /**

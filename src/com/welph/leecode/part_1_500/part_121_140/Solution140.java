@@ -2,8 +2,12 @@ package com.welph.leecode.part_1_500.part_121_140;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，
@@ -17,8 +21,8 @@ import java.util.List;
  * wordDict = ["cat", "cats", "and", "sand", "dog"]
  * 输出:
  * .[
- * .     "cats and dog",
- * .     "cat sand dog"
+ * . "cats and dog",
+ * . "cat sand dog"
  * .]
  * <p>
  * 示例 2：
@@ -27,9 +31,9 @@ import java.util.List;
  * wordDict = ["apple", "pen", "applepen", "pine", "pineapple"]
  * 输出:
  * .[
- * .     "pine apple pen apple",
- * .     "pineapple pen apple",
- * .     "pine applepen apple"
+ * . "pine apple pen apple",
+ * . "pineapple pen apple",
+ * . "pine applepen apple"
  * .]
  * 解释: 注意你可以重复使用字典中的单词。
  * <p>
@@ -63,7 +67,7 @@ public class Solution140 {
         int length = chars.length;
 
         Trie root = new Trie('/');
-        int minLen = Integer.MAX_VALUE; //假设计算出了最小移动距离
+        int minLen = Integer.MAX_VALUE; // 假设计算出了最小移动距离
         int maxLen = 0;
         for (String word : wordDict) {
             int i = insetTrie(root, word);
@@ -71,7 +75,7 @@ public class Solution140 {
             maxLen = Math.max(i, maxLen);
         }
 
-        List<Integer>[][] dp = new List[length][length + 1]; //保存最后一次的分割的位置(分割线的后面的索引)
+        List<Integer>[][] dp = new List[length][length + 1]; // 保存最后一次的分割的位置(分割线的后面的索引)
         dp[0][0] = new ArrayList<>();
         for (int i = 0; i < length; i++) {
             for (int j = minLen; j <= maxLen; j++) {
@@ -90,7 +94,7 @@ public class Solution140 {
         return result;
     }
 
-    //回溯算法构建结果集
+    // 回溯算法构建结果集
     public void deepIndex(LinkedList<Integer> indexs, List<Integer>[][] dp, int index, String s, List<String> result) {
         if (index == 0) {
             StringBuilder stringBuilder = new StringBuilder(s);
@@ -142,11 +146,45 @@ public class Solution140 {
     class Trie {
         public char data;
         public Trie[] children = new Trie[26];
-        public boolean isEndingChar = false; //是否为叶子节点
+        public boolean isEndingChar = false; // 是否为叶子节点
         public String word;
 
         public Trie(char data) {
             this.data = data;
         }
+    }
+
+    /* 官方题解 */
+    public List<String> wordBreak2(String s, List<String> wordDict) {
+        Map<Integer, List<List<String>>> map = new HashMap<Integer, List<List<String>>>();
+        List<List<String>> wordBreaks = backtrack(s, s.length(), new HashSet<String>(wordDict), 0, map);
+        List<String> breakList = new LinkedList<String>();
+        for (List<String> wordBreak : wordBreaks) {
+            breakList.add(String.join(" ", wordBreak));
+        }
+        return breakList;
+    }
+
+    public List<List<String>> backtrack(String s, int length, Set<String> wordSet, int index,
+            Map<Integer, List<List<String>>> map) {
+        if (!map.containsKey(index)) {
+            List<List<String>> wordBreaks = new LinkedList<List<String>>();
+            if (index == length) {
+                wordBreaks.add(new LinkedList<String>());
+            }
+            for (int i = index + 1; i <= length; i++) {
+                String word = s.substring(index, i);
+                if (wordSet.contains(word)) {
+                    List<List<String>> nextWordBreaks = backtrack(s, length, wordSet, i, map);
+                    for (List<String> nextWordBreak : nextWordBreaks) {
+                        LinkedList<String> wordBreak = new LinkedList<String>(nextWordBreak);
+                        wordBreak.offerFirst(word);
+                        wordBreaks.add(wordBreak);
+                    }
+                }
+            }
+            map.put(index, wordBreaks);
+        }
+        return map.get(index);
     }
 }

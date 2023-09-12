@@ -30,54 +30,52 @@ public class Solution130 {
 
     public static void main(String[] args) {
         char[][] board = {
-                {'X', 'X', 'X', 'X'},
-                {'X', 'O', 'O', 'X'},
-                {'X', 'X', 'O', 'X'},
-                {'X', 'O', 'X', 'X'},
+                { 'X', 'X', 'X', 'X' },
+                { 'X', 'O', 'O', 'X' },
+                { 'X', 'X', 'O', 'X' },
+                { 'X', 'O', 'X', 'X' },
         };
 
         char[][] board1 = {
-                {'O', 'X', 'O'},
-                {'X', 'O', 'X'},
-                {'O', 'X', 'O'},
+                { 'O', 'X', 'O' },
+                { 'X', 'O', 'X' },
+                { 'O', 'X', 'O' },
         };
 
         char[][] board2 = {
-                {'O', 'O', 'O', 'O', 'X', 'X'},
-                {'O', 'O', 'O', 'O', 'O', 'O'},
-                {'O', 'X', 'O', 'X', 'O', 'O'},
-                {'O', 'X', 'O', 'O', 'X', 'O'},
-                {'O', 'X', 'O', 'X', 'O', 'O'},
-                {'O', 'X', 'O', 'O', 'O', 'O'}
+                { 'O', 'O', 'O', 'O', 'X', 'X' },
+                { 'O', 'O', 'O', 'O', 'O', 'O' },
+                { 'O', 'X', 'O', 'X', 'O', 'O' },
+                { 'O', 'X', 'O', 'O', 'X', 'O' },
+                { 'O', 'X', 'O', 'X', 'O', 'O' },
+                { 'O', 'X', 'O', 'O', 'O', 'O' }
         };
 
-
         char[][] board3 = {
-                {'X', 'O', 'O', 'X', 'X', 'X', 'O', 'X', 'O', 'O'},
-                {'X', 'O', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
-                {'X', 'X', 'X', 'X', 'O', 'X', 'X', 'X', 'X', 'X'},
-                {'X', 'O', 'X', 'X', 'X', 'O', 'X', 'X', 'X', 'O'},
-                {'O', 'X', 'X', 'X', 'O', 'X', 'O', 'X', 'O', 'X'},
-                {'X', 'X', 'O', 'X', 'X', 'O', 'O', 'X', 'X', 'X'},
-                {'O', 'X', 'X', 'O', 'O', 'X', 'O', 'X', 'X', 'O'},
-                {'O', 'X', 'X', 'X', 'X', 'X', 'O', 'X', 'X', 'X'},
-                {'X', 'O', 'O', 'X', 'X', 'O', 'X', 'X', 'O', 'O'},
-                {'X', 'X', 'X', 'O', 'O', 'X', 'O', 'X', 'X', 'O'}};
+                { 'X', 'O', 'O', 'X', 'X', 'X', 'O', 'X', 'O', 'O' },
+                { 'X', 'O', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' },
+                { 'X', 'X', 'X', 'X', 'O', 'X', 'X', 'X', 'X', 'X' },
+                { 'X', 'O', 'X', 'X', 'X', 'O', 'X', 'X', 'X', 'O' },
+                { 'O', 'X', 'X', 'X', 'O', 'X', 'O', 'X', 'O', 'X' },
+                { 'X', 'X', 'O', 'X', 'X', 'O', 'O', 'X', 'X', 'X' },
+                { 'O', 'X', 'X', 'O', 'O', 'X', 'O', 'X', 'X', 'O' },
+                { 'O', 'X', 'X', 'X', 'X', 'X', 'O', 'X', 'X', 'X' },
+                { 'X', 'O', 'O', 'X', 'X', 'O', 'X', 'X', 'O', 'O' },
+                { 'X', 'X', 'X', 'O', 'O', 'X', 'O', 'X', 'X', 'O' } };
 
         char[][] board4 = {
-                {'O', 'X', 'O', 'O', 'X', 'X'},
-                {'O', 'X', 'X', 'X', 'O', 'X'},
-                {'X', 'O', 'O', 'X', 'O', 'O'},
-                {'O', 'O', 'X', 'O', 'X', 'X'},
-                {'X', 'X', 'O', 'O', 'O', 'O'}};
-
+                { 'O', 'X', 'O', 'O', 'X', 'X' },
+                { 'O', 'X', 'X', 'X', 'O', 'X' },
+                { 'X', 'O', 'O', 'X', 'O', 'O' },
+                { 'O', 'O', 'X', 'O', 'X', 'X' },
+                { 'X', 'X', 'O', 'O', 'O', 'O' } };
 
         char[][] board5 = {
-                {'X', 'X', 'X', 'X', 'X'},
-                {'X', 'O', 'O', 'O', 'X'},
-                {'X', 'X', 'O', 'O', 'X'},
-                {'X', 'X', 'X', 'O', 'X'},
-                {'X', 'O', 'X', 'X', 'X'}};
+                { 'X', 'X', 'X', 'X', 'X' },
+                { 'X', 'O', 'O', 'O', 'X' },
+                { 'X', 'X', 'O', 'O', 'X' },
+                { 'X', 'X', 'X', 'O', 'X' },
+                { 'X', 'O', 'X', 'X', 'X' } };
         solve(board);
         for (char[] chars : board) {
             System.out.println(Arrays.toString(chars));
@@ -95,7 +93,7 @@ public class Solution130 {
         int xl = board.length;
         int yl = board[0].length;
         boolean[][] crossed = new boolean[xl][yl];
-        //从四周出发,找到所有和边相连的点并进行标记
+        // 从四周出发,找到所有和边相连的点并进行标记
         for (int i = 0; i < xl; i++) {
             closed(board, crossed, i, 0, xl, yl);
             closed(board, crossed, i, yl - 1, xl, yl);
@@ -114,7 +112,7 @@ public class Solution130 {
     }
 
     public static void closed(char[][] board, boolean[][] crossed,
-                              int x, int y, int xl, int yl) {
+            int x, int y, int xl, int yl) {
         if (x >= 0 && x < xl && y >= 0 && y < yl) {
             if (!crossed[x][y] && board[x][y] == 'O') {
                 crossed[x][y] = true;
@@ -124,5 +122,44 @@ public class Solution130 {
                 closed(board, crossed, x, y - 1, xl, yl);
             }
         }
+    }
+
+    /* 官方题解 */
+    int n, m;
+
+    public void solve2(char[][] board) {
+        n = board.length;
+        if (n == 0) {
+            return;
+        }
+        m = board[0].length;
+        for (int i = 0; i < n; i++) {
+            dfs(board, i, 0);
+            dfs(board, i, m - 1);
+        }
+        for (int i = 1; i < m - 1; i++) {
+            dfs(board, 0, i);
+            dfs(board, n - 1, i);
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (board[i][j] == 'A') {
+                    board[i][j] = 'O';
+                } else if (board[i][j] == 'O') {
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
+
+    public void dfs(char[][] board, int x, int y) {
+        if (x < 0 || x >= n || y < 0 || y >= m || board[x][y] != 'O') {
+            return;
+        }
+        board[x][y] = 'A'; // 相较于我的方法 这里使用'A'代替crossed, 之后再重新复原
+        dfs(board, x + 1, y);
+        dfs(board, x - 1, y);
+        dfs(board, x, y + 1);
+        dfs(board, x, y - 1);
     }
 }

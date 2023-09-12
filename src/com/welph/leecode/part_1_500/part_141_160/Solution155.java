@@ -17,11 +17,12 @@ public class Solution155 {
         //["MinStack","push","push","push","getMin","pop","top","getMin"]
         //[[],[-2],[0],[-3],[],[],[],[]]
         MinStack2 obj = new MinStack2();
-        obj.push(-2);
         obj.push(0);
+        obj.push(-2);
+         System.out.println( obj.pop());//-3
         obj.push(-3);
         System.out.println(obj.getMin());//-3
-        obj.pop();
+       
         System.out.println(obj.top());//0
         System.out.println(obj.getMin());//-2
     }
@@ -50,10 +51,9 @@ public class Solution155 {
         public Integer pop() {
             int top = stack.peek();
             // 如果top小于0，显然最小值也一并会被删除，此时更新最小值
-            int origin = min;
             min = top < 0 ? (min - top) : min;
             stack.pop();
-            return top < 0 ? min : origin + top;
+            return min + top;
         }
 
         public Integer top() {

@@ -12,7 +12,7 @@ package com.welph.leecode.part_1_500.part_121_140;
  * 示例1:
  * <p>
  * 输入:
- * gas  = [1,2,3,4,5]
+ * gas = [1,2,3,4,5]
  * cost = [3,4,5,1,2]
  * <p>
  * 输出: 3
@@ -28,7 +28,7 @@ package com.welph.leecode.part_1_500.part_121_140;
  * 示例 2:
  * <p>
  * 输入:
- * gas  = [2,3,4]
+ * gas = [2,3,4]
  * cost = [3,4,3]
  * <p>
  * 输出: -1
@@ -44,19 +44,19 @@ package com.welph.leecode.part_1_500.part_121_140;
 public class Solution134 {
 
     public static void main(String[] args) {
-        int[] gas = {1, 2, 3, 4, 5};
-        int[] cost = {3, 4, 5, 1, 2};
+        int[] gas = { 1, 2, 3, 4, 5 };
+        int[] cost = { 3, 4, 5, 1, 2 };
         System.out.println(canCompleteCircuit(gas, cost));
     }
 
     /**
-     * 贪心算法  因为绕圈一周, 要保存好从0~i的油量
+     * 贪心算法 因为绕圈一周, 要保存好从0~i的油量
      */
     public static int canCompleteCircuit(int[] gas, int[] cost) {
-        //因为要跑到最后 至少说明是大于0的
+        // 因为要跑到最后 至少说明是大于0的
         int length = gas.length;
-        int total = 0;  //从0到i会有多少的油
-        int run = 0; //从某一处出发运行的油量
+        int total = 0; // 从0到i会有多少的油
+        int run = 0; // 从某一处出发运行的油量
         int start = 0;
         for (int i = 0; i < length; i++) {
             total += gas[i] - cost[i];
@@ -67,5 +67,30 @@ public class Solution134 {
             }
         }
         return total < 0 ? -1 : start;
+    }
+
+    /* 官方题解 另一种基础思路, 并不意味着就比贪心算法快 */
+    public int canCompleteCircuit1(int[] gas, int[] cost) {
+        int n = gas.length;
+        int i = 0;
+        while (i < n) {
+            int sumOfGas = 0, sumOfCost = 0;
+            int cnt = 0;
+            while (cnt < n) {
+                int j = (i + cnt) % n;
+                sumOfGas += gas[j];
+                sumOfCost += cost[j];
+                if (sumOfCost > sumOfGas) {
+                    break;
+                }
+                cnt++;
+            }
+            if (cnt == n) {
+                return i;
+            } else {
+                i = i + cnt + 1;//从下一个无法到达的加油站开始
+            }
+        }
+        return -1;
     }
 }

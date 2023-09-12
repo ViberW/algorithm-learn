@@ -25,11 +25,11 @@ package com.welph.leecode.part_1_500.part_181_200;
  */
 public class Solution198 {
     public static void main(String[] args) {
-        int[] nums = {2, 7, 9, 3, 1};
+        int[] nums = { 2, 7, 9, 3, 1 };
         System.out.println(rob(nums));
     }
 
-    //dp[i] = dp[i-2] + nums[i] //包含了当前
+    // dp[i] = dp[i-2] + nums[i] //包含了当前
     public static int rob(int[] nums) {
         int len = nums.length;
         if (len == 0) {
@@ -41,5 +41,24 @@ public class Solution198 {
             dp[i + 1] = Math.max(dp[i - 1] + nums[i], dp[i]);
         }
         return dp[len];
+    }
+
+    // 空间优化
+    public static int rob1(int[] nums) {
+        int len = nums.length;
+        if (len == 0) {
+            return 0;
+        }
+        if (len == 1) {
+            return nums[0];
+        }
+        int first = nums[0];
+        int second = Math.max(nums[0], nums[1]);
+        for (int i = 1; i < len; i++) {
+            int tmp = second;
+            second = Math.max(first + nums[i], second);
+            first = tmp;
+        }
+        return second;
     }
 }

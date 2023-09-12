@@ -3,7 +3,9 @@ package com.welph.leecode.part_1_500.part_141_160;
 import com.welph.leecode.common.ListNode;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 给定一个单链表L：L0→L1→…→Ln-1→Ln ，
@@ -49,7 +51,7 @@ public class Solution143 {
 
                 p = tmp;
             } else {
-                //说明不要有next
+                // 说明不要有next
                 ListNode tmp = p.next;
                 p.next = null;
                 p = tmp;
@@ -57,4 +59,29 @@ public class Solution143 {
             x++;
         }
     }
+
+    /* 官方题解 */
+    public void reorderList2(ListNode head) {
+        if (head == null) {
+            return;
+        }
+        List<ListNode> list = new ArrayList<ListNode>();
+        ListNode node = head;
+        while (node != null) {
+            list.add(node);
+            node = node.next;
+        }
+        int i = 0, j = list.size() - 1;
+        while (i < j) {
+            list.get(i).next = list.get(j);
+            i++;
+            if (i == j) {
+                break;
+            }
+            list.get(j).next = list.get(i);
+            j--;
+        }
+        list.get(i).next = null;
+    }
+
 }

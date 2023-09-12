@@ -1,5 +1,7 @@
 package com.welph.leecode.part_1_500.part_161_180;
 
+import java.util.Arrays;
+
 /**
  * 给定一组非负整数 nums，重新排列它们每个数字的顺序（每个数字不可拆分）使之组成一个最大的整数。
  * 注意：输出结果可能非常大，所以你需要返回一个字符串而不是整数。
@@ -27,11 +29,11 @@ package com.welph.leecode.part_1_500.part_161_180;
 public class Solution179 {
 
     public static void main(String[] args) {
-        int[] nums = {3, 30, 34, 5, 9};
+        int[] nums = { 3, 30, 34, 5, 9 };
         System.out.println(largestNumber(nums));
     }
 
-    //按照字母的前后顺序添加. 长度越短, 比较时越大
+    // 按照字母的前后顺序添加. 长度越短, 比较时越大
     public static String largestNumber(int[] nums) {
         sort(nums, 0, nums.length - 1);
         StringBuilder sb = new StringBuilder();
@@ -68,7 +70,7 @@ public class Solution179 {
     }
 
     private static boolean compare(int num, int pivot) {
-        //这里也可以先转化为string, 根据index比较, 就不用了太多的空间了
+        // 这里也可以先转化为string, 根据index比较, 就不用了太多的空间了
         return new StringBuilder().append(num).append(pivot).toString()
                 .compareTo(new StringBuilder().append(pivot).append(num).toString()) >= 0;
     }
@@ -81,4 +83,35 @@ public class Solution179 {
         nums[l] = nums[target];
         nums[target] = tmp;
     }
+
+    /* 官方题解 */
+    public String largestNumber2(int[] nums) {
+        int n = nums.length;
+        // 转换成包装类型，以便传入 Comparator 对象（此处为 lambda 表达式）
+        Integer[] numsArr = new Integer[n];
+        for (int i = 0; i < n; i++) {
+            numsArr[i] = nums[i];
+        }
+
+        Arrays.sort(numsArr, (x, y) -> {
+            long sx = 10, sy = 10;
+            while (sx <= x) {
+                sx *= 10;
+            }
+            while (sy <= y) {
+                sy *= 10;
+            }
+            return (int) (-sy * x - y + sx * y + x);
+        });
+
+        if (numsArr[0] == 0) {
+            return "0";
+        }
+        StringBuilder ret = new StringBuilder();
+        for (int num : numsArr) {
+            ret.append(num);
+        }
+        return ret.toString();
+    }
+
 }

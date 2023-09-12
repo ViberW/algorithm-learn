@@ -25,7 +25,7 @@ public class Solution204 {
         System.out.println(countPrimes1(100));
     }
 
-    //todo 这里还有个[线性筛] .....
+    // todo 这里还有个[线性筛] .....
     /**
      * {@link com.welph.leecode.algorithm.thinking.PrimeSieve_17} 线性筛
      */
@@ -48,8 +48,9 @@ public class Solution204 {
             if (isPrime[i] == 0) {
                 count++;
                 if ((long) i * i < n) {
+                    // 这里只能往后乘以i,因为以前的都被处理过了
                     for (int j = i * i; j < n; j += i) {
-                        isPrime[j] = 1;
+                        isPrime[j] = 1;// 标记已经被处理过了
                     }
                 }
             }
@@ -57,11 +58,30 @@ public class Solution204 {
         return count;
     }
 
+    /*
+     * 暴力法 一个个遍历
+     */
+    public int countPrimes0(int n) {
+        int ans = 0;
+        for (int i = 2; i < n; ++i) {
+            ans += isPrime(i) ? 1 : 0;
+        }
+        return ans;
+    }
 
-    //质数是指在大于1的自然数中，除了1和它本身以外不再有其他因数的自然数
-    //todo -_- 暴力法 就是针对每个数据进行从2~n-1是否有能够整除的.  --超出时间限制
-    //todo  这个质数其他看题解 这很数学!
-    //它总是等于 6x-1 或者 6x+1
+    public boolean isPrime(int x) {
+        for (int i = 2; i * i <= x; ++i) {
+            if (x % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // 质数是指在大于1的自然数中，除了1和它本身以外不再有其他因数的自然数
+    // todo -_- 暴力法 就是针对每个数据进行从2~n-1是否有能够整除的. --超出时间限制
+    // todo 这个质数其他看题解 这很数学!
+    // 它总是等于 6x-1 或者 6x+1
     public static int countPrimes(int n) {
         int count = 0;
         if (n > 2) {

@@ -30,7 +30,7 @@ public class Solution208 {
     static class Trie {
 
         public class TrieNode {
-            public char data;
+            public char data;//这里可以没必要存data 因为本身通过下标就能够表示
             public TrieNode[] children = new TrieNode[26];
             public boolean isEndingChar = false;
 

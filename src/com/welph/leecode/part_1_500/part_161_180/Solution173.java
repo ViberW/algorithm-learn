@@ -2,6 +2,7 @@ package com.welph.leecode.part_1_500.part_161_180;
 
 import com.welph.leecode.common.TreeNode;
 
+import java.util.Deque;
 import java.util.LinkedList;
 
 /**
@@ -25,9 +26,9 @@ public class Solution173 {
         LinkedList<Integer> queue;
 
         public BSTIterator(TreeNode root) {
-            //根据最小的root压栈
+            // 根据最小的root压栈
             queue = new LinkedList<Integer>();
-            //这里就需要使用 [中序遍历] morris遍历
+            // 这里就需要使用 [中序遍历] morris遍历
             TreeNode curr = root;
             TreeNode pre;
             while (curr != null) {
@@ -54,6 +55,33 @@ public class Solution173 {
 
         public boolean hasNext() {
             return !queue.isEmpty();
+        }
+    }
+
+    /* 官方题解 */
+
+    class BSTIterator1 {
+        private TreeNode cur;
+        private Deque<TreeNode> stack;
+
+        public BSTIterator1(TreeNode root) {
+            cur = root;
+            stack = new LinkedList<TreeNode>();
+        }
+
+        public int next() {
+            while (cur != null) {//使用stack存储,这里的处理方法也是类似上面的mirros遍历了
+                stack.push(cur);
+                cur = cur.left;
+            }
+            cur = stack.pop();
+            int ret = cur.val;
+            cur = cur.right;
+            return ret;
+        }
+
+        public boolean hasNext() {
+            return cur != null || !stack.isEmpty();
         }
     }
 

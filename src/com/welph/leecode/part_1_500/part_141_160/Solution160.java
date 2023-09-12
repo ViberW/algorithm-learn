@@ -33,7 +33,11 @@ public class Solution160 {
 
     //---todo 着重思考相同步数到相交点
     //两次遍历 第一次消除两个链表的长度不一
-    //第二次, 起始点会从相交点的前X位置开始比较;
+    //第二次, 起始点会从相交点的前X位置开始比较;  
+    /*
+     * ---- 看下leecode题解说明
+     * <a>https://leetcode.cn/problems/intersection-of-two-linked-lists/solutions/10774/tu-jie-xiang-jiao-lian-biao-by-user7208t/</a>
+     */
     public static ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         if (headA == null || headB == null) {
             return null;
