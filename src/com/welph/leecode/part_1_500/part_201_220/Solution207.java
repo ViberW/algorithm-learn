@@ -45,13 +45,13 @@ public class Solution207 {
         int[] inDegree = new int[numCourses];
         LinkedList<Integer>[] adj = new LinkedList[numCourses];
         for (int[] prerequisite : prerequisites) {
-            inDegree[prerequisite[1]]++; //到达的点+1;
-            LinkedList<Integer> list = adj[prerequisite[0]];
+            inDegree[prerequisite[0]]++; //到达的点+1;
+            LinkedList<Integer> list = adj[prerequisite[1]];
             if (list == null) {
                 list = new LinkedList<>();
-                adj[prerequisite[0]] = list;
+                adj[prerequisite[1]] = list;
             }
-            list.add(prerequisite[1]);
+            list.add(prerequisite[0]); //1能够到达的0的列表
         }
         //从那些inDegree[i] = 0 的点开始, 说明它是开头
         LinkedList<Integer> queue = new LinkedList<>();

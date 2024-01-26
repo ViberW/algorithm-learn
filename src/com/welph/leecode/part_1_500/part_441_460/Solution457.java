@@ -39,11 +39,11 @@ package com.welph.leecode.part_1_500.part_441_460;
 public class Solution457 {
 
     public static void main(String[] args) {
-        System.out.println(circularArrayLoop(new int[]{2, -1, 1, 2, 2}));
-        System.out.println(circularArrayLoop(new int[]{-2, 1, -1, -2, -2}));
-        System.out.println(circularArrayLoop(new int[]{-1, 2}));
-        System.out.println(circularArrayLoop(new int[]{2, 2, 2, 2, 2, 4, 7}));
-        System.out.println(circularArrayLoop(new int[]{-1, -1, -1}));
+        System.out.println(circularArrayLoop(new int[] { 2, -1, 1, 2, 2 }));
+        System.out.println(circularArrayLoop(new int[] { -2, 1, -1, -2, -2 }));
+        System.out.println(circularArrayLoop(new int[] { -1, 2 }));
+        System.out.println(circularArrayLoop(new int[] { 2, 2, 2, 2, 2, 4, 7 }));
+        System.out.println(circularArrayLoop(new int[] { -1, -1, -1 }));
     }
 
     /**
@@ -60,6 +60,7 @@ public class Solution457 {
         int next;
         boolean positive;
         for (int i = 0; i < len; i++) {
+            // 节点被遍历过
             if (nums[i] >= limit) {
                 continue;
             }
@@ -68,23 +69,66 @@ public class Solution457 {
             do {
                 next = (nums[k] + k) % len;
                 next = next < 0 ? len + next : next;
-                if (next == k) {
+                if (next == k) {// 成为本身, 无法成环
                     break;
                 }
+                // 下一个节点被遍历过
                 if (nums[next] >= limit) {
+                    // 说明绕回来了
                     if (nums[next] == limit + i) {
                         return true;
                     } else {
                         break;
                     }
                 }
+                // 若原本为 顺时针且节点next小于0 或 逆时针且节点next大于0 ,说明next不满足当前循环方向
                 if (positive ^ (nums[next] > 0)) {
                     break;
                 }
-                nums[k] = limit + i;
+                nums[k] = limit + i; // 加上limit 表示当前节点已经被遍历过了
                 k = next;
             } while (nums[k] < limit);
         }
         return false;
     }
+
+    /* 官方题解 */
+
+    // 快慢指针
+    // {@link Solution287}
+    public boolean circularArrayLoop1(int[] nums) {
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == 0) {
+                continue;
+            }
+            int slow = i, fast = next(nums, i);
+            // 判断非零且方向相同
+            while (nums[slow] * nums[fast] > 0 && nums[slow] * nums[next(nums, fast)] > 0) {
+                if (slow == fast) {
+                    if (slow != next(nums, slow)) {
+                        return true;
+                    } else {
+                        break;
+                    }
+                }
+                slow = next(nums, slow);
+                fast = next(nums, next(nums, fast));
+            }
+            // 把经历过的节点置为0
+            int add = i;
+            while (nums[add] * nums[next(nums, add)] > 0) {
+                int tmp = add;
+                add = next(nums, add);
+                nums[tmp] = 0;
+            }
+        }
+        return false;
+    }
+
+    public int next(int[] nums, int cur) {
+        int n = nums.length;
+        return ((cur + nums[cur]) % n + n) % n; // 保证返回值在 [0,n) 中
+    }
+
 }

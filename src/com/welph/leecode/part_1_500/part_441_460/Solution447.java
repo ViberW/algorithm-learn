@@ -31,10 +31,10 @@ import java.util.Map;
 public class Solution447 {
 
     public static void main(String[] args) {
-        System.out.println(numberOfBoomerangs(new int[][]{{1, 1}, {2, 2}, {3, 3}}));
-        System.out.println(numberOfBoomerangs(new int[][]{{0, 0}, {1, 0}, {2, 0}}));
-        System.out.println(numberOfBoomerangs(new int[][]{{1, 1}}));
-        System.out.println(numberOfBoomerangs(new int[][]{{0, 0}, {1, 0}, {-1, 0}, {0, 1}, {0, -1}}));
+        System.out.println(numberOfBoomerangs(new int[][] { { 1, 1 }, { 2, 2 }, { 3, 3 } }));
+        System.out.println(numberOfBoomerangs(new int[][] { { 0, 0 }, { 1, 0 }, { 2, 0 } }));
+        System.out.println(numberOfBoomerangs(new int[][] { { 1, 1 } }));
+        System.out.println(numberOfBoomerangs(new int[][] { { 0, 0 }, { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } }));
     }
 
     /**
@@ -46,15 +46,15 @@ public class Solution447 {
     public static int numberOfBoomerangs(int[][] points) {
         int ret = 0;
         int length = points.length;
-        //计算不同点之间的距离, 哈希表存储数据
+        // 计算不同点之间的距离, 哈希表存储数据
         int val;
-        //到i的距离
+        // 到i的距离
         Map<Integer, Integer>[] map = new Map[length];
         for (int i = 0; i < length; i++) {
             map[i] = new HashMap<>();
         }
         for (int i = 0; i < length; i++) {
-            //todo 减少空间的正确方法: 这里仅仅需要从头到尾计算就可以, 不用关心重复计算 减少空间使用
+            // todo 减少空间的正确方法: 这里仅仅需要从头到尾计算就可以, 不用关心重复计算 减少空间使用
             // for (int j = 0; j < length; j++) {
             for (int j = i + 1; j < length; j++) {
                 val = (int) (Math.pow(points[i][0] - points[j][0], 2) + Math.pow(points[i][1] - points[j][1], 2));
@@ -72,4 +72,27 @@ public class Solution447 {
         }
         return ret;
     }
+
+    /* 官方题解 */
+    // 枚举+哈希表
+    // 相较于上面方法, 空间很少, 并且计算的不多
+    public int numberOfBoomerangs2(int[][] points) {
+        int ans = 0;
+        // 将p作为回旋镖的中间点
+        for (int[] p : points) {
+            Map<Integer, Integer> cnt = new HashMap<Integer, Integer>();
+            // 那么只需要找到 有m个点到p距离相等
+            for (int[] q : points) {
+                int dis = (p[0] - q[0]) * (p[0] - q[0]) + (p[1] - q[1]) * (p[1] - q[1]);
+                cnt.put(dis, cnt.getOrDefault(dis, 0) + 1);
+            }
+            for (Map.Entry<Integer, Integer> entry : cnt.entrySet()) {
+                int m = entry.getValue();
+                // 那么相当于在m个点中选择2个点排列数, 它们的距离到p相等, 可选法: C(m,2)阶的和
+                ans += m * (m - 1);
+            }
+        }
+        return ans;
+    }
+
 }

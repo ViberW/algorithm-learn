@@ -34,7 +34,7 @@ package com.welph.leecode.part_1_500.part_261_280;
 public class Solution268 {
 
     public static void main(String[] args) {
-        int[] nums = {9, 6, 4, 2, 3, 5, 7, 0, 1};
+        int[] nums = { 9, 6, 4, 2, 3, 5, 7, 0, 1 };
         System.out.println(missingNumber(nums));
     }
 
@@ -47,4 +47,16 @@ public class Solution268 {
         }
         return val;
     }
+
+    // 基于数学的逻辑, 666
+    public int missingNumber2(int[] nums) {
+        int n = nums.length;
+        int total = n * (n + 1) / 2;
+        int arrSum = 0;
+        for (int i = 0; i < n; i++) {
+            arrSum += nums[i];
+        }
+        return total - arrSum;
+    }
+
 }

@@ -42,7 +42,7 @@ public class Solution312 {
         int[][] dp = new int[len + 2][len + 2]; //开区间
 
         int numI;
-        int numJ;
+        int numJ;   
         for (int j = 2; j <= len + 1; j++) {
             numJ = getValue(nums, j - 1);
             for (int i = j - 1; i >= 0; i--) {//一定要反着来, 否则dp[k + 1][j]最大值没机会计算了

@@ -93,11 +93,11 @@ public class Solution306 {
     public boolean isAdditiveNumber2(String num) {
         int n = num.length();
         for (int secondStart = 1; secondStart < n - 1; ++secondStart) {
-            if (num.charAt(0) == '0' && secondStart != 1) {
+            if (num.charAt(0) == '0' && secondStart != 1) { //筛选后面的累加序列不为0开头(除了二号位为0), 首位允许为0
                 break;
             }
             for (int secondEnd = secondStart; secondEnd < n - 1; ++secondEnd) {
-                if (num.charAt(secondStart) == '0' && secondStart != secondEnd) {
+                if (num.charAt(secondStart) == '0' && secondStart != secondEnd) { //允许2号位为0
                     break;
                 }
                 if (valid(secondStart, secondEnd, num)) {

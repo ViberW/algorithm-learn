@@ -62,7 +62,7 @@ public class Solution210 {
             edges[i] = new ArrayList<>();
         }
         for (int[] prerequisite : prerequisites) {
-            edges[prerequisite[0]].add(prerequisite[1]);
+            edges[prerequisite[0]].add(prerequisite[1]); // 这里代表入度的 主要是配合index++操作
         }
         for (int i = 0; i < numCourses && valid; i++) {
             if (visited[i] == 0) {
@@ -95,7 +95,7 @@ public class Solution210 {
     // 存储每个节点的入度
     int[] indeg;
 
-    //具体查看 {@link Solution207} 基于Kahn算法
+    // 具体查看 {@link Solution207} 基于Kahn算法
     public int[] findOrder2(int numCourses, int[][] prerequisites) {
         edges = new ArrayList<List<Integer>>();
         for (int i = 0; i < numCourses; ++i) {
@@ -105,7 +105,7 @@ public class Solution210 {
         result = new int[numCourses];
         index = 0;
         for (int[] info : prerequisites) {
-            edges.get(info[1]).add(info[0]);
+            edges.get(info[1]).add(info[0]);// 这里就是出度
             ++indeg[info[0]];
         }
 

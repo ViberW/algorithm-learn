@@ -54,7 +54,7 @@ public class Solution198 {
         }
         int first = nums[0];
         int second = Math.max(nums[0], nums[1]);
-        for (int i = 1; i < len; i++) {
+        for (int i = 2; i < len; i++) {
             int tmp = second;
             second = Math.max(first + nums[i], second);
             first = tmp;

@@ -36,7 +36,7 @@ public class Solution235 {
         TreeNode.print(lowestCommonAncestor(root, p, q));
     }
 
-    //找到对应的p q 一旦发现某个节点分割, 就说明是目标了
+    // 找到对应的p q 一旦发现某个节点分割, 就说明是目标了
     public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         if (p.val > q.val) {
             TreeNode tmp = p;
@@ -59,4 +59,21 @@ public class Solution235 {
         }
         return root;
     }
+
+    /* 官方题解 */
+    // 我的方法的精简, 其实不用比较p和q的大小
+    public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+        TreeNode ancestor = root;
+        while (true) {
+            if (p.val < ancestor.val && q.val < ancestor.val) {
+                ancestor = ancestor.left;
+            } else if (p.val > ancestor.val && q.val > ancestor.val) {
+                ancestor = ancestor.right;
+            } else {
+                break;
+            }
+        }
+        return ancestor;
+    }
+
 }

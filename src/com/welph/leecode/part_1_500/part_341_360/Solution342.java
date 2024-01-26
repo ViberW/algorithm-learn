@@ -45,4 +45,21 @@ public class Solution342 {
         }
         return false;
     }
+
+    /*官方题解 */
+    public boolean isPowerOfFour2(int n) {
+        //这里0xaaaaaaaa 二进制为 10101010101010101010101010101010 , 相当于时若n的二进制奇数位为1,则代表4的幂次
+        return n > 0 && (n & (n - 1)) == 0 && (n & 0xaaaaaaaa) == 0;
+    }
+
+    /*
+     * 若 n 是 4 的幂，那么它可以表示成 4^x 的形式，我们可以发现它除以 3 的余数一定为 1
+     * 若 n 不是 4 的幂而是2的幂，那么它可以表示成 那么它可以表示成 4^x * 2 的形式，此时它除以 3 的余数一定为 2。
+     * ------------------------
+     * 通过 n 除以 3 的余数是否为 1 来判断 n 是否是 4 的幂
+     */
+    public boolean isPowerOfFour3(int n) {
+        return n > 0 && (n & (n - 1)) == 0 && n % 3 == 1;
+    }
+
 }

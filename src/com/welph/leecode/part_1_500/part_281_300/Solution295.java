@@ -1,6 +1,8 @@
 package com.welph.leecode.part_1_500.part_281_300;
 
 import java.util.Arrays;
+import java.util.PriorityQueue;
+import java.util.TreeMap;
 
 /**
  * 中位数是有序列表中间的数。如果列表长度是偶数，中位数则是中间两个数的平均值。
@@ -26,16 +28,18 @@ import java.util.Arrays;
  */
 public class Solution295 {
 
-    //["MedianFinder","addNum","findMedian","addNum","findMedian","addNum",
+    // ["MedianFinder","addNum","findMedian","addNum","findMedian","addNum",
     // "findMedian","addNum","findMedian","addNum","findMedian"]
-    //[[],[-1],[],[-2],[],[-3],[],[-4],[],[-5],[]]
+    // [[],[-1],[],[-2],[],[-3],[],[-4],[],[-5],[]]
     public static void main(String[] args) {
-       /* MedianFinder finder = new MedianFinder();
-        finder.addNum(1);
-        finder.addNum(2);
-        System.out.println(finder.findMedian());
-        finder.addNum(3);
-        System.out.println(finder.findMedian());*/
+        /*
+         * MedianFinder finder = new MedianFinder();
+         * finder.addNum(1);
+         * finder.addNum(2);
+         * System.out.println(finder.findMedian());
+         * finder.addNum(3);
+         * System.out.println(finder.findMedian());
+         */
 
         MedianFinder finder = new MedianFinder();
         finder.addNum(-1);
@@ -116,7 +120,7 @@ public class Solution295 {
                 System.arraycopy(arr, 1, newArr, 1, size);
                 arr = newArr;
             }
-            //从下往上堆化
+            // 从下往上堆化
             arr[++size] = num;
             int i = size;
             while (i / 2 > 0 && compare(i / 2, i)) {
@@ -133,7 +137,7 @@ public class Solution295 {
             Integer peek = peek();
             arr[1] = num;
             int i = 1;
-            //从上往下堆化
+            // 从上往下堆化
             while (true) {
                 int minIndex = i;
                 if (i * 2 <= size && compare(i, i * 2)) {
@@ -165,4 +169,99 @@ public class Solution295 {
             heap[j] = tmp;
         }
     }
+
+    /* 官方题解 */
+    class MedianFinder2 {
+        PriorityQueue<Integer> queMin;
+        PriorityQueue<Integer> queMax;
+
+        public MedianFinder2() {
+            queMin = new PriorityQueue<Integer>((a, b) -> (b - a));
+            queMax = new PriorityQueue<Integer>((a, b) -> (a - b));
+        }
+
+        public void addNum(int num) {
+            if (queMin.isEmpty() || num <= queMin.peek()) {
+                queMin.offer(num);
+                if (queMax.size() + 1 < queMin.size()) {
+                    queMax.offer(queMin.poll());
+                }
+            } else {
+                queMax.offer(num);
+                if (queMax.size() > queMin.size()) {
+                    queMin.offer(queMax.poll());
+                }
+            }
+        }
+
+        public double findMedian() {
+            if (queMin.size() > queMax.size()) {
+                return queMin.peek();
+            }
+            return (queMin.peek() + queMax.peek()) / 2.0;
+        }
+    }
+
+    // 有序数组 + 双指针
+    class MedianFinder3 {
+        TreeMap<Integer, Integer> nums;
+        int n;
+        int[] left;
+        int[] right;
+
+        public MedianFinder3() {
+            nums = new TreeMap<Integer, Integer>();
+            n = 0;
+            left = new int[2]; // 0 代表数值 1-代表个数
+            right = new int[2];
+            // | left | right |
+        }
+
+        public void addNum(int num) {
+            nums.put(num, nums.getOrDefault(num, 0) + 1);
+            if (n == 0) {
+                left[0] = right[0] = num;
+                left[1] = right[1] = 1;
+            } else if ((n & 1) != 0) { // 原本奇数个元素
+                if (num < left[0]) { // 说明放到左边
+                    //因为奇数个, 说明此时left[0]=right[0], 仅仅需要根据左右移动即可
+                    decrease(left); // 既然放到左边 就需要将left减少, 整体向左移动
+                } else {
+                    increase(right); // 说明放到右边, 就需要将right增加, 整体向右移动
+                }
+            } else { // 原本偶数个元素
+                if (num > left[0] && num < right[0]) { //若num正好在左右中间, 则向左移动
+                    increase(left);
+                    decrease(right);
+                } else if (num >= right[0]) {//则左边移动, 因为偶数个 要想办法让left[0]=right[0]
+                    increase(left);
+                } else {
+                    decrease(right); //向右移动, 并覆盖left 保证left[0]=right[0]
+                    System.arraycopy(right, 0, left, 0, 2);
+                }
+            }
+            n++;
+        }
+
+        public double findMedian() {
+            return (left[0] + right[0]) / 2.0;
+        }
+
+        private void increase(int[] iterator) {
+            iterator[1]++;
+            if (iterator[1] > nums.get(iterator[0])) {
+                iterator[0] = nums.ceilingKey(iterator[0] + 1); // 找到比当前值最近大的值
+                iterator[1] = 1;
+            }
+        }
+
+        private void decrease(int[] iterator) {
+            iterator[1]--;
+            if (iterator[1] == 0) {
+                iterator[0] = nums.floorKey(iterator[0] - 1);// 找到比当前值最近小的值
+                iterator[1] = nums.get(iterator[0]);
+            }
+        }
+    }
+
 }

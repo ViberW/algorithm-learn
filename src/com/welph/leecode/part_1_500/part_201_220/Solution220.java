@@ -1,6 +1,5 @@
 package com.welph.leecode.part_1_500.part_201_220;
 
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
@@ -26,31 +25,52 @@ import java.util.TreeSet;
 public class Solution220 {
 
     public static void main(String[] args) {
-       /* int[] nums = {1, 5, 9, 1, 5, 9};
-        System.out.println(containsNearbyAlmostDuplicate(nums, 2, 3));
-        int[] nums1 = {1, 2, 3, 1};
-        System.out.println(containsNearbyAlmostDuplicate(nums1, 3, 0));*/
-        int[] nums2 = {-2147483648, 2147483647};
+        /*
+         * int[] nums = {1, 5, 9, 1, 5, 9};
+         * System.out.println(containsNearbyAlmostDuplicate(nums, 2, 3));
+         * int[] nums1 = {1, 2, 3, 1};
+         * System.out.println(containsNearbyAlmostDuplicate(nums1, 3, 0));
+         */
+        int[] nums2 = { -2147483648, 2147483647 };
         System.out.println(containsNearbyAlmostDuplicate(nums2, 1, 1));
     }
 
     /**
-     * 滑动窗口 k 个长度保存.  记录窗口的最小值和最大值  则判断最小和最大值是否能够匹配
+     * 滑动窗口 k 个长度保存. 记录窗口的最小值和最大值 则判断最小和最大值是否能够匹配
      */
     public static boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
         TreeSet<Integer> set = new TreeSet<>();
         Long targetVal = Long.valueOf(t);
         Integer v;
         for (int i = 0; i < nums.length; i++) {
-            //比当前值大的最小值
+            // 比当前值大的最小值
             v = set.ceiling(nums[i]);
-            if (v != null && v <= nums[i] + targetVal) return true;
-            //比当前值小的最大值
+            if (v != null && v <= nums[i] + targetVal)
+                return true;
+            // 比当前值小的最大值
             v = set.floor(nums[i]);
-            if (v != null && nums[i] <= v + targetVal) return true;
+            if (v != null && nums[i] <= v + targetVal)
+                return true;
             set.add(nums[i]);
             if (set.size() > k) {
-                set.remove(nums[i - k]);
+                set.remove(nums[i - k]); // 这里set在之前肯定不包含nums[i], 若是包含则上面就返回出去了
+            }
+        }
+        return false;
+    }
+
+    public static boolean containsNearbyAlmostDuplicate1(int[] nums, int k, int t) {
+        int n = nums.length;
+        TreeSet<Long> set = new TreeSet<Long>();
+        for (int i = 0; i < n; i++) {
+            // 官方题解中 这里使用差值代替了, 就能够很好的处理了. 就不需要取floor
+            Long ceiling = set.ceiling((long) nums[i] - (long) t);
+            if (ceiling != null && ceiling <= (long) nums[i] + (long) t) {
+                return true;
+            }
+            set.add((long) nums[i]);
+            if (i >= k) {
+                set.remove((long) nums[i - k]);
             }
         }
         return false;
@@ -65,19 +85,22 @@ public class Solution220 {
      * 最终移除掉-k前的数据, 保证始终维持在k的范围内
      */
     public boolean containsNearbyAlmostDuplicate2(int[] nums, int k, int t) {
-        if (t < 0) return false;
+        if (t < 0)
+            return false;
         Map<Long, Long> d = new HashMap<>();
         long w = (long) t + 1;
         for (int i = 0; i < nums.length; ++i) {
             long m = getID(nums[i], w);
             if (d.containsKey(m))
                 return true;
+            // 这里直接使用上一个或下一个桶的值, 是因为那些桶有且仅有一个值, 若是多个则上面就能返回出去了
             if (d.containsKey(m - 1) && Math.abs(nums[i] - d.get(m - 1)) < w)
                 return true;
             if (d.containsKey(m + 1) && Math.abs(nums[i] - d.get(m + 1)) < w)
                 return true;
             d.put(m, (long) nums[i]);
-            if (i >= k) d.remove(getID(nums[i - k], w));
+            if (i >= k)
+                d.remove(getID(nums[i - k], w));
         }
         return false;
     }

@@ -70,7 +70,7 @@ public class Solution209 {
         }
         for (int i = 1; i <= n; i++) {
             int target = s + sums[i - 1];
-            int bound = Arrays.binarySearch(sums, target);
+            int bound = Arrays.binarySearch(sums, target); // 这里认为i为左节点, 向后找bound的右节点
             if (bound < 0) {
                 bound = -bound - 1;
             }
@@ -81,7 +81,7 @@ public class Solution209 {
         return ans == Integer.MAX_VALUE ? 0 : ans;
     }
 
-    //和我的方法一样, 只不过看起来舒服很多
+    // 和我的方法一样, 只不过看起来舒服很多
     public int minSubArrayLen3(int s, int[] nums) {
         int n = nums.length;
         if (n == 0) {
@@ -101,6 +101,5 @@ public class Solution209 {
         }
         return ans == Integer.MAX_VALUE ? 0 : ans;
     }
-
 
 }

@@ -35,12 +35,33 @@ public class Solution424 {
         for (int i = 0; i < chars.length; i++) {
             arr[chars[i] - 'A']++;
             maxCnt = Math.max(maxCnt, arr[chars[i] - 'A']);
-            while (i - l + 1 - maxCnt > k) { //若是有新的,则尽量要保证至少超过maxCnt的长度
+            while (i - l + 1 - maxCnt > k) { // 若是有新的,则尽量要保证至少超过maxCnt的长度
                 arr[chars[l] - 'A']--;
                 l++;
             }
             res = Math.max(res, i - l + 1);
         }
         return res;
+    }
+
+    /* 来看看官方题解 */
+    /*
+     * 结合官方题解, 说明maxn=maxCnt 代表重复字母最长的一段值, 只能递增, 后续依照当前大小进行变化
+     */
+    public int characterReplacement2(String s, int k) {
+        int[] num = new int[26];
+        int n = s.length();
+        int maxn = 0;
+        int left = 0, right = 0;
+        while (right < n) {
+            num[s.charAt(right) - 'A']++;
+            maxn = Math.max(maxn, num[s.charAt(right) - 'A']);
+            if (right - left + 1 - maxn > k) {// 这里仅仅需要变动一次即可, right - left + 1 > maxn + k
+                num[s.charAt(left) - 'A']--;
+                left++;
+            }
+            right++;
+        }
+        return right - left;
     }
 }

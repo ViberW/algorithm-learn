@@ -1,7 +1,9 @@
 package com.welph.leecode.part_1_500.part_381_400;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 /**
@@ -132,4 +134,39 @@ public class Solution385 {
 
         List<NestedInteger> getList();
     }
+
+    /* 官方题解 */
+     public NestedInteger deserialize2(String s) {
+        if (s.charAt(0) != '[') {
+            return new MyNestedInteger(Integer.parseInt(s));
+        }
+        Deque<NestedInteger> stack = new ArrayDeque<NestedInteger>();
+        int num = 0;
+        boolean negative = false;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '-') {
+                negative = true;
+            } else if (Character.isDigit(c)) {
+                num = num * 10 + c - '0';
+            } else if (c == '[') {
+                stack.push(new MyNestedInteger());
+            } else if (c == ',' || c == ']') {
+                if (Character.isDigit(s.charAt(i - 1))) {
+                    if (negative) {
+                        num *= -1;
+                    }
+                    stack.peek().add(new MyNestedInteger(num));
+                }
+                num = 0;
+                negative = false;
+                if (c == ']' && stack.size() > 1) {
+                    NestedInteger ni = stack.pop();
+                    stack.peek().add(ni);
+                }
+            }
+        }
+        return stack.pop();
+    }
+
 }

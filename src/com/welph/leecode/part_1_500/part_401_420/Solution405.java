@@ -29,7 +29,7 @@ public class Solution405 {
         System.out.println(toHex(-1));
     }
 
-    static char[] chars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    static char[] chars = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
     public static String toHex(int num) {
         if (num == 0) {
@@ -47,4 +47,21 @@ public class Solution405 {
         }
         return builder.toString();
     }
+
+    public String toHex2(int num) {
+        if (num == 0) {
+            return "0";
+        }
+        StringBuffer sb = new StringBuffer();
+        //倒序看起来好一点 因为十六进制, 一共有8位 0xFFFFFFFF
+        for (int i = 7; i >= 0; i--) {
+            int val = (num >> (4 * i)) & 0xf;
+            if (sb.length() > 0 || val > 0) {
+                char digit = val < 10 ? (char) ('0' + val) : (char) ('a' + val - 10);
+                sb.append(digit);
+            }
+        }
+        return sb.toString();
+    }
+
 }

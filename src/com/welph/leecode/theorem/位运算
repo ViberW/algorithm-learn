@@ -17,3 +17,6 @@ a=a^b;
 
 * 只出现一次的(1个)数字 {@link Solution136}
 * 只出现一次的(2个)数字 {@link Solution260}
+
+* 相邻位数的调换: {@link Solution190} {@link Solution201}
+* 最右1位置: {@link Solution191}

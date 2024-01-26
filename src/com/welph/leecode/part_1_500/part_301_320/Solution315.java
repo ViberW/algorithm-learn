@@ -3,12 +3,14 @@ package com.welph.leecode.part_1_500.part_301_320;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * 给定一个整数数组 nums，按要求返回一个新数组 counts。数组 counts 有该性质：
- * counts[i] 的值是  nums[i] 右侧小于 nums[i] 的元素的数量。
+ * counts[i] 的值是 nums[i] 右侧小于 nums[i] 的元素的数量。
  * <p>
  * 示例：
  * 输入：nums = [5,2,6,1]
@@ -26,8 +28,8 @@ import java.util.stream.Collectors;
 public class Solution315 {
 
     public static void main(String[] args) {
-        int[] nums = {5, 2, 6, 1};
-        //  System.out.println(countSmaller(nums));
+        int[] nums = { 5, 2, 6, 1 };
+        // System.out.println(countSmaller(nums));
         System.out.println(countSmaller1(nums));
     }
 
@@ -40,19 +42,21 @@ public class Solution315 {
      */
     public static List<Integer> countSmaller(int[] nums) {
         List<Integer> res = new ArrayList<>();
-        //升序
+        // 升序
         int length = nums.length;
         int[] numbers = new int[length];
         int size = 0;
         for (int i = length - 1; i >= 0; i--) {
-            //二分查找数量
-            int k = binarySearch(numbers, 0, size - 1, nums[i]); //表名需要插入的位置
+            // 二分查找数量
+            int k = binarySearch(numbers, 0, size - 1, nums[i]); // 表名需要插入的位置
             res.add(k);
-            //插入排序 --超时了
-          /*  for (int j = size - 1; j >= k; j--) {
-                numbers[j + 1] = numbers[j];
-            }*/
-            //用System.copyArray移动吧
+            // 插入排序 --超时了
+            /*
+             * for (int j = size - 1; j >= k; j--) {
+             * numbers[j + 1] = numbers[j];
+             * }
+             */
+            // 用System.copyArray移动吧
             System.arraycopy(numbers, k, numbers, k + 1, size - k);
             numbers[k] = nums[i];
             size++;
@@ -71,7 +75,7 @@ public class Solution315 {
                 l = mid + 1;
             }
         }
-        //找到最近的大于值的下标
+        // 找到最近的大于值的下标
         return l;
     }
 
@@ -102,7 +106,7 @@ public class Solution315 {
     }
 
     private static void merge(int[][] nums, int l, int middle, int r, int[] res) {
-        //两个排序好的数据,
+        // 两个排序好的数据,
         int[][] result = new int[r - l][];
         int i = 0;
         int ml = l;
@@ -110,7 +114,7 @@ public class Solution315 {
         while (ml < middle && mr < r) {
             if (nums[ml][1] > nums[mr][1]) {
                 result[i++] = nums[ml];
-                //仅仅需要关注右边就好了
+                // 仅仅需要关注右边就好了
                 res[nums[ml][0]] += (r - mr);
                 ml++;
             } else {
@@ -126,17 +130,73 @@ public class Solution315 {
         System.arraycopy(result, 0, nums, l, result.length);
     }
 
-
     /**
      * {@link com.welph.leecode.algorithm.thinking.SegmentTree_14}
-     * 线段树,  从右向左移动, 每一次动, 对当前值及子节点(比当前值大)的进行更新.
+     * 线段树, 从右向左移动, 每一次动, 对当前值及子节点(比当前值大)的进行更新.
      * 树状数组 todo
-     * 二叉搜索树  todo
+     * 二叉搜索树 todo
+     * 官方题解也提供了归并排序的方法, 下面来看看另一种树状数组方式
      */
-    public static List<Integer> countSmaller100(int[] nums) {
-        List<Integer> res = new ArrayList<>();
-        //todo
-        return res;
+
+     /* 官方题解-树状数组 */
+    private int[] c;
+    private int[] a;
+    //树状数组
+    public List<Integer> countSmaller2(int[] nums) {
+        List<Integer> resultList = new ArrayList<Integer>();
+        discretization(nums);
+        init(nums.length + 5);
+        for (int i = nums.length - 1; i >= 0; --i) { //重要的逻辑: 倒序+树状数组, 更新value的值
+            int id = getId(nums[i]);
+            resultList.add(query(id - 1));
+            update(id);
+        }
+        Collections.reverse(resultList);
+        return resultList;
+    }
+
+    private void init(int length) {
+        c = new int[length];
+        Arrays.fill(c, 0);
+    }
+
+    private int lowBit(int x) {
+        return x & (-x);
+    }
+
+    private void update(int pos) {
+        while (pos < c.length) {
+            c[pos] += 1;
+            pos += lowBit(pos);
+        }
+    }
+
+    private int query(int pos) {
+        int ret = 0;
+        while (pos > 0) {
+            ret += c[pos];
+            pos -= lowBit(pos);
+        }
+
+        return ret;
+    }
+
+    private void discretization(int[] nums) {
+        Set<Integer> set = new HashSet<Integer>();
+        for (int num : nums) {
+            set.add(num);
+        }
+        int size = set.size();
+        a = new int[size];
+        int index = 0;
+        for (int num : set) {
+            a[index++] = num;
+        }
+        Arrays.sort(a);
+    }
+
+    private int getId(int x) {
+        return Arrays.binarySearch(a, x) + 1;
     }
 
 }

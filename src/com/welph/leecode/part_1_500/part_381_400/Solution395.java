@@ -30,7 +30,7 @@ public class Solution395 {
     }
 
     /**
-     * 使用滑动窗口呢?  --官方.
+     * 使用滑动窗口呢? --官方题解.
      */
     public static int longestSubstring1(String s, int k) {
         int ret = 0;
@@ -41,7 +41,7 @@ public class Solution395 {
             int tot = 0;
             int less = 0;
             while (r < n) {
-                //这块用来记录 less 当前子串存在满足的字符 若是less == 0 说明字符i满足>k  这块想到了 但下面...
+                // 这块用来记录 less 当前子串存在满足的字符 若是less == 0 说明字符i满足>k 这块想到了 但下面...
                 cnt[s.charAt(r) - 'a']++;
                 if (cnt[s.charAt(r) - 'a'] == 1) {
                     tot++;
@@ -94,4 +94,48 @@ public class Solution395 {
         }
         return r - l;
     }
+
+    /* 官方题解- 分治算法 */
+    public int longestSubstring2(String s, int k) {
+        int n = s.length();
+        return dfs(s, 0, n - 1, k);
+    }
+
+    public int dfs(String s, int l, int r, int k) {
+        int[] cnt = new int[26];
+        for (int i = l; i <= r; i++) {
+            cnt[s.charAt(i) - 'a']++;
+        }
+
+        char split = 0;
+        for (int i = 0; i < 26; i++) {
+            if (cnt[i] > 0 && cnt[i] < k) {
+                split = (char) (i + 'a');
+                break;
+            }
+        }
+        if (split == 0) {
+            return r - l + 1;
+        }
+
+        int i = l;
+        int ret = 0;
+        while (i <= r) {
+            while (i <= r && s.charAt(i) == split) {
+                i++;
+            }
+            if (i > r) {
+                break;
+            }
+            int start = i;
+            while (i <= r && s.charAt(i) != split) {
+                i++;
+            }
+            // 找出每一段的中间不包含split的子串
+            int length = dfs(s, start, i - 1, k);
+            ret = Math.max(ret, length);
+        }
+        return ret;
+    }
+
 }

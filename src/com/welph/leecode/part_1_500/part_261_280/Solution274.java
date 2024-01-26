@@ -21,20 +21,24 @@ import java.util.Arrays;
 public class Solution274 {
 
     public static void main(String[] args) {
-       /* int[] citations = {4, 0, 6, 1, 5};
-        System.out.println(hIndex(citations)); //3
-        int[] citations1 = {0, 1, 1, 1, 1, 1, 1};
-        System.out.println(hIndex(citations1));//1
-        int[] citations2 = {0};
-        System.out.println(hIndex(citations2));//0*/
-        int[] citations3 = {11, 15};
-        System.out.println(hIndex2(citations3));//2
-       /* int[] citations4 = {1, 1};
-        System.out.println(hIndex(citations4));//1
-        int[] citations5 = {0, 1, 0};
-        System.out.println(hIndex(citations5));//1
-        int[] citations6 = {1, 3, 1};
-        System.out.println(hIndex(citations6));//1*/
+        /*
+         * int[] citations = {4, 0, 6, 1, 5};
+         * System.out.println(hIndex(citations)); //3
+         * int[] citations1 = {0, 1, 1, 1, 1, 1, 1};
+         * System.out.println(hIndex(citations1));//1
+         * int[] citations2 = {0};
+         * System.out.println(hIndex(citations2));//0
+         */
+        int[] citations3 = { 11, 15 };
+        System.out.println(hIndex2(citations3));// 2
+        /*
+         * int[] citations4 = {1, 1};
+         * System.out.println(hIndex(citations4));//1
+         * int[] citations5 = {0, 1, 0};
+         * System.out.println(hIndex(citations5));//1
+         * int[] citations6 = {1, 3, 1};
+         * System.out.println(hIndex(citations6));//1
+         */
     }
 
     /**
@@ -50,7 +54,7 @@ public class Solution274 {
         return i;
     }
 
-    //计数排序方式 todo  也是很不错的方法
+    // 计数排序方式 todo 也是很不错的方法
     public static int hIndex2(int[] citations) {
         int n = citations.length;
         int[] papers = new int[n + 1];
@@ -64,23 +68,23 @@ public class Solution274 {
         return k;
     }
 
-    //寻找相同的最大值
-    //todo 哈哈哈 二分法处理 -- 一开始排序了, 没想到{@link Solution275} 题已经是排序好了 ,提前写出了那题的答案
+    // 寻找相同的最大值
+    // todo 哈哈哈 二分法处理 -- 一开始排序了, 没想到{@link Solution275} 题已经是排序好了 ,提前写出了那题的答案
     public static int hIndex(int[] citations) {
         Arrays.sort(citations);
         int len = citations.length;
         int l = 0;
         int r = len - 1;
         int mid;
-        //若剩余的大于中间值, 则应该向右走,,  若向右走没有的话, 则说明
-        //若剩余的值小于中间值, 则应该向左走
-        //仅仅在等于的时候给出
+        // 若剩余的大于中间值, 则应该向右走,, 若向右走没有的话, 则说明
+        // 若剩余的值小于中间值, 则应该向左走
+        // 仅仅在等于的时候给出
         while (l <= r) {
             mid = (l + r) / 2;
             if (citations[mid] < len - mid) {
                 l = mid + 1;
-            } else if (citations[mid] > len - mid) { //若是大于 说明有N个值大于 没问题.
-                //向前找, 若发现前面的>len-mid.说明不合法, 则需要向左移动
+            } else if (citations[mid] > len - mid) { // 若是大于 说明有N个值大于 没问题.
+                // 向前找, 若发现前面的>len-mid.说明不合法, 则需要向左移动
                 if (mid > 0 && citations[mid - 1] <= len - mid) {
                     return len - mid;
                 }
@@ -89,8 +93,34 @@ public class Solution274 {
                 return len - mid;
             }
         }
-        //若最后一次r变小, 则减去mid,
-        //否则说明最后一次l变大, 说明做边依旧找不到
+        // 若最后一次r变小, 则减去mid,
+        // 否则说明最后一次l变大, 说明做边依旧找不到
         return l >= len ? 0 : len - (l + r) / 2;
     }
+
+    /* 官方题解 */
+    // 这里是二分 但不是二分数组 而是二分h!!!   效率不一定高 但是好的思路]
+    public int hIndex3(int[] citations) {
+        int left = 0, right = citations.length;
+        int mid = 0, cnt = 0;
+        while (left < right) {
+            // +1 防止死循环
+            mid = (left + right + 1) >> 1;
+            cnt = 0;
+            for (int i = 0; i < citations.length; i++) {
+                if (citations[i] >= mid) {
+                    cnt++;
+                }
+            }
+            if (cnt >= mid) {
+                // 要找的答案在 [mid,right] 区间内
+                left = mid;
+            } else {
+                // 要找的答案在 [0,mid) 区间内
+                right = mid - 1;
+            }
+        }
+        return left;
+    }
+
 }

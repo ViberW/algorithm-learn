@@ -29,4 +29,5 @@ public class MousePoison {
      * 对于10瓶来说 满足了所有的情况(2^10 = 1024)
      * -- 最终答案就是: [大于target的最小最高位值]
      */
+    // 多维度的可以看: {@link Solution458}
 }

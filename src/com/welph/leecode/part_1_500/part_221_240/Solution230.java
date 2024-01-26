@@ -1,5 +1,8 @@
 package com.welph.leecode.part_1_500.part_221_240;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 import com.welph.leecode.common.TreeNode;
 
 /**
@@ -51,4 +54,23 @@ public class Solution230 {
         }
         return 0;
     }
+
+    /* 若是不想改变节点, 可以使用栈 */
+    public int kthSmallest2(TreeNode root, int k) {
+        Deque<TreeNode> stack = new ArrayDeque<TreeNode>();
+        while (root != null || !stack.isEmpty()) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            root = stack.pop();
+            --k;
+            if (k == 0) {
+                break;
+            }
+            root = root.right;
+        }
+        return root.val;
+    }
+
 }

@@ -250,6 +250,7 @@ public class Solution05 {
         int max = Integer.MIN_VALUE;
         int center = 0;
         for (int i = 0; i < s1.length(); i++) {
+            //找i对应的位于index左边相同位置的j的长度, 但不能超过PR
             count[i] = pR > i ? Math.min(pR - i, count[2 * index - i]) : 1;
             while (i + count[i] < s1.length() && i - count[i] > -1) {
                 if (s1.charAt(i + count[i]) == s1.charAt(i - count[i])) {

@@ -16,8 +16,9 @@ package com.welph.leecode.part_1_500.part_381_400;
 public class Solution400 {
 
     public static void main(String[] args) {
-//        System.out.println(findNthDigit(3));
-//        System.out.println(findNthDigit(11));
+        // System.out.println(findNthDigit(3));
+        // System.out.println(findNthDigit(11));
+        System.out.println(findNthDigit(149));
         System.out.println(findNthDigit(1000000000));
     }
 
@@ -34,7 +35,7 @@ public class Solution400 {
      * n=149，在10到189，（149-10）/2+10=79第79个数字也就是79，（149-10）%2==1第1位也就是9
      * int num=(n-left)/cnt+base;
      * int bit=(n-left)%cnt;
-     * -----------> num[bit]  --看了下题解 来了点思路
+     * -----------> num[bit] --看了下题解 来了点思路
      */
     public static int findNthDigit(int n) {
         if (n < 10) {
@@ -44,13 +45,18 @@ public class Solution400 {
         long right = 9;
         long cnt = 1;
         long base = 1;
+        // 找到对应的n所处的最大和最小值的范围
+        // 1 9
+        // 10 189  --> 10 一直到99 期间一共有90个数字 180位数
         while (!(left <= n && n <= right)) {
             left = right + 1;
-            cnt++;
+            cnt++; //代表当前范围每个数字一共由多少个位数组成
             base *= 10;
             right = right + cnt * 9 * base;
         }
+        //对应的数字是多少
         long num = (n - left) / cnt + base;
+        //对应的数字的第几位
         int bit = (int) ((n - left) % cnt);
         return String.valueOf(num).charAt(bit) - '0';
     }

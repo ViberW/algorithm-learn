@@ -35,10 +35,10 @@ public class Solution299 {
         System.out.println(getHint("1123", "0111"));
     }
 
-    //使用数组保存char更好^_^
+    // 使用数组保存char更好^_^
     public static String getHint(String secret, String guess) {
         int length = secret.length();
-        Map<Character, Integer> map = new HashMap<>();//这里可以使用长度为10的数组 更好
+        Map<Character, Integer> map = new HashMap<>();// 这里可以使用长度为10的数组 更好
         char c;
         int a = 0;
         int b = 0;
@@ -63,5 +63,27 @@ public class Solution299 {
             }
         }
         return a + "A" + b + "B";
+    }
+
+    /* 官方题解 */
+    // 使用数组比较好
+    public String getHint2(String secret, String guess) {
+        int bulls = 0;
+        int[] cntS = new int[10];
+        int[] cntG = new int[10];
+        for (int i = 0; i < secret.length(); ++i) {
+            if (secret.charAt(i) == guess.charAt(i)) {
+                ++bulls;
+            } else {
+                ++cntS[secret.charAt(i) - '0'];
+                ++cntG[guess.charAt(i) - '0'];
+            }
+        }
+        // 上面保存两次, 则仅仅只需要对比10长度的数组即可
+        int cows = 0;
+        for (int i = 0; i < 10; ++i) {
+            cows += Math.min(cntS[i], cntG[i]);
+        }
+        return Integer.toString(bulls) + "A" + Integer.toString(cows) + "B";
     }
 }

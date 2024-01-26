@@ -27,4 +27,22 @@ public class Solution231 {
     public static boolean isPowerOfTwo(int n) {
         return n != 0 && n > Integer.MIN_VALUE && (n & (n - 1)) == 0;
     }
+
+    /* 官方题解 */
+    // 依赖补码 若是2的幂次, 则n和n的补码(反码+1) 等于 n
+    public static boolean isPowerOfTwo2(int n) {
+        return n > 0 && (n & -n) == n;
+    }
+
+    static final int BIG = 1 << 30;
+
+    // 这也是一种方法
+    /*
+     * 给定的 323232 位有符号整数的范围内，最大的 2 的幂为 2^30=1073741824
+     * 我们只需要判断 n 是否是 2^30 的约数即可。
+     */
+    public boolean isPowerOfTwo3(int n) {
+        return n > 0 && BIG % n == 0;
+    }
+
 }

@@ -21,7 +21,7 @@ public class Solution233 {
 
     public static void main(String[] args) {
         System.out.println(countDigitOne(13));
-        System.out.println(countDigitOne(20));
+        System.out.println(countDigitOne(21));
         System.out.println(countDigitOne(10));
         System.out.println(countDigitOne(1410065408));
     }
@@ -33,7 +33,7 @@ public class Solution233 {
         int total = 0;
         int limit = Integer.MAX_VALUE / 2;
         for (; i <= n; i *= 10) {
-            counts.put(i * 10, 10 * counts.get(i) + i);
+            counts.put(i * 10, 10 * counts.get(i) + i); // 10的每段的1 加上 1开头的数值(对应10的位数)
             /**
              * 余数 : 判断首位为1的数值
              * 除数 : 判断当前的能够乘以多少个上一次的大小
@@ -61,8 +61,8 @@ public class Solution233 {
         long mulk = 1;
         int ans = 0;
         for (int k = 0; n >= mulk; ++k) {
-            //其实就是计算mulk的位数可能   +   (n % (mulk * 10) - mulk + 1) || 0        || mulk
-            //............................... mulk/10 ~ 2*mulk/10           <mulk/10    >2*mulk/10
+            // 其实就是计算mulk的位数可能 + (n % (mulk * 10) - mulk + 1) || 0 || mulk
+            // ............................... mulk/10 ~ 2*mulk/10 <mulk/10 >2*mulk/10
             ans += (n / (mulk * 10)) * mulk + Math.min(Math.max(n % (mulk * 10) - mulk + 1, 0), mulk);
             mulk *= 10;
         }

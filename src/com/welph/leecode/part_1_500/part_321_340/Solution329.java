@@ -29,26 +29,26 @@ import java.util.*;
 public class Solution329 {
 
     public static void main(String[] args) {
-        int[][] matrix = {{9, 9, 4}, {6, 6, 8}, {2, 1, 1}};
+        int[][] matrix = { { 9, 9, 4 }, { 6, 6, 8 }, { 2, 1, 1 } };
         System.out.println(longestIncreasingPath1(matrix));
-        int[][] matrix1 = {{3, 4, 5}, {3, 2, 6}, {2, 2, 1}};
+        int[][] matrix1 = { { 3, 4, 5 }, { 3, 2, 6 }, { 2, 2, 1 } };
         System.out.println(longestIncreasingPath1(matrix1));
-        int[][] matrix2 = {{1}};
+        int[][] matrix2 = { { 1 } };
         System.out.println(longestIncreasingPath1(matrix2));
     }
 
-    //dp[m][n] 代表到{m,n}的递增的位置;
+    // dp[m][n] 代表到{m,n}的递增的位置;
     public static int longestIncreasingPath(int[][] matrix) {
         int m = matrix.length;
         int n = matrix[0].length;
         int ans = 0;
 
-        //按照值排序, 记录v,m,n
+        // 按照值排序, 记录v,m,n
         int[][] list = new int[m * n][3];
         int size = 0;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                list[size++] = new int[]{matrix[i][j], i, j};
+                list[size++] = new int[] { matrix[i][j], i, j };
             }
         }
 
@@ -60,14 +60,14 @@ public class Solution329 {
         });
 
         int[][] dp = new int[m][n];
-        //dp[m][n] = max(dp[m][n], dp[r][c] + 1)
+        // dp[m][n] = max(dp[m][n], dp[r][c] + 1)
         int[] ints;
         int i;
         int j;
         int r;
         int c;
         int v;
-        int[][] range = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        int[][] range = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
         for (int k = 0; k < list.length; k++) {
             ints = list[k];
             v = ints[0];
@@ -88,12 +88,51 @@ public class Solution329 {
         return ans;
     }
 
+    /* 官方题解 */
+
+    // 记忆化搜索  从高处往地处走
+    public int longestIncreasingPath3(int[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+        int[][] dirs = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+        int rows = matrix.length;
+        int columns = matrix[0].length;
+        int[][] memo = new int[rows][columns];
+        int ans = 0;
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < columns; ++j) {
+                ans = Math.max(ans, dfs(matrix, i, j, memo, dirs, rows, columns));
+            }
+        }
+        return ans;
+    }
+
+    public int dfs(int[][] matrix, int row, int column, int[][] memo,
+            int[][] dirs, int rows, int columns) {
+        if (memo[row][column] != 0) { //记忆化搜索
+            return memo[row][column];
+        }
+        ++memo[row][column];
+        for (int[] dir : dirs) {
+            int newRow = row + dir[0], newColumn = column + dir[1];
+            if (newRow >= 0 && newRow < rows && newColumn >= 0 && newColumn < columns
+                    && matrix[newRow][newColumn] > matrix[row][column]) {
+                memo[row][column] = Math.max(memo[row][column],
+                        dfs(matrix, newRow, newColumn, memo, dirs, rows, columns) + 1);
+            }
+        }
+        return memo[row][column];
+    }
+
     /**
      * 拓扑排序的话, 在遍历每个点 上下左右大于当前点, 则标记当前点i,j的出度+1
-     * //使用queue, 不断处理, 知道出度为0  ,此处类似BFS处理方式了.
+     * //使用queue, 不断处理, 知道出度为0 ,此处类似BFS处理方式了.
+     * -----------------
+     * 这里是从低处往高处走
      */
     public static int longestIncreasingPath1(int[][] matrix) {
-        int[][] range = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        int[][] range = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
         int m = matrix.length;
         int n = matrix[0].length;
         int r;
@@ -112,11 +151,11 @@ public class Solution329 {
         }
 
         Queue<int[]> queue = new LinkedList<>();
-        //找出所有出度为0的点
+        // 找出所有出度为0的点
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (outDegree[i][j] == 0) {
-                    queue.offer(new int[]{i, j}); //说明周围没有一个比i,j大的点
+                    queue.offer(new int[] { i, j }); // 说明周围没有一个比i,j大的点
                 }
             }
         }
@@ -127,7 +166,7 @@ public class Solution329 {
         int j;
         while (!queue.isEmpty()) {
             ++ans;
-            int size = queue.size(); //类似BFS的处理 --每一次的循环,代表有X条相同长度的不同路径,知道找到最长的
+            int size = queue.size(); // 类似BFS的处理 --每一次的循环,代表有X条相同长度的不同路径,知道找到最长的
             for (int k = 0; k < size; k++) {
                 poll = queue.poll();
                 i = poll[0];
@@ -138,7 +177,7 @@ public class Solution329 {
                     if (r >= 0 && r < m && c >= 0 && c < n && matrix[i][j] > matrix[r][c]) {
                         --outDegree[r][c];
                         if (outDegree[r][c] == 0) {
-                            queue.offer(new int[]{r, c});
+                            queue.offer(new int[] { r, c });
                         }
                     }
                 }

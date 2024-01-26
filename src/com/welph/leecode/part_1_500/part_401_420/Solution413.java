@@ -22,14 +22,14 @@ package com.welph.leecode.part_1_500.part_401_420;
 public class Solution413 {
 
     public static void main(String[] args) {
-        System.out.println(numberOfArithmeticSlices(new int[]{1, 2, 3, 4, 5}));
+        System.out.println(numberOfArithmeticSlices(new int[] { 1, 2, 3, 4, 5 }));
     }
 
     /**
      * 动态规划:
      * dp[i] 表示到i处的个数 --- int sum 表示上一次的结果
      * delta 上一次的差值
-     * expend 上一次的连接到最后节点i的最长等差数列长度
+     * expend
      */
     public static int numberOfArithmeticSlices(int[] nums) {
         int n = nums.length;
@@ -38,7 +38,7 @@ public class Solution413 {
         }
         int sum = 0;
         int delta = nums[1] - nums[0];
-        int expend = 2;
+        int expend = 2;// 表示当前等差数组长度已有两个
         for (int i = 2; i < n; i++) {
             int d = nums[i] - nums[i - 1];
             if (d == delta) {
@@ -51,4 +51,26 @@ public class Solution413 {
         }
         return sum;
     }
+
+    // 写法好看点
+    public int numberOfArithmeticSlices2(int[] nums) {
+        int n = nums.length;
+        if (n == 1) {
+            return 0;
+        }
+
+        int d = nums[0] - nums[1], t = 0;// 代表以i为结尾满足的等差长度
+        int ans = 0;
+        for (int i = 2; i < n; ++i) {
+            if (nums[i - 1] - nums[i] == d) {
+                ++t;
+            } else {
+                d = nums[i - 1] - nums[i];
+                t = 0;
+            }
+            ans += t;
+        }
+        return ans;
+    }
+
 }

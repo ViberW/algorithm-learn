@@ -29,12 +29,12 @@ import java.util.Arrays;
 public class Solution410 {
 
     public static void main(String[] args) {
-        System.out.println(splitArray(new int[]{7, 2, 5, 10, 8}, 2));
+        System.out.println(splitArray(new int[] { 7, 2, 5, 10, 8 }, 2));
     }
 
     /**
      * todo 没思路
-     * --- 看题解了  --- 这都没想到...
+     * --- 看题解了 --- 这都没想到...
      * 方法1: 动态规划 f[i][j]表示前i个数共分成j段数组的最大值的最小值
      * 假定第k个数在第j段的开始,即[0,k-1]被分割为j-1段, [k+1,j]为第j段
      * 此时的f[i][j] = max(f[k][j-1], sum(k+1,j)]) 的最小值
@@ -47,7 +47,7 @@ public class Solution410 {
         for (int i = 0; i <= n; i++) {
             Arrays.fill(f[i], Integer.MAX_VALUE);
         }
-        //快速计算
+        // 快速计算
         int[] sub = new int[n + 1];
         for (int i = 0; i < n; i++) {
             sub[i + 1] = sub[i] + nums[i];
@@ -62,7 +62,43 @@ public class Solution410 {
         }
         return f[n][m];
     }
+
     /**
-     * 方法二 ;  有点负责
+     * 方法二 ; 有点复杂 好想法
      */
+    public int splitArray2(int[] nums, int m) {
+        int left = 0, right = 0;
+        for (int i = 0; i < nums.length; i++) {
+            right += nums[i];// 总和
+            if (left < nums[i]) {
+                left = nums[i]; // 单个值的最大值
+            }
+        }
+        // 拆分子数组 至少最大值范围在l到r内
+        while (left < right) {
+            // 二分的贪心思想
+            int mid = (right - left) / 2 + left;
+            if (check(nums, mid, m)) {// 如果满足, 则尝试不断缩减rgiht
+                right = mid;
+            } else {
+                left = mid + 1;// 否则不断调大中间阈值
+            }
+        }
+        return left;
+    }
+
+    public boolean check(int[] nums, int x, int m) {
+        int sum = 0;
+        int cnt = 1;
+        for (int i = 0; i < nums.length; i++) {
+            if (sum + nums[i] > x) {// 每当一段子数组超过x则拆分
+                cnt++;
+                sum = nums[i];
+            } else {
+                sum += nums[i];
+            }
+        }
+        return cnt <= m;
+    }
+
 }

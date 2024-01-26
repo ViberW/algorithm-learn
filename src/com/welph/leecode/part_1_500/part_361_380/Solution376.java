@@ -58,4 +58,50 @@ public class Solution376 {
         }
         return Math.max(up, down);
     }
+
+    /* 官方题解(其他解法) */
+
+    //动态规划
+    public int wiggleMaxLength2(int[] nums) {
+        int n = nums.length;
+        if (n < 2) {
+            return n;
+        }
+        //前i个元素中的最长上升摆动序列(最长结尾是上升)
+        int[] up = new int[n];
+        //前i个元素中的最长下降摆动序列(最长结尾是下降)
+        int[] down = new int[n];
+        up[0] = down[0] = 1;
+        for (int i = 1; i < n; i++) {
+            if (nums[i] > nums[i - 1]) {
+                up[i] = Math.max(up[i - 1], down[i - 1] + 1);
+                down[i] = down[i - 1];//因为比i-1大, 则下降序列和i-1一样
+            } else if (nums[i] < nums[i - 1]) {
+                up[i] = up[i - 1]; //因为比i-1小, 则上升序列和i-1一样
+                down[i] = Math.max(up[i - 1] + 1, down[i - 1]);
+            } else {
+                up[i] = up[i - 1];
+                down[i] = down[i - 1];
+            }
+        }
+        return Math.max(up[n - 1], down[n - 1]);
+    }
+
+    //对动态规划的优化
+    public int wiggleMaxLength3(int[] nums) {
+        int n = nums.length;
+        if (n < 2) {
+            return n;
+        }
+        int up = 1, down = 1;
+        for (int i = 1; i < n; i++) {
+            if (nums[i] > nums[i - 1]) {
+                up = Math.max(up, down + 1);
+            } else if (nums[i] < nums[i - 1]) {
+                down = Math.max(up + 1, down);
+            }
+        }
+        return Math.max(up, down);
+    }
+
 }

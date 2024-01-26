@@ -1,9 +1,9 @@
 package com.welph.leecode.part_1_500.part_421_440;
 
-import com.welph.leecode.common.TreeNode;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.welph.leecode.common.TreeNode;
 
 /**
  * 给定一个二叉树的根节点 root ，和一个整数 targetSum ，求该二叉树里节点值之和等于 targetSum 的 路径 的数目。
@@ -45,6 +45,7 @@ public class Solution437 {
             return 0;
         }
         int ret = 0;
+        // 每增加一个深度 就增加一个node记录数值
         tail.next = new Node(0);
         Node cur = head.next;
         while (cur != null) {
@@ -75,4 +76,61 @@ public class Solution437 {
             this.val = val;
         }
     }
+
+    /* 官方题解 */
+    // 深度优先搜索 比上面更简洁
+    public int pathSum1(TreeNode root, int targetSum) {
+        if (root == null) {
+            return 0;
+        }
+        // 以当前节点为最高节点
+        int ret = rootSum(root, targetSum);
+        ret += pathSum1(root.left, targetSum);
+        ret += pathSum1(root.right, targetSum);
+        return ret;
+    }
+
+    public int rootSum(TreeNode root, int targetSum) {
+        int ret = 0;
+
+        if (root == null) {
+            return 0;
+        }
+        int val = root.val;
+        if (val == targetSum) {
+            ret++;
+        }
+
+        ret += rootSum(root.left, targetSum - val);
+        ret += rootSum(root.right, targetSum - val);
+        return ret;
+    }
+
+    // 前缀和
+    public int pathSum2(TreeNode root, int targetSum) {
+        Map<Long, Integer> prefix = new HashMap<Long, Integer>();
+        prefix.put(0L, 1);
+        return dfs(root, prefix, 0, targetSum);
+    }
+
+    public int dfs(TreeNode root, Map<Long, Integer> prefix, long curr, int targetSum) {
+        if (root == null) {
+            return 0;
+        }
+
+        int ret = 0;
+        curr += root.val;
+        // root -> ... -> pi -> ... -> pi+1 -> node
+        // 若存在前缀和pi为 curr - targetSum, 那么pi+1->...->node总和为 targetSum
+        // 因为 [root->node] = [root->pi] + [pi+1->node]
+        // 对应 curr = (curr - targetSum) + targetSum
+        ret = prefix.getOrDefault(curr - targetSum, 0);
+        prefix.put(curr, prefix.getOrDefault(curr, 0) + 1);
+        ret += dfs(root.left, prefix, curr, targetSum);
+        ret += dfs(root.right, prefix, curr, targetSum);
+        prefix.put(curr, prefix.getOrDefault(curr, 0) - 1);
+
+        return ret;
+    }
+
 }

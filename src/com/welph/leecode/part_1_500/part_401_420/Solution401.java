@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 二进制手表顶部有 4 个 LED 代表 小时（0-11），底部的 6 个 LED 代表 分钟（0-59）。每个 LED 代表一个 0 或 1，最低位在右侧。
+ * 二进制手表顶部有 4 个 LED 代表 小时（0-11），底部的 6 个 LED 代表 分钟（0-59）。每个 LED 代表一个 0 或
+ * 1，最低位在右侧。
  * 例如，下面的二进制手表读取 "3:25" 。
  * <p>
  * 给你一个整数 turnedOn ，表示当前亮着的 LED 的数量，返回二进制手表可以表示的所有可能时间。你可以 按任意顺序 返回答案。
@@ -71,7 +72,7 @@ public class Solution401 {
     }
 
     static void back(List<Integer> ret, int reduce, int limit, int max,
-                     int val, int index) {
+            int val, int index) {
         if (val > max) {
             return;
         }
@@ -84,4 +85,17 @@ public class Solution401 {
             back(ret, reduce, limit, max, val + (1 << index), index + 1);
         }
     }
+
+    /* 官方题解 */
+    public List<String> readBinaryWatch2(int turnedOn) {
+        List<String> ans = new ArrayList<String>();
+        for (int i = 0; i < 1024; ++i) {
+            int h = i >> 6, m = i & 63; // 用位运算取出高 4 位和低 6 位
+            if (h < 12 && m < 60 && Integer.bitCount(i) == turnedOn) {
+                ans.add(h + ":" + (m < 10 ? "0" : "") + m);
+            }
+        }
+        return ans;
+    }
+
 }

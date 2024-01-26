@@ -77,7 +77,7 @@ public class Solution391 {
         for (int[] rectangle : rectangles) {
             minX = Math.min(minX, rectangle[0]);
             minY = Math.min(minY, rectangle[1]);
-            maxX = Math.max(maxX, rectangle[2]);
+            maxX = Math.max(maxX, rectangle[2]); 
             maxY = Math.max(maxY, rectangle[3]);
             area += (rectangle[3] - rectangle[1]) * (rectangle[2] - rectangle[0]);
 

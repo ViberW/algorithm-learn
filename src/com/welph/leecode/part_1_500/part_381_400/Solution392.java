@@ -7,7 +7,8 @@ import java.util.Arrays;
  * 字符串的一个子序列是原始字符串删除一些（也可以不删除）字符而不改变剩余字符相对位置形成的新字符串。
  * （例如，"ace"是"abcde"的一个子序列，而"aec"不是）。
  * 进阶：
- * 如果有大量输入的 S，称作 S1, S2, ... , Sk 其中 k >= 10亿，你需要依次检查它们是否为 T 的子序列。在这种情况下，你会怎样改变代码？
+ * 如果有大量输入的 S，称作 S1, S2, ... , Sk 其中 k >= 10亿，你需要依次检查它们是否为 T
+ * 的子序列。在这种情况下，你会怎样改变代码？
  * <p>
  * 示例 1：
  * 输入：s = "abc", t = "ahbgdc"
@@ -53,16 +54,21 @@ public class Solution392 {
      */
     public static boolean isSubsequence1(String s, String t) {
         int length = t.length();
-        int[][] dp = new int[length][26]; //[从哪个索引开始搜索][代表的英文字母]
+        int[][] dp = new int[length][26]; // [从哪个索引开始搜索][代表的英文字母]
         int c;
-        int[] word = new int[26];
-        Arrays.fill(word, -1);
-        for (int i = length - 1; i >= 0; i--) {
+        // int[] word = new int[26];
+        // Arrays.fill(word, -1);
+        // 优化下
+        Arrays.fill(dp[length - 1], -1);
+        for (int i = length - 1, k = 0; i >= 0; i--, k++) {
             c = t.charAt(i) - 'a';
-            word[c] = i;
-            System.arraycopy(word, 0, dp[i], 0, word.length);
+            // word[c] = i;
+            if (k > 0) {
+                System.arraycopy(dp[i + 1], 0, dp[i], 0, 26);
+            }
+            dp[i][c] = i;
         }
-        //从前往后找
+        // 从前往后找
         int index = 0;
         int k;
         for (int i = 0; i < s.length(); i++) {

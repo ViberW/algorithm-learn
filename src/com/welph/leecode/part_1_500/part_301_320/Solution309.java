@@ -15,12 +15,14 @@ package com.welph.leecode.part_1_500.part_301_320;
  */
 public class Solution309 {
     public static void main(String[] args) {
-        int[] prices = {1, 2, 3, 0, 2};
+        int[] prices = { 1, 2, 3, 0, 2 };
         System.out.println(maxProfit(prices));
         System.out.println(maxProfit2(prices));
     }
 
-    /**
+    /** 
+     * @link Solution188
+     * 
      * dp[][]
      * // dp[i][0]: 手上持有股票的最大收益
      * // dp[i][1]: 手上不持有股票，并且处于冷冻期中的累计最大收益
@@ -29,7 +31,7 @@ public class Solution309 {
     public static int maxProfit(int[] prices) {
         int n = prices.length;
         int[][] dp = new int[n][3];
-        dp[0][0] = -prices[0]; //第0天卖出的最大收益
+        dp[0][0] = -prices[0]; // 第0天卖出的最大收益
         for (int i = 1; i < n; i++) {
             dp[i][0] = Math.max(dp[i - 1][2] - prices[i], dp[i - 1][0]);
             dp[i][1] = dp[i - 1][0] + prices[i];

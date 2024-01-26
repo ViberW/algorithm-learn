@@ -18,7 +18,7 @@ import java.util.List;
 public class Solution442 {
 
     public static void main(String[] args) {
-        System.out.println(findDuplicates(new int[]{4, 3, 2, 7, 8, 2, 3, 1}));
+        System.out.println(findDuplicates(new int[] { 4, 3, 2, 7, 8, 2, 3, 1 }));
     }
 
     /**
@@ -30,7 +30,7 @@ public class Solution442 {
         int len = nums.length;
         List<Integer> ret = new ArrayList<>();
         int cur;
-        for (int i = 1; i <= len; ) {
+        for (int i = 1; i <= len;) {
             cur = nums[i - 1];
             if (cur != i) {
                 if (nums[cur - 1] != cur) {
@@ -55,4 +55,39 @@ public class Solution442 {
         nums[i] = nums[cur];
         nums[cur] = temp;
     }
+
+    /* 官方题解 */
+
+    // 位置交换, 思路和我的差不多. 但比较清晰
+    public List<Integer> findDuplicates1(int[] nums) {
+        int n = nums.length;
+        for (int i = 0; i < n; ++i) {
+            while (nums[i] != nums[nums[i] - 1]) { // 最终多余的二次数字会不等i+1
+                swap(nums, i, nums[i] - 1);
+            }
+        }
+        List<Integer> ans = new ArrayList<Integer>();
+        for (int i = 0; i < n; ++i) {
+            if (nums[i] - 1 != i) {
+                ans.add(nums[i]);
+            }
+        }
+        return ans;
+    }
+
+    // 使用正负符号标记 厉害!!!
+    public List<Integer> findDuplicates2(int[] nums) {
+        int n = nums.length;
+        List<Integer> ans = new ArrayList<Integer>();
+        for (int i = 0; i < n; ++i) {
+            int x = Math.abs(nums[i]);
+            if (nums[x - 1] > 0) {
+                nums[x - 1] = -nums[x - 1];
+            } else {
+                ans.add(x);
+            }
+        }
+        return ans;
+    }
+
 }

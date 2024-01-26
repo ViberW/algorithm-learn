@@ -37,17 +37,18 @@ import java.util.List;
 public class Solution406 {
 
     public static void main(String[] args) {
-        int[][] ints = reconstructQueue(new int[][]{{7, 0}, {4, 4}, {7, 1}, {5, 0}, {6, 1}, {5, 2}});
+        int[][] ints = reconstructQueue(new int[][] { { 7, 0 }, { 4, 4 }, { 7, 1 }, { 5, 0 }, { 6, 1 }, { 5, 2 } });
         for (int[] anInt : ints) {
             System.out.println(Arrays.toString(anInt));
         }
     }
 
+    // 官方题解
     public static int[][] reconstructQueue1(int[][] people) {
         Arrays.sort(people, new Comparator<int[]>() {
             @Override
             public int compare(int[] o1, int[] o2) {
-                return o1[0] == o2[0] ? o1[1] - o2[1] : o2[0] - o1[0]; //todo 这里相同身高,降序
+                return o1[0] == o2[0] ? o1[1] - o2[1] : o2[0] - o1[0]; // todo 这里相同身高,降序
             }
         });
         List<int[]> list = new ArrayList<>();
@@ -59,7 +60,7 @@ public class Solution406 {
 
     /**
      * 思考: 作为最小身高且最小前大于值, 能够放置的位置就是对应的排序index
-     * ---时间很长, 因为最大时间为O(N^2)  ---这里按照身高降序 {@see reconstructQueue1()}
+     * ---时间很长, 因为最大时间为O(N^2) ---这里按照身高降序 {@see reconstructQueue1()}
      */
     public static int[][] reconstructQueue(int[][] people) {
         Arrays.sort(people, new Comparator<int[]>() {
@@ -79,7 +80,9 @@ public class Solution406 {
             person = people[i];
             index = person[1];
             int actual = 0;
+            // 相当于是找到person的位置
             for (int j = 0; j < index || ret[actual][0] != -1; actual++) {
+                // 因为上面经过排序 前面的要么是小于person[0] 要么是等于person[0] 再或是还没设置, 但这些没设置的一定是大于或等于person[0]
                 if (ret[actual][0] == -1 || ret[actual][0] == person[0]) {
                     j++;
                 }
@@ -88,4 +91,53 @@ public class Solution406 {
         }
         return ret;
     }
+
+    /* 官方题解 */
+    // 从低到高考虑
+    public int[][] reconstructQueue2(int[][] people) {
+        Arrays.sort(people, new Comparator<int[]>() {
+            public int compare(int[] person1, int[] person2) {
+                if (person1[0] != person2[0]) {
+                    return person1[0] - person2[0];// 顺序
+                } else {
+                    return person2[1] - person1[1];// 倒序-- 相较于我上面的方式, 就少了一步ret[actual][0] == person[0]的
+                }
+            }
+        });
+        int n = people.length;
+        int[][] ans = new int[n][];
+        for (int[] person : people) {
+            int spaces = person[1];
+            for (int i = 0; i < n; ++i) {
+                if (ans[i] == null) {// 说明没人选
+                    if (spaces == 0) {// 没人选且前面已经有合适的空位, 则可以放入此地
+                        ans[i] = person;
+                        break;
+                    } else {
+                        --spaces;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+
+    // 从高到低考虑
+    public int[][] reconstructQueue3(int[][] people) {
+        Arrays.sort(people, new Comparator<int[]>() {
+            public int compare(int[] person1, int[] person2) {
+                if (person1[0] != person2[0]) {
+                    return person2[0] - person1[0];// 倒序
+                } else {
+                    return person1[1] - person2[1];// 顺序
+                }
+            }
+        });
+        List<int[]> ans = new ArrayList<int[]>();
+        for (int[] person : people) {
+            ans.add(person[1], person);// 选择对应的位置插入
+        }
+        return ans.toArray(new int[ans.size()][]);
+    }
+
 }

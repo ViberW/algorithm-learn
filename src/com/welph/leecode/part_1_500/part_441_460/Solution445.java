@@ -2,7 +2,6 @@ package com.welph.leecode.part_1_500.part_441_460;
 
 import com.welph.leecode.common.ListNode;
 
-import java.util.List;
 import java.util.Stack;
 
 /**
@@ -54,17 +53,12 @@ public class Solution445 {
         int reduce = 0;
         ListNode node = null;
         ListNode cur;
-        while (!s1.isEmpty() || !s2.isEmpty()) {
+        while (!s1.isEmpty() || !s2.isEmpty() || reduce > 0) {
             int v = (s2.isEmpty() ? 0 : s2.pop()) + (s1.isEmpty() ? 0 : s1.pop()) + reduce;
             cur = new ListNode(v % 10);
             cur.next = node;
             node = cur;
             reduce = v / 10;
-        }
-        if (reduce > 0) {
-            cur = new ListNode(reduce);
-            cur.next = node;
-            node = cur;
         }
         return node;
     }

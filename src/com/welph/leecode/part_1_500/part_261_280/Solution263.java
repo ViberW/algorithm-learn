@@ -21,7 +21,7 @@ package com.welph.leecode.part_1_500.part_261_280;
  * <p>
  * 说明：
  * 1 是丑数。
- * 输入不会超过 32 位有符号整数的范围: [−231,  231 − 1]。
+ * 输入不会超过 32 位有符号整数的范围: [−231, 231 − 1]。
  */
 public class Solution263 {
 
@@ -47,4 +47,21 @@ public class Solution263 {
         }
         return true;
     }
+
+    /* 官方题解 */
+
+    // 这样的做法更好
+    public boolean isUgly2(int n) {
+        if (n <= 0) {
+            return false;
+        }
+        int[] factors = { 2, 3, 5 };
+        for (int factor : factors) {
+            while (n % factor == 0) {
+                n /= factor;
+            }
+        }
+        return n == 1;
+    }
+
 }

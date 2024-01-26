@@ -121,7 +121,7 @@ public class Solution149 {
         return ret;
     }
 
-    //最小公倍数
+    //最小公倍数 {@link ExpandEuclidean_8}
     public int gcd(int a, int b) {
         return b != 0 ? gcd(b, a % b) : a;
     }

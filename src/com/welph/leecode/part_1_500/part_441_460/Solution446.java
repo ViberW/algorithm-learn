@@ -1,6 +1,5 @@
 package com.welph.leecode.part_1_500.part_441_460;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,16 +38,17 @@ import java.util.Map;
 public class Solution446 {
 
     public static void main(String[] args) {
-//        System.out.println(numberOfArithmeticSlices(new int[]{2, 4, 6, 8, 10}));
-//        System.out.println(numberOfArithmeticSlices(new int[]{7, 7, 7, 7, 7}));
-//        System.out.println(numberOfArithmeticSlices(new int[]{0, 2000000000, -294967296}));
-        System.out.println(numberOfArithmeticSlices(new int[]{-2147483648, 0, -2147483648}));
+        // System.out.println(numberOfArithmeticSlices(new int[]{2, 4, 6, 8, 10}));
+        // System.out.println(numberOfArithmeticSlices(new int[]{7, 7, 7, 7, 7}));
+        // System.out.println(numberOfArithmeticSlices(new int[]{0, 2000000000,
+        // -294967296}));
+        System.out.println(numberOfArithmeticSlices(new int[] { -2147483648, 0, -2147483648 }));
     }
 
     /**
      * {@link com.welph.leecode.part_1_500.part_401_420.Solution413}
      * ---这里允许删除.
-     * 动态规划  dp[][]
+     * 动态规划 dp[][]
      */
     public static int numberOfArithmeticSlices(int[] nums) {
         int len = nums.length;
@@ -58,6 +58,7 @@ public class Solution446 {
         Map<Long, Integer>[] maps = new HashMap[len];
         maps[0] = new HashMap<>(2);
         maps[1] = new HashMap<>(4);
+
         maps[1].put(nums[1] + 0L - nums[0], 0);
         long a;
         int ret = 0;
@@ -76,4 +77,25 @@ public class Solution446 {
         }
         return ret;
     }
+
+    /* 官方题解 */
+    // 相较于上面方法 比较简洁
+    public int numberOfArithmeticSlices2(int[] nums) {
+        int ans = 0;
+        int n = nums.length;
+        Map<Long, Integer>[] f = new Map[n];
+        for (int i = 0; i < n; ++i) {
+            f[i] = new HashMap<Long, Integer>();
+        }
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < i; ++j) {
+                long d = 1L * nums[i] - nums[j];
+                int cnt = f[j].getOrDefault(d, 0);
+                ans += cnt;
+                f[i].put(d, f[i].getOrDefault(d, 0) + cnt + 1);
+            }
+        }
+        return ans;
+    }
+
 }

@@ -41,7 +41,7 @@ public class Solution409 {
         for (int count : chars) {
             if ((count & 1) == 1) {
                 oddOverZero = true;
-                ans += Math.max(0, count - 1);
+                ans += count - 1;
             } else {
                 ans += count;
             }

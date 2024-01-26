@@ -29,4 +29,21 @@ public class Solution203 {
         }
         return parent.next;
     }
+
+    /* 官方题解 */
+    public ListNode removeElements1(ListNode head, int val) {
+        ListNode dummyHead = new ListNode(0);
+        dummyHead.next = head;
+        ListNode temp = dummyHead;
+        while (temp.next != null) {
+            if (temp.next.val == val) {
+                temp.next = temp.next.next;
+                // 这里不动tmp 这样就在判断的时候不用判断tmp是否空
+            } else {
+                temp = temp.next;
+            }
+        }
+        return dummyHead.next;
+    }
+
 }

@@ -1,5 +1,8 @@
 package com.welph.leecode.part_1_500.part_381_400;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 给定一个正整数 n ，你可以做如下操作：
  * <p>
@@ -52,11 +55,53 @@ public class Solution397 {
                 if (n == 3) {
                     return integerReplacement(n - 1) + 1;
                 } else if ((n & 2) == 2) {
-                    return integerReplacement(n + 1) + 1;  //因为若是不+1, 则会多出来一步
+                    return integerReplacement(n + 1) + 1; // 因为若是不+1, 则会多出来一步
                 } else {
                     return integerReplacement(n - 1) + 1;
                 }
             }
         }
     }
+
+    /* 另一种写法 官方 */
+    // 保证2的幂次
+    public int integerReplacement2(int n) {
+        int ans = 0;
+        while (n != 1) {
+            if (n % 2 == 0) {
+                ++ans;
+                n /= 2;
+            } else if (n % 4 == 1) {
+                ans += 2;
+                n /= 2;
+            } else {
+                if (n == 3) {
+                    ans += 2;
+                    n = 1;
+                } else {
+                    ans += 2;
+                    n = n / 2 + 1;
+                }
+            }
+        }
+        return ans;
+    }
+
+    // 一种效率不高的写法, 也添加进来, 记忆化迭代
+    Map<Integer, Integer> memo = new HashMap<Integer, Integer>();
+
+    public int integerReplacement3(int n) {
+        if (n == 1) {
+            return 0;
+        }
+        if (!memo.containsKey(n)) {
+            if (n % 2 == 0) {
+                memo.put(n, 1 + integerReplacement(n / 2));
+            } else {
+                memo.put(n, 2 + Math.min(integerReplacement(n / 2), integerReplacement(n / 2 + 1)));
+            }
+        }
+        return memo.get(n);
+    }
+
 }

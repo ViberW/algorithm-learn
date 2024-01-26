@@ -11,22 +11,31 @@ import java.util.Comparator;
 public class RangeContains {
 
     public static void main(String[] args) {
-        int[] ints = countContain(new int[][]{
-                {1, 2},
-                {2, 5},
-                {2, 3},
-                {2, 4},
-                {3, 6},
-                {6, 8},
-                {7, 8},
+        int[] ints = countContain(new int[][] {
+                { 1, 2 },
+                { 2, 5 },
+                { 2, 3 },
+                { 2, 4 },
+                { 3, 6 },
+                { 6, 8 },
+                { 7, 8 },
         });
 
         System.out.println(Arrays.toString(ints));
+        System.out.println(Arrays.toString(countRange(new int[][] {
+                { 1, 2 },
+                { 2, 5 },
+                { 2, 3 },
+                { 2, 4 },
+                { 3, 6 },
+                { 6, 8 },
+                { 7, 8 },
+        })));
     }
 
     /**
      * 对ranges排序 先按照s1排序, s1相同时按照e1排序
-     * 那样仅仅需要找到那些个包含s1  同时e1在目标的右边的集合区间
+     * 那样仅仅需要找到那些个包含s1 同时e1在目标的右边的集合区间
      * ,使用树状数组快速查询
      */
     private static int[] countContain(int[][] ranges) {
@@ -42,18 +51,18 @@ public class RangeContains {
         Arrays.sort(cow, new Comparator<Point>() {
             @Override
             public int compare(Point o1, Point o2) {
-                //先按照x升序排序, 相同时按照y倒序排序
-                //之后仅仅需要找到历史中,所有比y的区间
+                // 先按照x升序排序, 相同时按照y倒序排序
+                // 之后仅仅需要找到历史中,所有比y的区间
                 return o1.x == o2.x ? o2.y - o1.y : o1.x - o2.x;
             }
         });
-//        System.out.println(Arrays.toString(points));
-        int[] sum = new int[max], ans = new int[n]; //这里应该是y的最大值
-        for (int i = 0; i < n; ++i) { //每次遍历, 这样就代表从x小于或等于的位置, 找到左右比y大的地方
+        // System.out.println(Arrays.toString(points));
+        int[] sum = new int[max + 1], ans = new int[n]; // 这里应该是y的最大值
+        for (int i = 0; i < n; ++i) { // 每次遍历, 这样就代表从x小于或等于的位置, 找到左右比y大的地方
             if (i > 0 && cow[i].x == cow[i - 1].x && cow[i].y == cow[i - 1].y) {
                 ans[cow[i].index] = ans[cow[i - 1].index];
             } else {
-                ans[cow[i].index] = i - query(sum, cow[i].y - 1); //当前位置所有的, 减去过去中不超过的y数量
+                ans[cow[i].index] = i - query(sum, cow[i].y - 1); // 当前位置所有的, 减去过去中不超过的y数量
             }
             add(sum, cow[i].y, 1);
         }
@@ -73,7 +82,7 @@ public class RangeContains {
         }
     }
 
-    //查的是到index位置(值)的所有数据信息
+    // 查的是到index位置(值)的所有数据信息
     static int query(int[] sum, int index) {
         int ret = 0;
         for (int pos = index; pos > 0; pos -= lowbit(pos))
@@ -101,4 +110,41 @@ public class RangeContains {
                     '}' + "\n";
         }
     }
+
+    /*
+     * 上面这个题是考虑每个范围到底属于多少个范围的真子集, 它代表子集
+     * 
+     * 若是考虑当前范围有多少个真子集, 它属于父集, 那么代码应该如下
+     * 
+     */
+    private static int[] countRange(int[][] ranges) {
+        int n = ranges.length;
+        Point[] cow = new Point[n];
+        int[] range;
+        int max = 0;
+        for (int i = 0; i < n; i++) {
+            range = ranges[i];
+            cow[i] = new Point(i, range[0], range[1]);
+            max = Math.max(max, range[1]);
+        }
+        Arrays.sort(cow, new Comparator<Point>() {
+            @Override
+            public int compare(Point o1, Point o2) {
+                // 先按照x升序降序, 相同时按照y升序排序
+                // 这里排序相反, 和上面的解法不一样, 通过调整排序方式, 实现子集和父集的转换
+                return o1.x == o2.x ? o1.y - o2.y : o2.x - o1.x;
+            }
+        });
+        int[] sum = new int[max + 1], ans = new int[n]; // 这里应该是y的最大值
+        for (int i = 0; i < n; ++i) { // 每次遍历, 这样就代表从x小于或等于的位置, 找到左右比y大的地方
+            if (i > 0 && cow[i].x == cow[i - 1].x && cow[i].y == cow[i - 1].y) {
+                ans[cow[i].index] = ans[cow[i - 1].index];
+            } else {
+                ans[cow[i].index] = query(sum, cow[i].y); // 包含y内的数量即为作为多少个子集的父集
+            }
+            add(sum, cow[i].y, 1);
+        }
+        return ans;
+    }
+
 }

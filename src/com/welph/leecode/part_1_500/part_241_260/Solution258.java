@@ -20,6 +20,9 @@ public class Solution258 {
     //todo 这个数学题要好好理解  10进制转9进制.
     //<a>https://leetcode-cn.com/problems/add-digits/solution/java-o1jie-fa-de-ge-ren-li-jie-by-liveforexperienc/</a>
     public static int addDigits(int num) {
+        //因为num>0时 结果一定是大于0 所以不能直接num%9 这样会有0值
+        //又有num=0时 结果为0 
+        // 所以需要num-1 (mod 9) 
         return (num - 1) % 9 + 1;
     }
 

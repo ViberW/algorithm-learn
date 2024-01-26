@@ -24,15 +24,15 @@ public class Solution279 {
         System.out.println(numSquares(12));
     }
 
-    //动态规划
-    //dp = dp[最近的]
-    //todo 还有很多方法
+    // 动态规划
+    // dp = dp[最近的]
+    // todo 还有很多方法
     public static int numSquares(int n) {
         if (n == 0) {
             return 0;
         }
         int[] dp = new int[n + 1];
-        //最坏的为1+1+1+1...+1
+        // 最坏的为1+1+1+1...+1
         for (int i = 1; i <= n; i++) {
             dp[i] = i;
             for (int j = 1; i - j * j >= 0; j++) {
@@ -40,5 +40,40 @@ public class Solution279 {
             }
         }
         return dp[n];
+    }
+
+    /* 官方题解 */
+    // 四平方和定理: 任意一个正整数都可以被表示为至多四个正整数的平方和 {@link https://zhuanlan.zhihu.com/p/382062423}
+    // 对于当前题目, 四平方和定理代表了上界
+    public int numSquares2(int n) {
+        if (isPerfectSquare(n)) {
+            return 1;
+        }
+        // 根据四平方和定理: 4^k*(8m+7) = n 时, n只能被四个正整数表示
+        if (checkAnswer4(n)) {
+            return 4;
+        }
+        // 剩下的结果一定是1, 2, 3中的一个
+        for (int i = 1; i * i <= n; i++) {
+            int j = n - i * i;
+            if (isPerfectSquare(j)) {
+                return 2;
+            }
+        }
+        return 3;
+    }
+
+    // 判断是否为完全平方数
+    public boolean isPerfectSquare(int x) {
+        int y = (int) Math.sqrt(x);
+        return y * y == x;
+    }
+
+    // 判断是否能表示为 4^k*(8m+7)
+    public boolean checkAnswer4(int x) {
+        while (x % 4 == 0) {
+            x /= 4;
+        }
+        return x % 8 == 7;
     }
 }

@@ -44,4 +44,25 @@ public class Solution338 {
         }
         return ans;
     }
+
+    /* 官方题解 */
+    //上面方法的简化
+    public int[] countBits2(int n) {
+        int[] bits = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            bits[i] = bits[i >> 1] + (i & 1);
+        }
+        return bits;
+    }
+
+    // 根据小数获取当前的,相较于countBits2, 少了一步计算
+    public int[] countBits3(int n) {
+        int[] bits = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            // 这样就能找到比它小的值, 且相差一个1的数
+            bits[i] = bits[i & (i - 1)] + 1;
+        }
+        return bits;
+    }
+
 }

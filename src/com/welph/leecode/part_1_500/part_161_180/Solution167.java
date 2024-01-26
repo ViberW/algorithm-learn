@@ -20,18 +20,20 @@ import java.util.Arrays;
 public class Solution167 {
 
     public static void main(String[] args) {
-        /*int[] numbers = {2, 7, 11, 15};
-        System.out.println(Arrays.toString(twoSum(numbers, 9)));
+        /*
+         * int[] numbers = {2, 7, 11, 15};
+         * System.out.println(Arrays.toString(twoSum(numbers, 9)));
+         * 
+         * int[] numbers1 = {-1, 0};
+         * System.out.println(Arrays.toString(twoSum(numbers1, -1)));
+         */
 
-        int[] numbers1 = {-1, 0};
-        System.out.println(Arrays.toString(twoSum(numbers1, -1)));*/
-
-        int[] numbers2 = {-3, 3, 4, 90};
+        int[] numbers2 = { -3, 3, 4, 90 };
         System.out.println(Arrays.toString(twoSum(numbers2, 0)));
     }
 
     /**
-     * 双指针  已经排序好的数据. {@link Solution01}
+     * 双指针 已经排序好的数据. {@link Solution01}
      * 由于这里排好序, 可以使用二分查找.
      */
     public static int[] twoSum(int[] numbers, int target) {
@@ -41,10 +43,14 @@ public class Solution167 {
         while (l < r) {
             val = numbers[l] + numbers[r];
             if (val == target) {
-                return new int[]{l + 1, r + 1};
-            } else if (val > target) {
+                return new int[] { l + 1, r + 1 };
+            }
+            // 因为是唯一target, 若l先到达左目标点, 此时val>target, 就只需要r--
+            else if (val > target) {
                 r--;
-            } else {
+            }
+            // 因为是唯一target, 若r先到达右目标点, 此时val<target, 就只需要l++
+            else {
                 l++;
             }
         }

@@ -28,21 +28,21 @@ import com.welph.leecode.part_1_500.part_81_100.Solution81;
 public class Solution153 {
 
     public static void main(String[] args) {
-        int[] nums = {3, 4, 5, 1, 2};
+        int[] nums = { 3, 4, 5, 1, 2 };
         System.out.println(findMin(nums));
-        int[] nums1 = {4, 5, 6, 7, 0, 1, 2};
+        int[] nums1 = { 4, 5, 6, 7, 0, 1, 2 };
         System.out.println(findMin(nums1));
     }
 
     /**
      * 和{@link Solution81},{@link Solution33}
-     * 二分查找,  这里还是唯一的 都不用判断重复.
+     * 二分查找, 这里还是唯一的 都不用判断重复.
      */
     public static int findMin(int[] nums) {
         int l = 0;
         int r = nums.length - 1;
         int mid;
-        int expect = nums[0]; //假定第一位为最小值, 二分法找比当前值还小的值
+        int expect = nums[0]; // 假定第一位为最小值, 二分法找比当前值还小的值
         while (l <= r) {
             mid = (l + r) / 2;
             if (nums[mid] < expect) {
@@ -54,4 +54,21 @@ public class Solution153 {
         }
         return expect;
     }
+
+    /* 官方题解 */
+    // 不适用expect, 其实expect就是 nums[low]
+    public int findMin2(int[] nums) {
+        int low = 0;
+        int high = nums.length - 1;
+        while (low < high) {
+            int pivot = low + (high - low) / 2;
+            if (nums[pivot] < nums[high]) {
+                high = pivot;
+            } else {
+                low = pivot + 1;
+            }
+        }
+        return nums[low];
+    }
+
 }

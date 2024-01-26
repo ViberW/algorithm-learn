@@ -46,9 +46,11 @@ import java.util.Stack;
 public class Solution150 {
 
     public static void main(String[] args) {
-       /* String[] tokens = {"2", "1", "+", "3", "*"};
-        System.out.println(evalRPN(tokens));*/
-        String[] tokens1 = {"10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"};
+        /*
+         * String[] tokens = {"2", "1", "+", "3", "*"};
+         * System.out.println(evalRPN(tokens));
+         */
+        String[] tokens1 = { "10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+" };
         System.out.println(evalRPN(tokens1));
     }
 
@@ -82,4 +84,38 @@ public class Solution150 {
         }
         return stack.pop();
     }
+
+    /* 官方题解 */
+    // 数组控制 另一种数组替代栈
+    public int evalRPN1(String[] tokens) {
+        int n = tokens.length;
+        int[] stack = new int[(n + 1) / 2];
+        int index = -1;
+        for (int i = 0; i < n; i++) {
+            String token = tokens[i];
+            switch (token) {
+                case "+":
+                    index--;
+                    stack[index] += stack[index + 1];
+                    break;
+                case "-":
+                    index--;
+                    stack[index] -= stack[index + 1];
+                    break;
+                case "*":
+                    index--;
+                    stack[index] *= stack[index + 1];
+                    break;
+                case "/":
+                    index--;
+                    stack[index] /= stack[index + 1];
+                    break;
+                default:
+                    index++;
+                    stack[index] = Integer.parseInt(token);
+            }
+        }
+        return stack[index];
+    }
+
 }

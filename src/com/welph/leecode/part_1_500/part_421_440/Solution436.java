@@ -35,13 +35,14 @@ import java.util.Comparator;
 public class Solution436 {
 
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(findRightInterval(new int[][]{
-                {1, 4}, {2, 3}, {3, 4}
+        System.out.println(Arrays.toString(findRightInterval(new int[][] {
+                { 1, 4 }, { 2, 3 }, { 3, 4 }
         })));
-        System.out.println(Arrays.toString(findRightInterval(new int[][]{
-                {3, 4}, {2, 3}, {1, 2}
+        System.out.println(Arrays.toString(findRightInterval(new int[][] {
+                { 3, 4 }, { 2, 3 }, { 1, 2 }
         })));
     }
+
     /**
      * todo 官方有更好的方法, 通过TreeMap保存数据, 相对于二分查找, 更加快速
      */
@@ -54,7 +55,7 @@ public class Solution436 {
     public static int[] findRightInterval(int[][] intervals) {
         int length = intervals.length;
         int[] ret = new int[length];
-        //根据start_i进行排序
+        // 根据start_i进行排序
         Entity[] entities = new Entity[length];
         for (int i = 0; i < length; i++) {
             entities[i] = new Entity(intervals[i][0], i);
@@ -93,4 +94,34 @@ public class Solution436 {
             this.index = index;
         }
     }
+
+    /* 官方题解 */
+    // 双指针法
+    public int[] findRightInterval1(int[][] intervals) {
+        int n = intervals.length;
+        int[][] startIntervals = new int[n][2];
+        int[][] endIntervals = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            startIntervals[i][0] = intervals[i][0];
+            startIntervals[i][1] = i;
+            endIntervals[i][0] = intervals[i][1];
+            endIntervals[i][1] = i;
+        }
+        Arrays.sort(startIntervals, (o1, o2) -> o1[0] - o2[0]);
+        Arrays.sort(endIntervals, (o1, o2) -> o1[0] - o2[0]);
+
+        int[] ans = new int[n];
+        for (int i = 0, j = 0; i < n; i++) {
+            while (j < n && endIntervals[i][0] > startIntervals[j][0]) {
+                j++;
+            }
+            if (j < n) {
+                ans[endIntervals[i][1]] = startIntervals[j][1];
+            } else {
+                ans[endIntervals[i][1]] = -1;
+            }
+        }
+        return ans;
+    }
+
 }

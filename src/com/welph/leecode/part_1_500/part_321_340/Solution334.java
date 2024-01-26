@@ -70,4 +70,51 @@ public class Solution334 {
         }
         return l;
     }
+
+    /* 官方题解 --更适合的方法 */
+    //双向遍历
+    public boolean increasingTriplet2(int[] nums) {
+        int n = nums.length;
+        if (n < 3) {
+            return false;
+        }
+        int[] leftMin = new int[n];
+        leftMin[0] = nums[0];
+        for (int i = 1; i < n; i++) {
+            leftMin[i] = Math.min(leftMin[i - 1], nums[i]); //每个点的最小值
+        }
+        int[] rightMax = new int[n];
+        rightMax[n - 1] = nums[n - 1];
+        for (int i = n - 2; i >= 0; i--) {
+            rightMax[i] = Math.max(rightMax[i + 1], nums[i]); //每个点的最大值
+        }
+        for (int i = 1; i < n - 1; i++) {
+            if (nums[i] > leftMin[i - 1] && nums[i] < rightMax[i + 1]) { //若存在说明符合
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //贪心算法
+    public boolean increasingTriplet3(int[] nums) {
+        int n = nums.length;
+        if (n < 3) {
+            return false;
+        }
+        //first 表示三元中的第一个数   second表示三元中的第二个数
+        int first = nums[0], second = Integer.MAX_VALUE;
+        for (int i = 1; i < n; i++) {
+            int num = nums[i];
+            if (num > second) {
+                return true;
+            } else if (num > first) {//相当于尽可能的去缩小second
+                second = num;
+            } else {//相当于尽可能的去缩小first
+                first = num;
+            }
+        }
+        return false;
+    }
+
 }

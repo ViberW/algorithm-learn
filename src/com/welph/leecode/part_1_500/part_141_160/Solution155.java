@@ -14,17 +14,17 @@ import java.util.Stack;
  */
 public class Solution155 {
     public static void main(String[] args) {
-        //["MinStack","push","push","push","getMin","pop","top","getMin"]
-        //[[],[-2],[0],[-3],[],[],[],[]]
+        // ["MinStack","push","push","push","getMin","pop","top","getMin"]
+        // [[],[-2],[0],[-3],[],[],[],[]]
         MinStack2 obj = new MinStack2();
         obj.push(0);
         obj.push(-2);
-         System.out.println( obj.pop());//-3
+        System.out.println(obj.pop());// -3
         obj.push(-3);
-        System.out.println(obj.getMin());//-3
-       
-        System.out.println(obj.top());//0
-        System.out.println(obj.getMin());//-2
+        System.out.println(obj.getMin());// -3
+
+        System.out.println(obj.top());// 0
+        System.out.println(obj.getMin());// -2
     }
 
     /**
@@ -74,7 +74,7 @@ public class Solution155 {
     static class MinStack1 {
         // 定义两个栈
         public static Stack<Integer> stack = new Stack<>();
-        //始终保存到当前的最小值
+        // 始终保存到当前的最小值
         public static Stack<Integer> helper = new Stack<>();
 
         /**
@@ -88,10 +88,8 @@ public class Solution155 {
                 helper.push(data);
             }
             // 判断栈顶与要 push 元素的大小
-            else if (helper.peek() <= data) {
-                helper.push(data);
-            } else {
-                helper.push(helper.peek());
+            else {
+                helper.push(Math.min(helper.peek(), data));
             }
         }
 
@@ -114,13 +112,13 @@ public class Solution155 {
         int size = 0;
         int capacity;
         int minCapacity;
-        Entry[] entries; //小顶堆
+        Entry[] entries; // 小顶堆
 
         public MinStack() {
             this.minCapacity = 10;
             this.capacity = minCapacity;
             data = new Entry[capacity];
-            entries = new Entry[capacity + 1]; //从下标为1开始, 方便计算
+            entries = new Entry[capacity + 1]; // 从下标为1开始, 方便计算
         }
 
         public void push(int x) {
@@ -169,7 +167,6 @@ public class Solution155 {
             }
             entries[size + 1] = null;
         }
-
 
         public int top() {
             return data[size - 1].value;

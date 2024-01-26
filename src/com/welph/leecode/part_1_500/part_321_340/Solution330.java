@@ -26,29 +26,29 @@ package com.welph.leecode.part_1_500.part_321_340;
 public class Solution330 {
 
     public static void main(String[] args) {
-        System.out.println(minPatches(new int[]{1, 3}, 6));
-        System.out.println(minPatches(new int[]{1, 5, 10}, 20));
-        System.out.println(minPatches(new int[]{1, 2, 2}, 5));
-        System.out.println(minPatches(new int[]{1, 2, 31, 33}, 2147483647));
+        System.out.println(minPatches(new int[] { 1, 3 }, 6));
+        System.out.println(minPatches(new int[] { 1, 5, 10 }, 20));
+        System.out.println(minPatches(new int[] { 1, 2, 2 }, 5));
+        System.out.println(minPatches(new int[] { 1, 2, 31, 33 }, 2147483647));
     }
 
-    //尽量选择满足的. 1~n的所有值的总和K, 在1~n中能找到任意的数字和等于1~k范围内的值;
+    // 尽量选择满足的. 1~n的所有值的总和K, 在1~n中能找到任意的数字和等于1~k范围内的值;
     public static int minPatches(int[] nums, int n) {
         int res = 0;
-        //不断变更res的, 直到res>n
+        // 不断变更res的, 直到res>n
         int mid = n / 2;
-        //防止数据越界, 需要对N除2;
+        // 防止数据越界, 需要对N除2;
         int ans = 0;
-        for (int i = 0; i < nums.length && res < n; ) {
+        for (int i = 0; i < nums.length && res < n;) {
             int num = nums[i];
-            if (num - res <= 1) { //因为nums是已排序好的.不用担心重复的数值插入
+            if (num - res <= 1) { // 因为nums是已排序好的.不用担心重复的数值插入
                 if (num > mid) {
                     return ans;
                 }
                 res += num;
                 i++;
             } else {
-                ans++;
+                ans++; //插入一个值, 这个值为 res+1
                 if (res > mid) {
                     return ans;
                 }
@@ -64,4 +64,30 @@ public class Solution330 {
         }
         return ans;
     }
+
+    /* 官方题解的写法 也是贪心算法 */
+    /*
+     * 对于正整数 x，如果区间 [1,x−1] 内的所有数字都已经被覆盖，且 x 在数组中，
+     * 则区间 [1,2x−1][内的所有数字也都被覆盖
+     * ---------------------------------------
+     * 贪心逻辑:
+     * 每次找到未被数组 nums 覆盖的最小的整数 x，在数组中补充 x，然后寻找下一个未被覆盖的最小的整数，
+     * 重复上述步骤直到区间 [1,n]中的所有数字都被覆盖。
+     */
+    public int minPatches2(int[] nums, int n) {
+        int patches = 0;
+        long x = 1;
+        int length = nums.length, index = 0;
+        while (x <= n) {
+            if (index < length && nums[index] <= x) {
+                x += nums[index];
+                index++;
+            } else {
+                x *= 2;
+                patches++;
+            }
+        }
+        return patches;
+    }
+
 }

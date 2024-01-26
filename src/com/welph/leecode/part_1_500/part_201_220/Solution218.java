@@ -44,7 +44,7 @@ public class Solution218 {
 
     public static void main(String[] args) {
         int[][] buildings = { { 2, 9, 10 }, { 3, 7, 15 }, { 5, 12, 12 }, { 15, 20, 10 }, { 19, 24, 8 } };
-        System.out.println(getSkyline(buildings));
+        System.out.println(getSkyline2(buildings));
     }
 
     // 一旦[高度发生变化]时,就记录一个点, 并保证记录的点时[最左可展示点]
@@ -54,8 +54,8 @@ public class Solution218 {
         return result;
     }
 
-    /*官方题解 */
-    public List<List<Integer>> getSkyline2(int[][] buildings) {
+    /* 官方题解 */
+    public static List<List<Integer>> getSkyline2(int[][] buildings) {
         // 如果将所有的建筑的边界作为一条线，那么所有的答案都在这些线上
         // 考虑任意一条线，那么这条线和所有相交的建筑（这里排除掉刚好和建筑右边界相交），取一个最高的
         // 高度，然后判断这个高度是否和ans末尾最后一个元素的高度相等，不相等就加入进去
@@ -90,7 +90,8 @@ public class Solution218 {
             // 如果此时的堆为空，证明边界线没有穿过任何建筑，来到了建筑的分割位置，天际线为0
             int maxHeight = pq.isEmpty() ? 0 : pq.peek()[1];
 
-            // 按照这种算法，每一条边界线都会产生一个天际线高度，如果这个高度和ans末尾元素的高度一致，那么就说明两条边界线穿过了同一个建筑，并且相邻，那么按照规则只取最左端
+            // 按照这种算法，每一条边界线都会产生一个天际线高度，如果这个高度和ans末尾元素的高度一致，
+            // 那么就说明两条边界线穿过了同一个建筑，并且相邻，那么按照规则只取最左端
             if (ans.size() == 0 || maxHeight != ans.get(ans.size() - 1).get(1)) {
                 ans.add(Arrays.asList(boundary, maxHeight));
             }

@@ -1,5 +1,6 @@
 package com.welph.leecode.part_1_500.part_401_420;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +15,8 @@ import java.util.Set;
  * 示例 1：
  * 输入：stones = [0,1,3,5,6,8,12,17]
  * 输出：true
- * 解释：青蛙可以成功过河，按照如下方案跳跃：跳 1 个单位到第 2 块石子, 然后跳 2 个单位到第 3 块石子, 接着 跳 2 个单位到第 4 块石子, 然后跳 3 个单位到第 6 块石子, 跳 4 个单位到第 7 块石子, 最后，跳 5 个单位到第 8 个石子（即最后一块石子）。
+ * 解释：青蛙可以成功过河，按照如下方案跳跃：跳 1 个单位到第 2 块石子, 然后跳 2 个单位到第 3 块石子, 接着 跳 2 个单位到第 4 块石子,
+ * 然后跳 3 个单位到第 6 块石子, 跳 4 个单位到第 7 块石子, 最后，跳 5 个单位到第 8 个石子（即最后一块石子）。
  * <p>
  * 示例 2：
  * 输入：stones = [0,1,2,3,4,8,9,11]
@@ -29,8 +31,8 @@ import java.util.Set;
 public class Solution403 {
 
     public static void main(String[] args) {
-        System.out.println(canCross1(new int[]{0, 1, 3, 5, 6, 8, 12, 17}));
-        System.out.println(canCross1(new int[]{0, 1, 2, 3, 4, 8, 9, 11}));
+        System.out.println(canCross1(new int[] { 0, 1, 3, 5, 6, 8, 12, 17 }));
+        System.out.println(canCross1(new int[] { 0, 1, 2, 3, 4, 8, 9, 11 }));
     }
 
     /**
@@ -62,7 +64,7 @@ public class Solution403 {
                             || val + node.k + 1 == target) {
                         return true;
                     }
-                    //todo 需要去除重复的k和位置
+                    // todo 需要去除重复的k和位置
                     add(new Node(val + node.k, node.k), tail);
                     add(new Node(val + node.k + 1, node.k + 1), tail);
                     if (node.k > 1) {
@@ -110,6 +112,7 @@ public class Solution403 {
      * -------------------------耗时有点长
      * 思考: 是不是可以按照在i之前的所有可能的step统计, 并按照step对i查看是否存在对应的位置呢
      */
+    @SuppressWarnings("unchecked")
     public static boolean canCross(int[] stones) {
         int len = stones.length;
         Set<Integer>[] dp = new Set[len];
@@ -139,4 +142,63 @@ public class Solution403 {
         }
         return set;
     }
+
+    /* 官方题解 ->理解i处的最大跳跃距离为i+1 */
+    private Boolean[][] rec;
+
+    // 记忆化搜索+二分查找
+    public boolean canCross2(int[] stones) {
+        int n = stones.length;
+        // 这里隐藏了一个点 就是二维是不可能超过n的, 因为k始终是前一次的K-1~K+1的范围,
+        // 所以最不济, 也是每次+1, 也是小于n的
+        rec = new Boolean[n][n];
+        return dfs(stones, 0, 0);
+    }
+
+    private boolean dfs(int[] stones, int i, int lastDis) {
+        if (i == stones.length - 1) {
+            return true;
+        }
+        if (rec[i][lastDis] != null) {
+            return rec[i][lastDis];
+        }
+
+        for (int curDis = lastDis - 1; curDis <= lastDis + 1; curDis++) {
+            if (curDis > 0) {
+                int j = Arrays.binarySearch(stones, i + 1, stones.length, curDis + stones[i]);
+                if (j >= 0 && dfs(stones, j, curDis)) {
+                    return rec[i][lastDis] = true;
+                }
+            }
+        }
+        return rec[i][lastDis] = false;
+    }
+
+    // 动态规划
+    // 本质上是知道了最终的跳跃距离不超过n的
+    public boolean canCross3(int[] stones) {
+        int n = stones.length;
+        boolean[][] dp = new boolean[n][n];
+        dp[0][0] = true;
+        for (int i = 1; i < n; ++i) {
+            // 这是因为i-1 跳跃距离是不可能超过i的
+            if (stones[i] - stones[i - 1] > i) {
+                return false;
+            }
+        }
+        for (int i = 1; i < n; ++i) {
+            for (int j = i - 1; j >= 0; --j) {
+                int k = stones[i] - stones[j];
+                if (k > j + 1) {
+                    break;
+                }
+                dp[i][k] = dp[j][k - 1] || dp[j][k] || dp[j][k + 1];
+                if (i == n - 1 && dp[i][k]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

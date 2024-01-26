@@ -2,6 +2,7 @@ package com.welph.leecode.part_1_500.part_221_240;
 
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * 请你仅使用两个队列实现一个后入先出（LIFO）的栈，并支持普通队列的全部四种操作（push、top、pop 和 empty）。
@@ -86,6 +87,41 @@ public class Solution225 {
          */
         public boolean empty() {
             return deque.isEmpty();
+        }
+    }
+
+    /* 官方题解 */
+    // 因为题目有限制, 不能用.getLast()等获取最后的方法.
+    class MyStack1 {
+        Queue<Integer> queue;
+
+        /** Initialize your data structure here. */
+        public MyStack1() {
+            queue = new LinkedList<Integer>();
+        }
+
+        /** Push element x onto stack. */
+        public void push(int x) {
+            int n = queue.size();
+            queue.offer(x);
+            for (int i = 0; i < n; i++) {
+                queue.offer(queue.poll());
+            }
+        }
+
+        /** Removes the element on top of the stack and returns that element. */
+        public int pop() {
+            return queue.poll();
+        }
+
+        /** Get the top element. */
+        public int top() {
+            return queue.peek();
+        }
+
+        /** Returns whether the stack is empty. */
+        public boolean empty() {
+            return queue.isEmpty();
         }
     }
 }

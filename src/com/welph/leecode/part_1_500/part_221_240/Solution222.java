@@ -36,28 +36,28 @@ public class Solution222 {
     }
 
     public static int countNodes(TreeNode root) {
-        //查找到当前存在的位置上
-        int r = depth(root, true); //找到最右边
-        int l = depth(root, false);//找到最左边
-        int count = (int) Math.pow(2, r + 1) - 1; //最右边肯定最短, 统计数量
+        // 查找到当前存在的位置上
+        int r = depth(root, true); // 找到最右边
+        int l = depth(root, false);// 找到最左边
+        int count = (int) Math.pow(2, r + 1) - 1; // 最右边肯定最短, 统计数量
         TreeNode target = root;
-        int stepCount = (int) Math.pow(2, r + 1); //这里是最底下一层满员的总数
+        int stepCount = (int) Math.pow(2, r + 1); // 这里是最底下一层满员的总数
         while (r < l) {
             l--;
             r--;
             int tmp = l;
-            l = depth(target.right, false); //二分查询右节点是否长度小,
-            if (r < l) { //若是根节点的右节点本身形成了高度差
-                count += stepCount / 2;  //加上最底层的左半部分
-                target = target.right; //当前节点变为右节点
+            l = depth(target.right, false); // 二分查询右节点是否长度小,
+            if (r < l) { // 若是根节点的右节点本身形成了高度差
+                count += stepCount / 2; // 加上最底层的左半部分
+                target = target.right; // 当前节点变为右节点
             } else {
-                //由于在左边
+                // 由于在左边
                 l = tmp;
                 r = depth(target.left, true);
-                if (r == l) {//此时是正好相等的.
+                if (r == l) {// 此时是正好相等的.
                     count += stepCount / 2;
                 }
-                target = target.left;//若r<l.则说明左半部分
+                target = target.left;// 若r<l.则说明左半部分
             }
             stepCount = stepCount / 2;
         }
@@ -75,4 +75,42 @@ public class Solution222 {
         }
         return n;
     }
+
+    /* 官方题解 */
+    public int countNodes2(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int level = 0;
+        TreeNode node = root;//其实这里只需要查看left的长度, 因为right介于[left-1, left]
+        while (node.left != null) { 
+            level++;
+            node = node.left;
+        }
+        int low = 1 << level, high = (1 << (level + 1)) - 1;
+        while (low < high) {
+            int mid = (high - low + 1) / 2 + low;
+            if (exists(root, level, mid)) {
+                low = mid;
+            } else {
+                high = mid - 1;
+            }
+        }
+        return low;
+    }
+
+    public boolean exists(TreeNode root, int level, int k) {
+        int bits = 1 << (level - 1);
+        TreeNode node = root;
+        while (node != null && bits > 0) {
+            if ((bits & k) == 0) {
+                node = node.left;
+            } else {
+                node = node.right;
+            }
+            bits >>= 1;
+        }
+        return node != null;
+    }
+
 }

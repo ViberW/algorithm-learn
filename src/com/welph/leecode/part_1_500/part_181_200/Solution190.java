@@ -30,7 +30,7 @@ public class Solution190 {
         System.out.println(reverseBits(0b11111111111111111111111111111101));
     }
 
-    //前后颠倒
+    // 前后颠倒
     public static int reverseBits(int n) {
         int val = 0;
         int count = 0;
@@ -40,4 +40,20 @@ public class Solution190 {
         }
         return val;
     }
+
+    /* 官方题解 */
+    private static final int M1 = 0x55555555; // 01010101010101010101010101010101
+    private static final int M2 = 0x33333333; // 00110011001100110011001100110011
+    private static final int M4 = 0x0f0f0f0f; // 00001111000011110000111100001111
+    private static final int M8 = 0x00ff00ff; // 00000000111111110000000011111111
+
+    // 位运算分治 (可以参考 HashMap 计算2的偏移的位运算逻辑)
+    public int reverseBits2(int n) {
+        n = n >>> 1 & M1 | (n & M1) << 1; // 奇偶调换
+        n = n >>> 2 & M2 | (n & M2) << 2;
+        n = n >>> 4 & M4 | (n & M4) << 4;
+        n = n >>> 8 & M8 | (n & M8) << 8;
+        return n >>> 16 | n << 16;// 左右调换
+    }
+
 }

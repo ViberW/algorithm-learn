@@ -96,7 +96,7 @@ public class Solution239 {
         int n = nums.length;
         Deque<Integer> deque = new LinkedList<Integer>();
         for (int i = 0; i < k; ++i) {
-            while (!deque.isEmpty() && nums[i] >= nums[deque.peekLast()]) {
+            while (!deque.isEmpty() && nums[i] >= nums[deque.peekLast()]) {  //单调减栈即可
                 deque.pollLast();
             }
             deque.offerLast(i);
@@ -150,7 +150,7 @@ public class Solution239 {
             }
         }
         for (int i = n - 1; i >= 0; --i) {
-            if (i == n - 1 || (i + 1) % k == 0) {//以i(被k整除)结束,向前的一小段
+            if (i == n - 1 || (i + 1) % k == 0) {//以i(被k整除)结束,向前的一小段 ,这里的i需要+1, 保证index=0处的结尾代表第一段
                 suffixMax[i] = nums[i];
             } else {
                 suffixMax[i] = Math.max(suffixMax[i + 1], nums[i]);

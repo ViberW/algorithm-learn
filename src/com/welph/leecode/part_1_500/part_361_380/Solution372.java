@@ -36,7 +36,7 @@ public class Solution372 {
     /**
      * a^(200) = ((a^20)^10) * (a^4) = ((((a^2)^10) * (a^0))^10) * (a^4)
      * ------------
-     * ( a^b ) % 1337 = (a%1337)^b = 余数^b; ^_~
+     * ( a^b ) % 1337 = (a%1337)^b = 余数^b; 
      */
     public static int superPow(int a, int[] b) {
         int ans = 1;

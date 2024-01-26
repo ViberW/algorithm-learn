@@ -22,18 +22,20 @@ import java.util.Arrays;
 public class Solution164 {
 
     public static void main(String[] args) {
-        int[] nums = {3, 6, 9, 1};
+        int[] nums = { 3, 6, 9, 1 };
         System.out.println(maximumGap(nums));
-        int[] nums1 = {2, 99999999};
+        int[] nums1 = { 2, 99999999 };
         System.out.println(maximumGap(nums1));
-        int[] nums2 = {1, 1, 1, 1};
+        int[] nums2 = { 1, 1, 1, 1 };
         System.out.println(maximumGap(nums2));
-        int[] nums3 = {15252, 16764, 27963, 7817, 26155, 20757, 3478, 22602, 20404, 6739, 16790, 10588, 16521, 6644, 20880, 15632, 27078, 25463, 20124, 15728, 30042, 16604, 17223, 4388, 23646, 32683, 23688, 12439, 30630, 3895, 7926, 22101, 32406, 21540, 31799, 3768, 26679, 21799, 23740};
+        int[] nums3 = { 15252, 16764, 27963, 7817, 26155, 20757, 3478, 22602, 20404, 6739, 16790, 10588, 16521, 6644,
+                20880, 15632, 27078, 25463, 20124, 15728, 30042, 16604, 17223, 4388, 23646, 32683, 23688, 12439, 30630,
+                3895, 7926, 22101, 32406, 21540, 31799, 3768, 26679, 21799, 23740 };
         System.out.println(maximumGap(nums3));
     }
 
-    //时间 42.15%  空间 5.23% -_-
-    //尝试在线性时间和空间复杂度下解决
+    // 时间 42.15% 空间 5.23% -_-
+    // 尝试在线性时间和空间复杂度下解决
     // 桶排序 + 归并排序(找出当前桶的最大Gap)
     public static int maximumGap(int[] nums) {
         if (nums.length < 2) {
@@ -76,7 +78,7 @@ public class Solution164 {
     }
 
     private static int sort(int[] bucket) {
-        //想办法排序 nlogn的排序 并能够返回相差的值,又避免使用额外空间 --快排
+        // 想办法排序 nlogn的排序 并能够返回相差的值,又避免使用额外空间 --快排
         return sort(bucket, 0, bucket.length - 1);
     }
 
@@ -119,10 +121,52 @@ public class Solution164 {
         bucket[target] = tmp;
     }
 
-
     private static int[] arrAppend(int[] bucket, int num) {
         bucket = Arrays.copyOf(bucket, bucket.length + 1);
         bucket[bucket.length - 1] = num;
         return bucket;
     }
+
+    /* 官方题解 */
+    // 这里也是桶排序, 但是由于使用了n的长度做为桶. 那么就只需要考虑每个桶之间的差值
+    public int maximumGap2(int[] nums) {
+        int n = nums.length;
+        if (n < 2) {
+            return 0;
+        }
+        int minVal = Arrays.stream(nums).min().getAsInt();
+        int maxVal = Arrays.stream(nums).max().getAsInt();
+        // 这里使用n的桶, 因为相邻数字最大间距肯定不会小于 k  = (max-min)/(n-1)
+        // 反证: 若是最大间距小于k 那么所有数字的总差值一定小于(max-min)  所以最大间距一定大于等于k
+        int d = Math.max(1, (maxVal - minVal) / (n - 1)); 
+        int bucketSize = (maxVal - minVal) / d + 1;
+
+        int[][] bucket = new int[bucketSize][2];
+        for (int i = 0; i < bucketSize; ++i) {
+            Arrays.fill(bucket[i], -1); // 存储 (桶内最小值，桶内最大值) 对， (-1, -1) 表示该桶是空的
+        }
+        for (int i = 0; i < n; i++) {
+            int idx = (nums[i] - minVal) / d;
+            if (bucket[idx][0] == -1) {
+                bucket[idx][0] = bucket[idx][1] = nums[i];
+            } else {
+                bucket[idx][0] = Math.min(bucket[idx][0], nums[i]);
+                bucket[idx][1] = Math.max(bucket[idx][1], nums[i]);
+            }
+        }
+
+        int ret = 0;
+        int prev = -1;
+        for (int i = 0; i < bucketSize; i++) {
+            if (bucket[i][0] == -1) {
+                continue;
+            }
+            if (prev != -1) {
+                ret = Math.max(ret, bucket[i][0] - bucket[prev][1]); // 两个桶之间的差值
+            }
+            prev = i;
+        }
+        return ret;
+    }
+
 }

@@ -26,6 +26,7 @@ public class HeapSort {
 
     public static void sort(int[] arr) {
         int len = arr.length;
+        //找到最大的值 放于index=0的位置
         buildMaxHeap(arr, len);
         //但本身还没有排好序,所以此案有这一步操作;
         //将第一元素放到最后,之后只需要处理len-1范围内的数据,重复如此

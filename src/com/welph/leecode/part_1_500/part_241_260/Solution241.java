@@ -78,7 +78,7 @@ public class Solution241 {
     // 动态规划
     @SuppressWarnings("unchecked")
     public List<Integer> diffWaysToCompute2(String expression) {
-        List<Integer> ops = new ArrayList<Integer>();//构建数字和字符
+        List<Integer> ops = new ArrayList<Integer>();// 构建数字和字符
         for (int i = 0; i < expression.length();) {
             if (!Character.isDigit(expression.charAt(i))) {
                 if (expression.charAt(i) == '+') {
@@ -98,7 +98,7 @@ public class Solution241 {
                 ops.add(t);
             }
         }
-        //开始动态规划
+        // 开始动态规划
         List<Integer>[][] dp = new List[ops.size()][ops.size()];
         for (int i = 0; i < ops.size(); i++) {
             for (int j = 0; j < ops.size(); j++) {
@@ -108,11 +108,12 @@ public class Solution241 {
         for (int i = 0; i < ops.size(); i += 2) {
             dp[i][i].add(ops.get(i));
         }
-        for (int i = 3; i <= ops.size(); i++) {
-            for (int j = 0; j + i <= ops.size(); j += 2) {
+        // for (int i = 3; i <= ops.size(); i++) { //官方这里使用了++ 但使用+=2 更好, 直接跳过运算符
+        for (int i = 3; i <= ops.size(); i += 2) {
+            for (int j = 0; j + i <= ops.size(); j += 2) {// 计算小范围的可能值 每次+2 避开运算符的开始
                 int l = j;
                 int r = j + i - 1;
-                for (int k = j + 1; k < r; k += 2) {
+                for (int k = j + 1; k < r; k += 2) { // 一段小范围内, 按照那些拆分括号 同样是+2 确定运算符
                     List<Integer> left = dp[l][k - 1];
                     List<Integer> right = dp[k + 1][r];
                     for (int num1 : left) {

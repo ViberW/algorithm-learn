@@ -18,13 +18,13 @@ package com.welph.leecode.part_1_500.part_261_280;
 public class Solution278 {
 
     public static void main(String[] args) {
-        //2126753390
-        //1702766719
+        // 2126753390
+        // 1702766719
         System.out.println(firstBadVersion(2126753390));
         System.out.println(firstBadVersion(8));
     }
 
-    //二分法
+    // 二分法
     public static int firstBadVersion(int n) {
         int l = 1;
         int r = n;
@@ -32,22 +32,42 @@ public class Solution278 {
         while (l <= r) {
             mid = l + (r - l) / 2;
             if (isBadVersion(mid)) {
-                /*if (mid > 1 && !isBadVersion(mid - 1)) {
-                    return mid;
-                }*/
+                /*
+                 * if (mid > 1 && !isBadVersion(mid - 1)) {
+                 * return mid;
+                 * }
+                 */
                 r = mid - 1;
             } else {
-               /* if (mid < n && isBadVersion(mid + 1)) {
-                    return mid + 1;
-                }*/
+                /*
+                 * if (mid < n && isBadVersion(mid + 1)) {
+                 * return mid + 1;
+                 * }
+                 */
                 l = mid + 1;
             }
         }
         return l + (r - l) / 2;
     }
 
-    //这是个假设方法, 用于测试
+    // 这是个假设方法, 用于测试
     public static boolean isBadVersion(int n) {
         return n >= 4;
     }
+
+    // 这种写法更好些
+    public int firstBadVersion2(int n) {
+        int left = 1, right = n;
+        while (left < right) { // 循环直至区间左右端点相同
+            int mid = left + (right - left) / 2; // 防止计算时溢出
+            if (isBadVersion(mid)) {
+                right = mid; // 答案在区间 [left, mid] 中
+            } else {
+                left = mid + 1; // 答案在区间 [mid+1, right] 中
+            }
+        }
+        // 此时有 left == right，区间缩为一个点，即为答案
+        return left;
+    }
+
 }

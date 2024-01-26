@@ -20,21 +20,23 @@ package com.welph.leecode.part_1_500.part_141_160;
 public class Solution154 {
 
     public static void main(String[] args) {
-        int[] nums = {1, 3, 5};
+        int[] nums = { 1, 3, 5 };
         System.out.println(findMin(nums));
-        int[] nums1 = {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1};
+        int[] nums1 = { 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1 };
         System.out.println(findMin(nums1));
     }
 
-    //这里就要考虑重复元素了
+    // 这里就要考虑重复元素了
     public static int findMin(int[] nums) {
         int l = 0;
         int r = nums.length - 1;
         int mid;
         int expect = nums[0];
         while (l <= r) {
-            while (l < r && nums[l] == nums[l + 1]) ++l;
-            while (l < r && nums[r] == nums[r - 1]) --r;
+            while (l < r && nums[l] == nums[l + 1])
+                ++l;
+            while (l < r && nums[r] == nums[r - 1])
+                --r;
             mid = (l + r) / 2;
             if (nums[mid] < expect) {
                 expect = nums[mid];
@@ -45,4 +47,23 @@ public class Solution154 {
         }
         return expect;
     }
+
+    /* 官方题解 */
+    // 通过相等进行high-- 也是可行的
+    public int findMin2(int[] nums) {
+        int low = 0;
+        int high = nums.length - 1;
+        while (low < high) {
+            int pivot = low + (high - low) / 2;
+            if (nums[pivot] < nums[high]) {
+                high = pivot;
+            } else if (nums[pivot] > nums[high]) {
+                low = pivot + 1;
+            } else {
+                high -= 1;
+            }
+        }
+        return nums[low];
+    }
+
 }

@@ -27,9 +27,9 @@ package com.welph.leecode.part_1_500.part_401_420;
 public class Solution414 {
 
     public static void main(String[] args) {
-        System.out.println(thirdMax(new int[]{3, 2, 1, 2, 1, 0, -1}));
-        System.out.println(thirdMax(new int[]{1, 2}));
-        System.out.println(thirdMax(new int[]{2, 2, 3, 1}));
+        System.out.println(thirdMax(new int[] { 3, 2, 1, 2, 1, 0, -1 }));
+        System.out.println(thirdMax(new int[] { 1, 2 }));
+        System.out.println(thirdMax(new int[] { 2, 2, 3, 1 }));
     }
 
     /**
@@ -38,8 +38,7 @@ public class Solution414 {
     public static int thirdMax(int[] nums) {
         int[] arr = new int[3];
         int size = 0;
-        LABEL:
-        for (int num : nums) {
+        LABEL: for (int num : nums) {
             for (int i = 0; i < size; i++) {
                 if (arr[i] == num) {
                     continue LABEL;
@@ -61,6 +60,25 @@ public class Solution414 {
         int temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
+    }
+
+    /* 官方题解 */
+    // 一次遍历
+    public int thirdMax2(int[] nums) {
+        Integer a = null, b = null, c = null;
+        for (int num : nums) {
+            if (a == null || num > a) {
+                c = b;
+                b = a;
+                a = num;
+            } else if (a > num && (b == null || num > b)) {
+                c = b;
+                b = num;
+            } else if (b != null && b > num && (c == null || num > c)) {
+                c = num;
+            }
+        }
+        return c == null ? a : c;
     }
 
 }

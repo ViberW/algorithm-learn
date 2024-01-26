@@ -15,7 +15,7 @@ import java.util.Map;
  * <p>
  * 示例 2：
  * 输入：numerator = 2, denominator = 1
- * 输出："2"
+  * 输出："2"
  * <p>
  * 示例 3：
  * 输入：numerator = 2, denominator = 3

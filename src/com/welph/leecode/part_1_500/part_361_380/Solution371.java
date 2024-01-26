@@ -26,4 +26,15 @@ public class Solution371 {
         }
         return sum;
     }
+
+    //不用递归
+    public int getSum2(int a, int b) {
+        while (b != 0) {
+            int carry = (a & b) << 1;
+            a = a ^ b;
+            b = carry;
+        }
+        return a;
+    }
+
 }

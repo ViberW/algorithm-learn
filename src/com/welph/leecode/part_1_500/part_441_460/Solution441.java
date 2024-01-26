@@ -33,10 +33,16 @@ public class Solution441 {
      * k ~= sqrt((2n+1/4)) -1/2;
      * 由于之后只需要判断k是否有小数,
      */
+    /*
+     * n阶的和: n = (x+1) * x / 2
+     * => x^2 + x -2n = 0
+     * 通过判别式: b^2-4ac 可以得出 8*n + 1 >0 有两个解, 去掉负数的
+     * 求根公式: x = (-b ± sqrt(b^2-4ac))/ 2a
+     * x = (sqrt(8*n + 1) - 1)/2 => sqrt((2n+1/4)) -1/2
+     */
     public static int arrangeCoins(int n) {
-        return (int) (Math.sqrt(2l * n + 0.25) - 0.5);
+        return (int) (Math.sqrt(2 * n + 0.25) - 0.5);
     }
-
 
     /**
      * 二分查找法
@@ -44,7 +50,7 @@ public class Solution441 {
     public int arrangeCoins1(int n) {
         int left = 1, right = n;
         while (left < right) {
-            int mid = (right - left + 1) / 2 + left; //一半的长度, 是否满足1+2+3..+n的和
+            int mid = (right - left + 1) / 2 + left; // 一半的长度, 是否满足1+2+3..+n的和
             if ((long) mid * (mid + 1) <= (long) 2 * n) {
                 left = mid;
             } else {

@@ -28,6 +28,7 @@ public class Solution216 {
     /**
      * 1 - 9的数字 且不存在重合
      * 类同 {@link com.welph.leecode.part_1_500.part_21_40.Solution39}
+     * {@link com.welph.leecode.part_1_500.part_21_40.Solution40}
      */
     public static List<List<Integer>> combinationSum3(int k, int n) {
         List<List<Integer>> ans = new ArrayList<>();

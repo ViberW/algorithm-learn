@@ -149,7 +149,7 @@ public class BMDemo {
      *
      * @param b      模式串
      * @param m      模式串长度
-     * @param suffix suffix数组 匹配的子串
+     * @param suffix suffix数组 匹配的子串  (下标代表后缀子串的长度)
      * @param prefix prefix数组 匹配的子串是否为模式串的前缀子串;
      */
     private static void generateSuffix(char[] b, int m, int[] suffix, boolean[] prefix) {

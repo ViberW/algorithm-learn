@@ -29,7 +29,7 @@ public class Solution429 {
     public static List<List<Integer>> levelOrder(Node root) {
         List<List<Integer>> ret = new ArrayList<>();
         if (root == null) {
-            return ret;
+            return ret; 
         }
         LinkedList<Node> queue = new LinkedList<>();
         queue.add(root);

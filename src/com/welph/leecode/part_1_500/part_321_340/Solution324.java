@@ -25,21 +25,25 @@ import java.util.Arrays;
 public class Solution324 {
 
     public static void main(String[] args) {
-        /*int[] nums = {1, 5, 1, 1, 6, 4, 7, 3, 2, 2, 4, 7};
-        wiggleSort(nums);
-        System.out.println(Arrays.toString(nums));
-        int[] nums1 = {1, 1, 2, 1, 2, 2, 1};
-        wiggleSort(nums1);
-        System.out.println(Arrays.toString(nums1));*/
-       /* int[] nums2 = {4, 5, 5, 6};
-        wiggleSort(nums2);
-        System.out.println(Arrays.toString(nums2));*/
-        int[] nums3 = {5, 3, 1, 2, 6, 7, 8, 5, 5};
+        /*
+         * int[] nums = {1, 5, 1, 1, 6, 4, 7, 3, 2, 2, 4, 7};
+         * wiggleSort(nums);
+         * System.out.println(Arrays.toString(nums));
+         * int[] nums1 = {1, 1, 2, 1, 2, 2, 1};
+         * wiggleSort(nums1);
+         * System.out.println(Arrays.toString(nums1));
+         */
+        /*
+         * int[] nums2 = {4, 5, 5, 6};
+         * wiggleSort(nums2);
+         * System.out.println(Arrays.toString(nums2));
+         */
+        int[] nums3 = { 5, 3, 1, 2, 6, 7, 8, 5, 5 };
         wiggleSort1(nums3);
         System.out.println(Arrays.toString(nums3));
     }
 
-    //先把排序加合并的写下吧
+    // 先把排序加合并的写下吧
     public static void wiggleSort1(int[] nums) {
         Arrays.sort(nums);
         reverse(nums, 0, nums.length - 1);
@@ -64,16 +68,16 @@ public class Solution324 {
         }
     }
 
-    //排序, 分成两边. 随后一个升序 一个降序空间内 再合并? 但空间不是O(1)
-    //选择一个点,将快排分成两边. 仅仅需要保证能够找到一个中点, 并不要求严格排序,仅仅需要知道中间点
-    //------------好像还是要排序的好, 否则会导致-todo h还是没想好怎么处理O(1)及时间复杂度O(N)定位问题
+    // 排序, 分成两边. 随后一个升序 一个降序空间内 再合并? 但空间不是O(1)
+    // 选择一个点,将快排分成两边. 仅仅需要保证能够找到一个中点, 并不要求严格排序,仅仅需要知道中间点
+    // ------------好像还是要排序的好, 否则会导致-todo h还是没想好怎么处理O(1)及时间复杂度O(N)定位问题
     public static void wiggleSort(int[] nums) {
         int l = 0;
         int r = nums.length - 1;
         int target = (l + r) / 2;
         while (l < r) {
             int pivot = partition(nums, l, r);
-            //看pivot是否在中间位置.
+            // 看pivot是否在中间位置.
             if (pivot == target) {
                 break;
             } else if (pivot > target) {
@@ -82,8 +86,8 @@ public class Solution324 {
                 l = pivot + 1;
             }
         }
-        //已经是倒序了.[target,len);[0,target);
-        //todo ....
+        // 已经是倒序了.[target,len);[0,target);
+        // todo ....
     }
 
     private static int partition(int[] nums, int l, int r) {
@@ -104,4 +108,21 @@ public class Solution324 {
         nums[k] = nums[i];
         nums[i] = tmp;
     }
+
+    /* 官方题解 */
+    // 排序思想. 相较于我的思路 这里更好看, 也不需要翻转数组
+    public void wiggleSort3(int[] nums) {
+        int[] arr = nums.clone();
+        Arrays.sort(arr);
+        int n = nums.length;
+        int x = (n + 1) / 2;
+        for (int i = 0, j = x - 1, k = n - 1; i < n; i += 2, j--, k--) {
+            nums[i] = arr[j];
+            if (i + 1 < n) {
+                nums[i + 1] = arr[k];
+            }
+        }
+    }
+
+    //todo 还有三种官方解法......
 }
