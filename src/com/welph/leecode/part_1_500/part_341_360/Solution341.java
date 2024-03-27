@@ -13,11 +13,11 @@ import java.util.*;
  * boolean hasNext() 如果仍然存在待迭代的整数，返回 true ；否则，返回 false 。
  * 你的代码将会用下述伪代码检测：
  * <p>
- * .  initialize iterator with nestedList
- * .  res = []
- * .  while iterator.hasNext()
- * .      append iterator.next() to the end of res
- * .  return res
+ * . initialize iterator with nestedList
+ * . res = []
+ * . while iterator.hasNext()
+ * . append iterator.next() to the end of res
+ * . return res
  * 如果 res 与预期的扁平化列表匹配，那么你的代码将会被判为正确。
  * <p>
  * 示例 1：
@@ -62,7 +62,7 @@ public class Solution341 {
         }
 
         @Override
-        public boolean hasNext() { //[[]] 这样的数据格式应该返回false
+        public boolean hasNext() { // [[]] 这样的数据格式应该返回false
             while (!stack.isEmpty() && stack.peek().hasNext()) {
                 Iterator<NestedInteger> peek = stack.peek();
                 NestedInteger next = peek.next();
@@ -70,7 +70,7 @@ public class Solution341 {
                     stack.pop();
                 }
                 if (next.isInteger()) {
-                    val = next.getInteger();
+                    val = next.getInteger(); // 根据下面的官方题解, val并不需要提前取出来
                     return true;
                 } else {
                     List<NestedInteger> list = next.getList();
@@ -137,5 +137,79 @@ public class Solution341 {
          * 返回持有一个列表, 若持有一个integer,则返回空list
          */
         List<NestedInteger> getList();
+    }
+
+    /* 官方题解 */
+
+    // 深度优先搜索
+    public class NestedIterator2 implements Iterator<Integer> {
+        private List<Integer> vals;
+        private Iterator<Integer> cur;
+
+        public NestedIterator2(List<NestedInteger> nestedList) {
+            vals = new ArrayList<Integer>();
+            dfs(nestedList); // 预先遍历好, 但是耗空间
+            cur = vals.iterator();
+        }
+
+        @Override
+        public Integer next() {
+            return cur.next();
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cur.hasNext();
+        }
+
+        private void dfs(List<NestedInteger> nestedList) {
+            for (NestedInteger nest : nestedList) {
+                if (nest.isInteger()) {
+                    vals.add(nest.getInteger());
+                } else {
+                    dfs(nest.getList());
+                }
+            }
+        }
+    }
+
+    // 使用栈
+    // 比我的好 少了value的存储
+    public class NestedIterator3 implements Iterator<Integer> {
+        // 存储列表的当前遍历位置
+        private Deque<Iterator<NestedInteger>> stack;
+
+        public NestedIterator3(List<NestedInteger> nestedList) {
+            stack = new LinkedList<Iterator<NestedInteger>>();
+            stack.push(nestedList.iterator());
+        }
+
+        @Override
+        public Integer next() {
+            // 由于保证调用 next 之前会调用 hasNext，直接返回栈顶列表的当前元素
+            return stack.peek().next().getInteger();
+        }
+
+        @Override
+        public boolean hasNext() {
+            while (!stack.isEmpty()) {
+                Iterator<NestedInteger> it = stack.peek();
+                if (!it.hasNext()) { // 遍历到当前列表末尾，出栈
+                    stack.pop();
+                    continue;
+                }
+                // 若取出的元素是整数，则通过创建一个额外的列表将其重新放入栈中
+                NestedInteger nest = it.next();
+                if (nest.isInteger()) {
+                    // 重新包装了一份list
+                    List<NestedInteger> list = new ArrayList<NestedInteger>();
+                    list.add(nest);
+                    stack.push(list.iterator());
+                    return true;
+                }
+                stack.push(nest.getList().iterator());
+            }
+            return false;
+        }
     }
 }

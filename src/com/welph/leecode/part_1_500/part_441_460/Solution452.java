@@ -42,9 +42,9 @@ import java.util.Comparator;
 public class Solution452 {
 
     public static void main(String[] args) {
-        System.out.println(findMinArrowShots(new int[][]{{10, 16}, {2, 8}, {1, 6}, {7, 12}}));
-        System.out.println(findMinArrowShots(new int[][]{{1, 2}, {3, 4}, {5, 6}, {7, 8}}));
-        System.out.println(findMinArrowShots(new int[][]{{1, 2}, {2, 3}, {3, 4}, {4, 5}}));
+        System.out.println(findMinArrowShots(new int[][] { { 10, 16 }, { 2, 8 }, { 1, 6 }, { 7, 12 } }));
+        System.out.println(findMinArrowShots(new int[][] { { 1, 2 }, { 3, 4 }, { 5, 6 }, { 7, 8 } }));
+        System.out.println(findMinArrowShots(new int[][] { { 1, 2 }, { 2, 3 }, { 3, 4 }, { 4, 5 } }));
     }
 
     /**
@@ -61,7 +61,7 @@ public class Solution452 {
                 return Integer.compare(o1[1], o2[1]);
             }
         });
-        //找到一个结尾的位置, 知道满足下一个不相交的气球
+        // 找到一个结尾的位置, 知道满足下一个不相交的气球
         int count = 1;
         int end = points[0][1];
         for (int i = 1; i < points.length; i++) {

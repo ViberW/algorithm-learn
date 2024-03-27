@@ -7,7 +7,8 @@ import java.util.Random;
 /**
  * 给定圆的半径和圆心的位置，实现函数 randPoint ，在圆中产生均匀随机点。
  * 实现Solution类:
- * Solution(double radius, double x_center, double y_center)用圆的半径radius和圆心的位置 (x_center, y_center) 初始化对象
+ * Solution(double radius, double x_center, double y_center)用圆的半径radius和圆心的位置
+ * (x_center, y_center) 初始化对象
  * randPoint()返回圆内的一个随机点。圆周上的一点被认为在圆内。答案作为数组返回 [x, y] 。
  * <p>
  * 示例 1：
@@ -45,7 +46,7 @@ public class Solution478 {
         double radius2;
 
         public Solution(double radius, double x_center, double y_center) {
-            //上下左右的xy范围
+            // 上下左右的xy范围
             this.x_center = x_center;
             this.y_center = y_center;
             this.radius = radius;
@@ -53,20 +54,21 @@ public class Solution478 {
             radius2 = radius * 2;
         }
 
-        //这里需要保证 半径的平方 再取随机数, 之后开根号,  这样才能保证数据均匀(面积=π*r^2, 所以数据需要r平方)
+        // 这里需要保证 半径的平方 再取随机数, 之后开根号, 这样才能保证数据均匀(面积=π*r^2, 所以数据需要r平方)
         public double[] randPoint() {
             double u = random.nextDouble();
             double theta = random.nextDouble() * 2 * Math.PI;
             double r = Math.sqrt(u);
-            return new double[]{x_center + r * Math.cos(theta) * this.radius, y_center + r * Math.sin(theta) * this.radius};
+            return new double[] { x_center + r * Math.cos(theta) * this.radius,
+                    y_center + r * Math.sin(theta) * this.radius };
         }
 
         public double[] randPoint1() {
-            while (true) {
+            while (true) {// 拒绝采样在更大的radius2的正方形中 获取符合条件的
                 double x = random.nextDouble() * (radius2) - radius;
                 double y = random.nextDouble() * (radius2) - radius;
                 if (x * x + y * y <= radiusPower) {
-                    return new double[]{x_center + x, y_center + y};
+                    return new double[] { x_center + x, y_center + y };
                 }
             }
         }

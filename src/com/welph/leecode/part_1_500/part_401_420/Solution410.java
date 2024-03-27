@@ -55,7 +55,7 @@ public class Solution410 {
         f[0][0] = 0;
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= Math.min(i, m); j++) {
-                for (int k = 0; k < i; k++) {
+                for (int k = 0; k < i; k++) { // 按理来说这里的j
                     f[i][j] = Math.min(f[i][j], Math.max(f[k][j - 1], sub[i] - sub[k]));
                 }
             }
@@ -67,6 +67,7 @@ public class Solution410 {
      * 方法二 ; 有点复杂 好想法
      */
     public int splitArray2(int[] nums, int m) {
+        // 单个最大值, 总和值
         int left = 0, right = 0;
         for (int i = 0; i < nums.length; i++) {
             right += nums[i];// 总和

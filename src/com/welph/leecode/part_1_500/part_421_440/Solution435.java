@@ -135,7 +135,7 @@ public class Solution435 {
                 }
             }
         }
-        return n - Arrays.stream(f).max().getAsInt();
+        return n - Arrays.stream(f).max().getAsInt(); // 找到以某一i为最后的最大值. 作为不重合的最多区间数
     }
 
 }

@@ -31,18 +31,18 @@ import java.util.Arrays;
 public class Solution506 {
 
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(findRelativeRanks(new int[]{
+        System.out.println(Arrays.toString(findRelativeRanks(new int[] {
                 5, 4, 3, 2, 1
         })));
-        System.out.println(Arrays.toString(findRelativeRanks(new int[]{
+        System.out.println(Arrays.toString(findRelativeRanks(new int[] {
                 10, 3, 8, 9, 4
         })));
     }
 
     public static String[] findRelativeRanks(int[] score) {
-        String[] medals = {"Gold Medal", "Silver Medal", "Bronze Medal"};
+        String[] medals = { "Gold Medal", "Silver Medal", "Bronze Medal" };
         String[] result = new String[score.length];
-        //快排的同时进行处理
+        // 快排的同时进行处理
         int[] index = new int[score.length];
         for (int i = 0; i < index.length; i++) {
             index[i] = i;
@@ -83,4 +83,27 @@ public class Solution506 {
         index[i] = index[j];
         index[j] = temp;
     }
+
+    // 与其自己写快排 不如使用二维数组
+    public String[] findRelativeRanks2(int[] score) {
+        int n = score.length;
+        String[] desc = { "Gold Medal", "Silver Medal", "Bronze Medal" };
+        int[][] arr = new int[n][2];
+
+        for (int i = 0; i < n; ++i) {
+            arr[i][0] = score[i];
+            arr[i][1] = i;
+        }
+        Arrays.sort(arr, (a, b) -> b[0] - a[0]);
+        String[] ans = new String[n];
+        for (int i = 0; i < n; ++i) {
+            if (i >= 3) {
+                ans[arr[i][1]] = Integer.toString(i + 1);
+            } else {
+                ans[arr[i][1]] = desc[i];
+            }
+        }
+        return ans;
+    }
+
 }

@@ -62,6 +62,6 @@ public class Solution424 {
             }
             right++;
         }
-        return right - left;
+        return right - left; // 因为上面的滑动窗口是不会缩小的, 只会增大, 所以最终r-l的长度等于中间某一段的最长字符长度
     }
 }

@@ -152,6 +152,7 @@ public class Solution385 {
             } else if (c == '[') {
                 stack.push(new MyNestedInteger());
             } else if (c == ',' || c == ']') {
+                //上一个字符是否为数字
                 if (Character.isDigit(s.charAt(i - 1))) {
                     if (negative) {
                         num *= -1;

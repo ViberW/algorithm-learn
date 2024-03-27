@@ -19,38 +19,39 @@ import java.util.Arrays;
  */
 public class HeapSort {
     public static void main(String[] args) {
-        int[] arr = {4, 5, 3, 2, 1, 6};
+        int[] arr = { 4, 5, 3, 2, 1, 6 };
         sort(arr);
         System.out.println(Arrays.toString(arr));
     }
 
     public static void sort(int[] arr) {
         int len = arr.length;
-        //找到最大的值 放于index=0的位置
+        // 找到最大的值 放于index=0的位置
         buildMaxHeap(arr, len);
-        //但本身还没有排好序,所以此案有这一步操作;
-        //将第一元素放到最后,之后只需要处理len-1范围内的数据,重复如此
+        // 但本身还没有排好序,所以此案有这一步操作;
+        // 将第一元素放到最后,之后只需要处理len-1范围内的数据,重复如此
         for (int i = len - 1; i > 0; i--) {
-            swap(arr, 0, i);
+            swap(arr, 0, i); // 最顶上的一定是当前len范围的最大值, 交换后, 在len--
             len--;
-            //每个元素从上往下堆化;
+            // 每个元素从上往下堆化;
             heapify(arr, 0, len);
         }
     }
 
+    // 除了最底层以外 子节点的挑选最大值, 但此时左右子树并未排序
     private static void buildMaxHeap(int[] arr, int len) {
         for (int i = (int) Math.floor(len / 2); i >= 0; i--) {
             heapify(arr, i, len);
         }
     }
 
-    //构建堆
+    // 构建堆
     private static void heapify(int[] arr, int i, int r) {
-        int left = 2 * i + 1;   //因为是完全二叉树,所有,左右子节点,分别为2*i+1, 2*i+2.若是使用1作为起始索引,则2*i和2*i+1ß
+        int left = 2 * i + 1; // 因为是完全二叉树,所有,左右子节点,分别为2*i+1, 2*i+2.若是使用1作为起始索引,则2*i和2*i+1ß
         int right = 2 * i + 2;
         int largest = i;
 
-        //大顶堆模式
+        // 大顶堆模式
         if (left < r && arr[left] > arr[largest]) {
             largest = left;
         }

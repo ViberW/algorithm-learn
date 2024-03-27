@@ -87,8 +87,23 @@ public class Solution401 {
     }
 
     /* 官方题解 */
+    // 枚举
+    public List<String> readBinaryWatch3(int turnedOn) {
+        List<String> ans = new ArrayList<String>();
+        for (int h = 0; h < 12; ++h) { // 枚举小时
+            for (int m = 0; m < 60; ++m) {// 枚举分钟
+                if (Integer.bitCount(h) + Integer.bitCount(m) == turnedOn) {// 看看亮灯数是否一致
+                    ans.add(h + ":" + (m < 10 ? "0" : "") + m);
+                }
+            }
+        }
+        return ans;
+    }
+
+    // 二进制枚举
     public List<String> readBinaryWatch2(int turnedOn) {
         List<String> ans = new ArrayList<String>();
+        // 小时4个灯 分钟6个灯 总共2^10=1024种可能
         for (int i = 0; i < 1024; ++i) {
             int h = i >> 6, m = i & 63; // 用位运算取出高 4 位和低 6 位
             if (h < 12 && m < 60 && Integer.bitCount(i) == turnedOn) {

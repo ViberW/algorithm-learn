@@ -67,7 +67,7 @@ public class Solution363 {
             int[] sum = new int[n];
             for (int j = i; j < m; ++j) { // 枚举下边界
                 for (int c = 0; c < n; ++c) {
-                    sum[c] += matrix[j][c]; // 更新每列的元素和
+                    sum[c] += matrix[j][c]; // 更新每列的元素和-
                 }
                 TreeSet<Integer> sumSet = new TreeSet<Integer>();
                 sumSet.add(0);

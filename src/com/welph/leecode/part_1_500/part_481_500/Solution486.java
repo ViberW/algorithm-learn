@@ -12,7 +12,8 @@ package com.welph.leecode.part_1_500.part_481_500;
  * 输入：nums = [1,5,2]
  * 输出：false
  * 解释：一开始，玩家 1 可以从 1 和 2 中进行选择。
- * 如果他选择 2（或者 1 ），那么玩家 2 可以从 1（或者 2 ）和 5 中进行选择。如果玩家 2 选择了 5 ，那么玩家 1 则只剩下 1（或者 2 ）可选。
+ * 如果他选择 2（或者 1 ），那么玩家 2 可以从 1（或者 2 ）和 5 中进行选择。如果玩家 2 选择了 5 ，那么玩家 1 则只剩下 1（或者 2
+ * ）可选。
  * 所以，玩家 1 的最终分数为 1 + 2 = 3，而玩家 2 为 5 。
  * 因此，玩家 1 永远不会成为赢家，返回 false 。
  * <p>
@@ -29,15 +30,15 @@ package com.welph.leecode.part_1_500.part_481_500;
 public class Solution486 {
 
     public static void main(String[] args) {
-        System.out.println(PredictTheWinner(new int[]{1, 5, 2}));
-        System.out.println(PredictTheWinner(new int[]{1, 5, 233, 7}));
+        System.out.println(PredictTheWinner(new int[] { 1, 5, 2 }));
+        System.out.println(PredictTheWinner(new int[] { 1, 5, 233, 7 }));
     }
 
     /**
      * {@link com.welph.leecode.part_1_500.part_461_480.Solution464}
      */
     public static boolean PredictTheWinner(int[] nums) {
-        //找完所有的数据后, 查看是否存在1>2的数值; [i][j]  可能最大的1>2  存储最大的相差值.
+        // 找完所有的数据后, 查看是否存在1>2的数值; [i][j] 可能最大的1>2 存储最大的相差值.
         int len = nums.length;
         Integer[][][] dp = new Integer[len][len][2];
         return PredictTheWinner(nums, 0, len - 1, dp, 0) >= 0;
@@ -51,10 +52,10 @@ public class Solution486 {
         if (i == j) {// 都是包含的
             max = one == 0 ? nums[i] : -nums[i];
         } else {
-            if (one == 0) { //现在该选择1号
+            if (one == 0) { // 现在该选择1号
                 max = Math.max(nums[i] + PredictTheWinner(nums, i + 1, j, dp, 1),
                         nums[j] + PredictTheWinner(nums, i, j - 1, dp, 1));
-            } else {//现在该选择2号
+            } else {// 现在该选择2号
                 max = Math.min(-nums[i] + PredictTheWinner(nums, i + 1, j, dp, 0),
                         -nums[j] + PredictTheWinner(nums, i, j - 1, dp, 0));
             }
@@ -62,4 +63,22 @@ public class Solution486 {
         dp[i][j][one] = max;
         return max;
     }
+
+    /* 官方题解 */
+
+    public boolean PredictTheWinner2(int[] nums) {
+        int length = nums.length;
+        int[][] dp = new int[length][length];
+        for (int i = 0; i < length; i++) {
+            dp[i][i] = nums[i];
+        }
+        for (int i = length - 2; i >= 0; i--) {
+            for (int j = i + 1; j < length; j++) {
+                // 这里的减 是因为从小扩到大
+                dp[i][j] = Math.max(nums[i] - dp[i + 1][j], nums[j] - dp[i][j - 1]);
+            }
+        }
+        return dp[0][length - 1] >= 0;
+    }
+
 }

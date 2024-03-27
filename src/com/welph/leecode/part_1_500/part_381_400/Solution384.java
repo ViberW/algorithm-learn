@@ -20,9 +20,10 @@ import java.util.Random;
  * <p>
  * 解释
  * Solution solution = new Solution([1, 2, 3]);
- * solution.shuffle();    // 打乱数组 [1,2,3] 并返回结果。任何 [1,2,3]的排列返回的概率应该相同。例如，返回 [3, 1, 2]
- * solution.reset();      // 重设数组到它的初始状态 [1, 2, 3] 。返回 [1, 2, 3]
- * solution.shuffle();    // 随机返回数组 [1, 2, 3] 打乱后的结果。例如，返回 [1, 3, 2]
+ * solution.shuffle(); // 打乱数组 [1,2,3] 并返回结果。任何 [1,2,3]的排列返回的概率应该相同。例如，返回 [3, 1,
+ * 2]
+ * solution.reset(); // 重设数组到它的初始状态 [1, 2, 3] 。返回 [1, 2, 3]
+ * solution.shuffle(); // 随机返回数组 [1, 2, 3] 打乱后的结果。例如，返回 [1, 3, 2]
  * <p>
  * 提示：
  * 1 <= nums.length <= 200
@@ -33,7 +34,7 @@ import java.util.Random;
 public class Solution384 {
 
     public static void main(String[] args) {
-        Solution obj = new Solution(new int[]{1, 2, 3});
+        Solution obj = new Solution(new int[] { 1, 2, 3 });
         System.out.println(Arrays.toString(obj.reset()));
         System.out.println(Arrays.toString(obj.shuffle()));
         System.out.println(Arrays.toString(obj.reset()));
@@ -58,7 +59,7 @@ public class Solution384 {
             return current;
         }
 
-        public int[] shuffle() { //有点类似{@link Solution382}, 每个点的概率是相同的.
+        public int[] shuffle() { // 有点类似{@link Solution382}, 每个点的概率是相同的.
             for (int i = length; i > 0; i--) {
                 swap(current, i - 1, random.nextInt(i));
             }
@@ -76,21 +77,22 @@ public class Solution384 {
     class Solution2 {
         int[] nums;
         int[] original;
-    
+
         public Solution2(int[] nums) {
             this.nums = nums;
             this.original = new int[nums.length];
             System.arraycopy(nums, 0, original, 0, nums.length);
         }
-        
+
         public int[] reset() {
             System.arraycopy(original, 0, nums, 0, nums.length);
             return nums;
         }
-        
+
+        // Fisher-Yates 洗牌算法
         public int[] shuffle() {
             Random random = new Random();
-            //一样的思路,只不过它是顺序  上面的是倒序
+            // 一样的思路,只不过它是顺序 上面的是倒序
             for (int i = 0; i < nums.length; ++i) {
                 int j = i + random.nextInt(nums.length - i);
                 int temp = nums[i];
@@ -100,5 +102,5 @@ public class Solution384 {
             return nums;
         }
     }
-    
+
 }

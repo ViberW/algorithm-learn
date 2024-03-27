@@ -146,7 +146,7 @@ public class Solution433 {
     }
 
     /* 官方题解 */
-    // 广度优先搜索
+    // 广度优先搜索 {@Solution126}
     public int minMutation2(String start, String end, String[] bank) {
         Set<String> cnt = new HashSet<String>();
         Set<String> visited = new HashSet<String>();
@@ -190,7 +190,7 @@ public class Solution433 {
         return -1;
     }
 
-    // 预处理  和我的方法一样 预处理加广度搜索
+    // 预处理  和我的方法一样 预处理加广度搜索 {@Solution127}
     public int minMutation3(String start, String end, String[] bank) {
         int m = start.length();
         int n = bank.length;

@@ -3,6 +3,9 @@ package com.welph.leecode.part_1_500.part_461_480;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.welph.leecode.part_1_500.part_281_300.Solution292;
+import com.welph.leecode.part_1_500.part_361_380.Solution375;
+
 /**
  * 在 "100 game" 这个游戏中，两名玩家轮流选择从 1 到 10 的任意整数，累计整数和，
  * 先使得累计整数和达到或超过 100 的玩家，即为胜者。
@@ -35,7 +38,8 @@ public class Solution464 {
     }
 
     /**
-     *
+     * {@link Solution292}
+     * {@link Solution375}
      */
     public static boolean canIWin(int maxChoosableInteger, int desiredTotal) {
         if (maxChoosableInteger >= desiredTotal) {
@@ -48,6 +52,14 @@ public class Solution464 {
         return canIWin(maxChoosableInteger, desiredTotal, 0, visited);
     }
 
+    /**
+     * 
+     * @param choose
+     * @param total
+     * @param state 这里其实是一个二进制, 通过位数来表示那些数据被选择了
+     * @param visited
+     * @return
+     */
     static boolean canIWin(int choose, int total, int state, Map<Integer, Boolean> visited) {
         if (visited.containsKey(state)) {
             return visited.get(state);
@@ -64,6 +76,39 @@ public class Solution464 {
             }
         }
         visited.put(state, false);
+        return false;
+    }
+
+    // 同样的思路 但是却处理很好的方法
+    public static boolean canIWin2(int maxChoosableInteger, int desiredTotal) {
+        if (desiredTotal <= 0 || maxChoosableInteger <= 0) {
+            return true;
+        }
+        if ((1 + maxChoosableInteger) * maxChoosableInteger / 2 < desiredTotal) {
+            return false;
+        }
+        int mask = (1 << maxChoosableInteger) - 1; //提前标记所有位为1
+        int[] dp = new int[mask + 1];
+        return process3(maxChoosableInteger, desiredTotal, mask, dp);
+    }
+
+    private static boolean process3(int maxChoosableInteger, int desiredTotal, int mask, int[] dp) {
+        if (desiredTotal <= 0) {
+            return false;
+        }
+        if (dp[mask] != 0) {
+            return dp[mask] == 1 ? true : false;
+        }
+        for (int i = 1; i <= maxChoosableInteger; i++) {
+            if (((1 << (i - 1)) & mask) != 0) {
+                int cur = mask & (~(1 << (i - 1)));
+                if (!process3(maxChoosableInteger,desiredTotal - i, cur, dp)) {
+                    dp[mask] = 1;
+                    return true;
+                }
+            }
+        }
+        dp[mask] = -1;
         return false;
     }
 }

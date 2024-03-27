@@ -41,15 +41,14 @@ public class Solution481 {
         nums[0] = 1;
         nums[1] = 2;
         nums[2] = 2;
-        int left = 2;
-        int right = 3;
+        int left = 2; // 存储下一批次应该有多少重复的1或2
+        int right = 3; // 存储下一次数据应该从哪里开始存储
         int ret = 1;
         int count;
         int val;
-        LABEL:
-        for (; right < n; ) {
+        LABEL: for (; right < n;) {
             count = nums[left];
-            val = nums[right - 1] == 1 ? 2 : 1;
+            val = nums[right - 1] == 1 ? 2 : 1; // 和上一次相反的数组并存储count的次
             if (val == 1) {
                 ret += Math.min(count, n - right);
             }

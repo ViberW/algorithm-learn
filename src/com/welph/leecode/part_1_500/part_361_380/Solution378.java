@@ -63,6 +63,9 @@ public class Solution378 {
 
 
     /* 官方题解 */
+    /*
+     * {@link Solution240}
+     */
     //二分查找法
     public int kthSmallest2(int[][] matrix, int k) {
         int n = matrix.length;

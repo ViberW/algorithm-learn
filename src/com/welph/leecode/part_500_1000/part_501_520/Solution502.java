@@ -1,5 +1,6 @@
 package com.welph.leecode.part_500_1000.part_501_520;
 
+import java.util.Arrays;
 import java.util.PriorityQueue;
 
 /**
@@ -39,28 +40,28 @@ public class Solution502 {
 
     public static void main(String[] args) {
         System.out.println(findMaximizedCapital(11, 11,
-                new int[]{1, 2, 3},
-                new int[]{11, 12, 13}));
+                new int[] { 1, 2, 3 },
+                new int[] { 11, 12, 13 }));
     }
 
     /**
-     * 在可选的范围中选择一个利润最大的数据信息  666
+     * 在可选的范围中选择一个利润最大的数据信息 666
      */
     public static int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
-        //按照capital的排序 若相同则按照profits倒序, 构建的最大堆
+        // 按照capital的排序 若相同则按照profits倒序, 构建的最大堆
         PriorityQueue<Integer> heap = new PriorityQueue<>((o1, o2) -> o2 - o1);
-        //对profits和capital 进行排序
+        // 对profits和capital 进行排序
         quickSort(profits, capital, 0, profits.length - 1);
         int i = 0;
         while (k > 0) {
-            while (i < capital.length && capital[i] <= w) {//每次将所有可能符合预算的加入进去
+            while (i < capital.length && capital[i] <= w) {// 每次将所有可能符合预算的加入进去
                 heap.add(profits[i]);
                 i++;
             }
             if (heap.isEmpty()) {
                 break;
             } else {
-                w += heap.poll(); //从中找到或得到的最大一次的利润
+                w += heap.poll(); // 从中找到或得到的最大一次的利润
             }
             k--;
         }
@@ -75,7 +76,7 @@ public class Solution502 {
         }
     }
 
-    //根据capital
+    // 根据capital
     private static int partition(int[] profits, int[] capital, int l, int r) {
         int pivot = capital[r];
         int target = l;
@@ -97,4 +98,34 @@ public class Solution502 {
         profits[i] = profits[j];
         profits[j] = temp;
     }
+
+    /* 官方题解 */
+
+    public int findMaximizedCapital2(int k, int w, int[] profits, int[] capital) {
+        int n = profits.length;
+        int curr = 0;
+        int[][] arr = new int[n][2];
+
+        for (int i = 0; i < n; ++i) {
+            arr[i][0] = capital[i];
+            arr[i][1] = profits[i];
+        }
+        Arrays.sort(arr, (a, b) -> a[0] - b[0]);
+
+        PriorityQueue<Integer> pq = new PriorityQueue<>((x, y) -> y - x);
+        for (int i = 0; i < k; ++i) {
+            while (curr < n && arr[curr][0] <= w) {
+                pq.add(arr[curr][1]);
+                curr++;
+            }
+            if (!pq.isEmpty()) {
+                w += pq.poll();
+            } else {
+                break;
+            }
+        }
+
+        return w;
+    }
+
 }

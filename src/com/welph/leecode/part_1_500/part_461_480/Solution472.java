@@ -1,6 +1,5 @@
 package com.welph.leecode.part_1_500.part_461_480;
 
-
 import java.util.*;
 
 /**
@@ -8,7 +7,8 @@ import java.util.*;
  * 连接词 定义为：一个完全由给定数组中的至少两个较短单词组成的字符串。
  * <p>
  * 示例 1：
- * 输入：words = ["cat","cats","catsdogcats","dog","dogcatsdog","hippopotamuses","rat","ratcatdogcat"]
+ * 输入：words =
+ * ["cat","cats","catsdogcats","dog","dogcatsdog","hippopotamuses","rat","ratcatdogcat"]
  * 输出：["catsdogcats","dogcatsdog","ratcatdogcat"]
  * 解释："catsdogcats" 由 "cats", "dog" 和 "cats" 组成;
  * "dogcatsdog" 由 "dog", "cats" 和 "dog" 组成;
@@ -27,17 +27,19 @@ import java.util.*;
 public class Solution472 {
 
     public static void main(String[] args) {
-        System.out.println(new Solution472().findAllConcatenatedWordsInADict(new String[]{"cat", "dog", "catdog"}));
-        System.out.println(new Solution472().findAllConcatenatedWordsInADict(new String[]{"cat", "cats", "catsdogcats", "dog", "dogcatsdog", "hippopotamuses", "rat", "ratcatdogcat"}));
-        System.out.println(new Solution472().findAllConcatenatedWordsInADict(new String[]{"cat", "cats", "dog", "dogcatsdog"}));
-        System.out.println(new Solution472().findAllConcatenatedWordsInADict(new String[]{""}));
+        System.out.println(new Solution472().findAllConcatenatedWordsInADict(new String[] { "cat", "dog", "catdog" }));
+        System.out.println(new Solution472().findAllConcatenatedWordsInADict(new String[] { "cat", "cats",
+                "catsdogcats", "dog", "dogcatsdog", "hippopotamuses", "rat", "ratcatdogcat" }));
+        System.out.println(
+                new Solution472().findAllConcatenatedWordsInADict(new String[] { "cat", "cats", "dog", "dogcatsdog" }));
+        System.out.println(new Solution472().findAllConcatenatedWordsInADict(new String[] { "" }));
     }
 
     /**
      * {@link com.welph.leecode.part_1_500.part_121_140.Solution140}
      * {@link com.welph.leecode.part_1_500.part_121_140.Solution139}
      * -----------
-     * 先根据长度排序, 再构建字典树, 判断当前是否是有组合  ----------通过了 但慢的雅痞
+     * 先根据长度排序, 再构建字典树, 判断当前是否是有组合 ----------通过了 但慢的雅痞
      */
     public List<String> findAllConcatenatedWordsInADict(String[] words) {
         if (words.length == 0) {
@@ -55,7 +57,7 @@ public class Solution472 {
                 max = last;
             }
             if (length != 0) {
-                boolean[][] dp = new boolean[length][length + 1]; //左闭右开
+                boolean[][] dp = new boolean[length][length + 1]; // 左闭右开
                 dp[0][0] = true;
                 for (int i = 0; i < length; i++) {
                     for (int j = min; j <= max; j++) {
@@ -106,11 +108,78 @@ public class Solution472 {
     static class Trie {
         public char data;
         public Trie[] children = new Trie[26];
-        public boolean isEndingChar = false; //是否为叶子节点
+        public boolean isEndingChar = false; // 是否为叶子节点
         public String word;
+        boolean isEnd;
 
         public Trie(char data) {
             this.data = data;
         }
+
+        public Trie() {
+            children = new Trie[26];
+            isEnd = false;
+        }
     }
+
+    /* 官方题解 */
+
+    static Trie trie = new Trie();
+
+    public static List<String> findAllConcatenatedWordsInADict2(String[] words) {
+        List<String> ans = new ArrayList<String>();
+        Arrays.sort(words, (a, b) -> a.length() - b.length());
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            if (word.length() == 0) {
+                continue;
+            }
+            boolean[] visited = new boolean[word.length()];
+            if (dfs(word, 0, visited)) {
+                ans.add(word);
+            } else {
+                insert(word);
+            }
+        }
+        return ans;
+    }
+
+    public static boolean dfs(String word, int start, boolean[] visited) {
+        if (word.length() == start) {
+            return true;
+        }
+        if (visited[start]) {
+            return false;
+        }
+        visited[start] = true;
+        Trie node = trie;
+        for (int i = start; i < word.length(); i++) {
+            char ch = word.charAt(i);
+            int index = ch - 'a';
+            node = node.children[index];
+            if (node == null) {
+                return false;
+            }
+            if (node.isEnd) {
+                if (dfs(word, i + 1, visited)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void insert(String word) {
+        Trie node = trie;
+        for (int i = 0; i < word.length(); i++) {
+            char ch = word.charAt(i);
+            int index = ch - 'a';
+            if (node.children[index] == null) {
+                node.children[index] = new Trie();
+            }
+            node = node.children[index];
+        }
+        node.isEnd = true;
+    }
+
 }

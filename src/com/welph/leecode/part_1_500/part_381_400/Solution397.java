@@ -52,12 +52,12 @@ public class Solution397 {
             if (n == Integer.MAX_VALUE) {
                 return integerReplacement(n / 2 + 1) + 2;
             } else {
-                if (n == 3) {
+                if (n == 3) { // 这里的(n & 2) == 2, 但它只需要-1后成为2再除, 两步操作. 若+1的话有除两次共三次操作
                     return integerReplacement(n - 1) + 1;
-                } else if ((n & 2) == 2) {
+                } else if ((n & 2) == 2) { // 相当于是利用进位
                     return integerReplacement(n + 1) + 1; // 因为若是不+1, 则会多出来一步
                 } else {
-                    return integerReplacement(n - 1) + 1;
+                    return integerReplacement(n - 1) + 1; // 说明没办法利用进位, 那么最好就是直接减再除
                 }
             }
         }
@@ -71,16 +71,16 @@ public class Solution397 {
             if (n % 2 == 0) {
                 ++ans;
                 n /= 2;
-            } else if (n % 4 == 1) {
+            } else if (n % 4 == 1) {// 二进制: 01
                 ans += 2;
                 n /= 2;
             } else {
                 if (n == 3) {
                     ans += 2;
                     n = 1;
-                } else {
+                } else {// 肯定最后两位是11
                     ans += 2;
-                    n = n / 2 + 1;
+                    n = n / 2 + 1; // 先n+1 再除2 结果就为 n/2 + 1
                 }
             }
         }

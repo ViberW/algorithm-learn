@@ -95,6 +95,36 @@ public class Solution436 {
         }
     }
 
+    // 对上面的简化, 但仍不如双指针, 少了点空间
+    public int[] findRightInterval2(int[][] intervals) {
+        int n = intervals.length;
+        int[][] startIntervals = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            startIntervals[i][0] = intervals[i][0];
+            startIntervals[i][1] = i;
+        }
+        Arrays.sort(startIntervals, (o1, o2) -> o1[0] - o2[0]);
+
+        int[] ans = new int[n];
+        for (int i = 0; i < n; i++) {
+            // 二分查找
+            int left = 0;
+            int right = n - 1;
+            int target = -1;
+            while (left <= right) {
+                int mid = (left + right) / 2;
+                if (startIntervals[mid][0] >= intervals[i][1]) {
+                    target = startIntervals[mid][1];
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            }
+            ans[i] = target;
+        }
+        return ans;
+    }
+
     /* 官方题解 */
     // 双指针法
     public int[] findRightInterval1(int[][] intervals) {
@@ -112,6 +142,7 @@ public class Solution436 {
 
         int[] ans = new int[n];
         for (int i = 0, j = 0; i < n; i++) {
+            // 双指针 依照于end 不断去循环寻找start的值
             while (j < n && endIntervals[i][0] > startIntervals[j][0]) {
                 j++;
             }

@@ -1,5 +1,7 @@
 package com.welph.leecode.part_1_500.part_381_400;
 
+import java.util.Arrays;
+
 /**
  * 给定一个长度为 n 的整数数组 A 。
  * 假设 Bk 是数组 A 顺时针旋转 k 个位置后的数组，我们定义 A 的“旋转函数” F 为：
@@ -23,7 +25,7 @@ package com.welph.leecode.part_1_500.part_381_400;
 public class Solution396 {
 
     public static void main(String[] args) {
-        System.out.println(maxRotateFunction(new int[]{4, 3, 2, 6}));
+        System.out.println(maxRotateFunction(new int[] { 4, 3, 2, 6 }));
     }
 
     /**
@@ -47,5 +49,19 @@ public class Solution396 {
             pre = cur;
         }
         return ans;
+    }
+
+    /* 官方题解 */
+    public int maxRotateFunction2(int[] nums) {
+        int f = 0, n = nums.length, numSum = Arrays.stream(nums).sum();
+        for (int i = 0; i < n; i++) {
+            f += i * nums[i];
+        }
+        int res = f;
+        for (int i = n - 1; i > 0; i--) { // 代码简化
+            f += numSum - n * nums[i];
+            res = Math.max(res, f);
+        }
+        return res;
     }
 }

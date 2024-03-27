@@ -2,6 +2,7 @@ package com.welph.leecode.part_500_1000.part_501_520;
 
 import com.welph.leecode.common.TreeNode;
 
+import java.util.ArrayDeque;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -24,7 +25,7 @@ import java.util.Queue;
 public class Solution513 {
 
     public static void main(String[] args) {
-        TreeNode root = TreeNode.createTestData("[2,1,3]");
+        TreeNode root = TreeNode.createTestData("[2,null,3]");
         System.out.println(findBottomLeftValue(root));
     }
 
@@ -39,7 +40,7 @@ public class Solution513 {
         int len;
         while (!queue.isEmpty()) {
             len = queue.size();
-            ret = queue.peek().val;
+            ret = queue.peek().val; // 不如下面的方法
             for (int i = 0; i < len; i++) {
                 TreeNode poll = queue.poll();
                 if (poll.left != null) {
@@ -52,4 +53,25 @@ public class Solution513 {
         }
         return ret;
     }
+
+    /* 官方题解 */
+
+    // 广度
+    public static int findBottomLeftValue2(TreeNode root) {
+        int ret = 0;
+        Queue<TreeNode> queue = new ArrayDeque<TreeNode>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            TreeNode p = queue.poll();
+            if (p.right != null) { // 先放right
+                queue.offer(p.right);
+            }
+            if (p.left != null) {// 再放left
+                queue.offer(p.left);
+            }
+            ret = p.val; // 只需要取最后一个值作为最底层最左.
+        }
+        return ret;
+    }
+
 }

@@ -21,7 +21,7 @@ package com.welph.leecode.part_1_500.part_401_420;
  * 进阶:
  * 你可以用一次扫描算法，只使用O(1)额外空间，并且不修改甲板的值来解决这个问题吗？
  */
-public class Solution418 {
+public class Solution419 {
 
     public static void main(String[] args) {
         System.out.println(countBattleships(new char[][] {

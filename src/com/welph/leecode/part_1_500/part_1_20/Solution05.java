@@ -14,7 +14,7 @@ public class Solution05 {
         System.out.println(longestPalindrome(s));
         System.out.println(longestPalindrome01(s));
         System.out.println(longestPalindrome03(s));
-        System.out.println(longestPalindrome06(s));
+        System.out.println(longestPalindrome08(s));
     }
 
     /**
@@ -197,6 +197,30 @@ public class Solution05 {
                     dp[j][i] = dp[j + 1][i - 1] && chars[j] == chars[i];
                 }
                 if (dp[j][i] && i - j > end - st) {
+                    st = j;
+                    end = i;
+                }
+            }
+        }
+        return s.substring(st, end + 1);
+    }
+
+    //动态规划,简化版 再简化
+    public static String longestPalindrome08(String s) {
+        int len = s.length();
+        if (len <= 1) return s;
+        int st = 0, end = 0;
+        char[] chars = s.toCharArray();
+        boolean[] dp = new boolean[len];
+        for (int i = 0; i < len; i++) {
+            dp[i] = true;
+            for (int j = 0; j < i; j++) {
+                if (j + 1 == i) {
+                    dp[j] = chars[j] == chars[i];
+                } else {
+                    dp[j] = dp[j + 1] && chars[j] == chars[i];
+                }
+                if (dp[j] && i - j > end - st) {
                     st = j;
                     end = i;
                 }

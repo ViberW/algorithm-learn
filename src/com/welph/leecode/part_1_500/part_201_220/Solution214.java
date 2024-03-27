@@ -82,6 +82,7 @@ public class Solution214 {
      */
     public String shortestPalindrome2(String s) {
         int n = s.length();
+        //next数组计算
         int[] fail = new int[n];
         Arrays.fill(fail, -1);
         for (int i = 1; i < n; ++i) {
@@ -93,6 +94,7 @@ public class Solution214 {
                 fail[i] = j + 1;
             }
         }
+        //将s倒序, 用s去匹配
         int best = -1;
         for (int i = n - 1; i >= 0; --i) {
             while (best != -1 && s.charAt(best + 1) != s.charAt(i)) {

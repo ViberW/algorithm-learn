@@ -8,9 +8,9 @@ package com.welph.leecode.part_1_500.part_461_480;
  * 输入：x = 1, y = 4
  * 输出：2
  * 解释：
- * > 1   (0 0 0 1)
- * > 4   (0 1 0 0)
- * >        ↑   ↑
+ * > 1 (0 0 0 1)
+ * > 4 (0 1 0 0)
+ * > ↑ ↑
  * 上面的箭头指出了对应二进制位不同的位置。
  * <p>
  * 示例 2：
@@ -28,7 +28,7 @@ public class Solution461 {
     }
 
     public static int hammingDistance(int x, int y) {
-        //逐步的往后移动
+        // 逐步的往后移动
         int ret = 0;
         for (int i = 1; i <= 31; i++) {
             if ((x & 1) != (y & 1)) {
@@ -43,7 +43,7 @@ public class Solution461 {
     public int hammingDistance2(int x, int y) {
         int s = x ^ y, ret = 0;
         while (s != 0) {
-            s &= s - 1;
+            s &= s - 1; // 如101110&(101101)=101100 相当于是每次减少右边的不同值
             ret++;
         }
         return ret;

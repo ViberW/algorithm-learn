@@ -34,12 +34,12 @@ import java.util.*;
  * 提示：
  * 1 <= ring.length, key.length <= 100
  * ring 和 key 只包含小写英文字母
- * 保证 字符串 key 一定可以由字符串  ring 旋转拼出
+ * 保证 字符串 key 一定可以由字符串 ring 旋转拼出
  */
 public class Solution514 {
 
     public static void main(String[] args) {
-//        System.out.println(findRotateSteps("godding", "gd"));
+        // System.out.println(findRotateSteps("godding", "gd"));
         System.out.println(findRotateSteps1("caotmcaataijjxi", "oatjiioicitatajtijciocjcaaxaaatmctxamacaamjjx"));
 
     }
@@ -52,13 +52,13 @@ public class Solution514 {
      * ---todo 参考官方 完美结合实际情况的动态规划
      */
     public static int findRotateSteps1(String ring, String key) {
-        //构建相同字符有多少个位置
+        // 构建相同字符有多少个位置
         List<Integer>[] pos = new List[26];
         for (int i = 0; i < pos.length; i++) {
             pos[i] = new ArrayList<>();
         }
         for (int i = 0; i < ring.length(); i++) {
-            pos[ring.charAt(i) - 'a'].add(i);
+            pos[ring.charAt(i) - 'a'].add(i); // 这个字符在哪个位置
         }
         int[][] dp = new int[key.length()][ring.length()];
         for (int i = 0; i < dp.length; i++) {
@@ -71,8 +71,9 @@ public class Solution514 {
             for (Integer j : pos[key.charAt(i) - 'a']) {
                 for (Integer k : pos[key.charAt(i - 1) - 'a']) {
                     dp[i][j] = Math.min(dp[i][j],
-                            dp[i - 1][k] + Math.min(Math.abs(j - k),
-                                    ring.length() - Math.abs(j - k)) + 1);
+                            dp[i - 1][k] + Math.min(Math.abs(j - k), // 顺时针
+                                    ring.length() - Math.abs(j - k) // 逆时针
+                            ) + 1); // 按一下
                 }
             }
         }
@@ -80,16 +81,16 @@ public class Solution514 {
     }
 
     /**
-     * 表示当前到 i  本身出于ring的j位置, 找到当前位置的数据信息
+     * 表示当前到 i 本身出于ring的j位置, 找到当前位置的数据信息
      * ------------
-     * A-B     D  - 反而是最小的
-     * A-C  - 第一次到c最小
+     * A-B D - 反而是最小的
+     * A-C - 第一次到c最小
      * 使用广度优先搜索 找到目标的逻辑
      * ----------------
      * 超时 而且导致了 queue 越来越大
      */
     public static int findRotateSteps(String ring, String key) {
-        //预处理  保存某个点到每个点的距离. 但问题在于并不是每个点都需要重复判断, 广度保存每个节点到每个节点的可能长度
+        // 预处理 保存某个点到每个点的距离. 但问题在于并不是每个点都需要重复判断, 广度保存每个节点到每个节点的可能长度
         List<Node>[][] dp = new List[26][26];
         char[] ringChars = ring.toCharArray();
         int start = ringChars[0] - 'a';

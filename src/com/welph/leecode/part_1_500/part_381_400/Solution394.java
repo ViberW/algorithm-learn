@@ -24,10 +24,10 @@ package com.welph.leecode.part_1_500.part_381_400;
  */
 public class Solution394 {
     public static void main(String[] args) {
-//        System.out.println(decodeString("3[a]2[bc]"));
-//        System.out.println(decodeString("3[a2[c]]"));
-//        System.out.println(decodeString("2[abc]3[cd]ef"));
-//        System.out.println(decodeString("abc3[cd]xyz"));
+        // System.out.println(decodeString("3[a]2[bc]"));
+        // System.out.println(decodeString("3[a2[c]]"));
+        // System.out.println(decodeString("2[abc]3[cd]ef"));
+        // System.out.println(decodeString("abc3[cd]xyz"));
         System.out.println(decodeString("100[leetcode]"));
     }
 
@@ -60,5 +60,56 @@ public class Solution394 {
             b.append(builder);
         }
         return l;
+    }
+
+    /* 官方题解 */ // 感觉我的写法还挺好
+    String src;
+    int ptr;
+
+    public String decodeString2(String s) {
+        src = s;
+        ptr = 0;
+        return getString();
+    }
+
+    public String getString() {
+        if (ptr == src.length() || src.charAt(ptr) == ']') {
+            // String -> EPS
+            return "";
+        }
+
+        char cur = src.charAt(ptr);
+        int repTime = 1;
+        String ret = "";
+
+        if (Character.isDigit(cur)) {// 数字
+            // String -> Digits [ String ] String
+            // 解析 Digits
+            repTime = getDigits();
+            // 过滤左括号
+            ++ptr;
+            // 解析 String
+            String str = getString(); // 解析后面一层
+            // 过滤右括号
+            ++ptr;
+            // 构造字符串
+            while (repTime-- > 0) {
+                ret += str;
+            }
+        } else if (Character.isLetter(cur)) { // 是否为字母
+            // String -> Char String
+            // 解析 Char
+            ret = String.valueOf(src.charAt(ptr++));
+        }
+
+        return ret + getString();
+    }
+
+    public int getDigits() {
+        int ret = 0;
+        while (ptr < src.length() && Character.isDigit(src.charAt(ptr))) {
+            ret = ret * 10 + src.charAt(ptr++) - '0';
+        }
+        return ret;
     }
 }

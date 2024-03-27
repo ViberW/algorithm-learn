@@ -21,7 +21,6 @@ package com.welph.leecode.part_1_500.part_461_480;
  */
 public class Solution476 {
 
-
     public static void main(String[] args) {
         System.out.println(findComplement(8));
         System.out.println(findComplement(5));
@@ -34,7 +33,7 @@ public class Solution476 {
      * 但需要找到离5最近的数值. 这里考虑到是正整数, 所以用一个负数的值.
      */
     public static int findComplement(int num) {
-        //不断补全相关的值
+        // 不断补全相关的值
         int high = 0;
         for (int i = 0; i <= 30; i++) {
             if (num >= 1 << i) {
@@ -43,9 +42,22 @@ public class Solution476 {
                 break;
             }
         }
-        //找到最大的关联数值后
+        // 找到最大的关联数值后
         int val = high == 30 ? 0x7fffffff : (1 << (high + 1)) - 1;
         return val ^ num;
+    }
+
+    // 另一种位运算;
+     // {@link HashMap.tableSizeFor()}
+    int findComplement2(int num) {
+        int t = num;
+        t |= t >> 1;
+        t |= t >> 2;
+        t |= t >> 4;
+        t |= t >> 8;
+        t |= t >> 16;
+        //到目前为止 找到了num的最大ffff的值,如num最开始=0b_1000_0000, 那么最终t为0b_1111_1111
+        return ~num & t;
     }
 
 }

@@ -83,6 +83,7 @@ public class Solution443 {
     }
 
     /* 官方题解 */
+    // 双指针
     public int compress1(char[] chars) {
         int n = chars.length;
         int write = 0, left = 0;

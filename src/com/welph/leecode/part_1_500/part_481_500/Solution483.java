@@ -1,3 +1,4 @@
+
 package com.welph.leecode.part_1_500.part_481_500;
 
 /**
@@ -36,19 +37,29 @@ public class Solution483 {
      * k^x-1+...+ 1*k^0 = n
      * 返回最小的k
      * ---
-     * 等比数列的求和公式:  n = ((k^x) - 1) / (k - 1)
-     * => x = log2(num) +1
+     * 等比数列的求和公式: n = ((k^x) - 1) / (k - 1) => k^(x)=k*n-n+1 < k*n
+     * => k^(x) < k*n
+     * => k^(x-1) < n //两边除k
+     * =>(x-1)<log k(n)
+     * --------------------------------------
+     * n =k^x-1+...+ 1*k^0 > k^x-1
+     * <a herf=
+     * "https://leetcode.cn/problems/smallest-good-base/solutions/832832/zui-xiao-hao-jin-zhi-by-leetcode-solutio-csqn/"
+     * />
+     * 
+     * k< pow(n,1/(x-1))<k+1
      */
     public static String smallestGoodBase(String n) {
         long val = Long.parseLong(n);
         long maxX = (long) (Math.log(val + 1) / Math.log(2));
         long sum;
         for (long i = maxX; i > 2; i--) {
-            //每种长度进行处理.
+            // 每种长度进行处理.
             long l = 2;
+            // 选择一个x, 找到合适的sqrt(n,x-1)
             long r = (long) Math.pow(val, 1.0 / (i - 1)) + 1;// 找出最接近的K的值, 根号(x-1)的val, 向上取整
             while (l < r) {
-                long k = l + (r - l) / 2;
+                long k = l + (r - l) / 2; // 在当前返回寻找匹配的k值
                 sum = 0;
                 for (long j = 0; j < i; j++) {
                     sum = sum * k + 1;

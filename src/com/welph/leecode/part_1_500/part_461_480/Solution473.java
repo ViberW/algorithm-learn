@@ -25,8 +25,8 @@ import java.util.Comparator;
 public class Solution473 {
 
     public static void main(String[] args) {
-        System.out.println(makesquare1(new int[]{1, 1, 2, 2, 2}));
-        System.out.println(makesquare1(new int[]{3, 3, 3, 3, 4}));
+        System.out.println(makesquare1(new int[] { 1, 1, 2, 2, 2 }));
+        System.out.println(makesquare1(new int[] { 3, 3, 3, 3, 4 }));
     }
 
     /**
@@ -40,13 +40,13 @@ public class Solution473 {
         if (sum % 4 != 0) {
             return false;
         }
-        //每条边预期的长度 = sum/4
+        // 每条边预期的长度 = sum/4
         Arrays.sort(matchsticks);
         return makesquareEdge(matchsticks, matchsticks.length - 1, new int[4], sum / 4);
     }
 
     private static boolean makesquareEdge(int[] matchsticks, int index, int[] ints, int avg) {
-        //判断长度适合那条边
+        // 判断长度适合那条边
         if (index == -1) {
             return ints[0] == avg && ints[1] == avg && ints[2] == avg && ints[3] == avg;
         }
@@ -89,4 +89,41 @@ public class Solution473 {
                 || makeEdgeSquare(matchsticks, i + 1, l, r, u + len, d)
                 || makeEdgeSquare(matchsticks, i + 1, l, r, u, d + len);
     }
+
+    /* 官方题解 */
+    // 回溯方法在上面类同
+
+    // 状态压缩+动态规划 厉害了!!!
+    public boolean makesquare3(int[] matchsticks) {
+        int totalLen = Arrays.stream(matchsticks).sum();
+        if (totalLen % 4 != 0) {
+            return false;
+        }
+        int len = totalLen / 4, n = matchsticks.length;
+
+        int[] dp = new int[1 << n]; // 使用int的位数代表第k条火柴被使用, 因为n<=15
+        Arrays.fill(dp, -1);
+
+        dp[0] = 0;
+        for (int s = 1; s < (1 << n); s++) { // 这里的s其实就是代表哪些火柴被先后使用了
+            // 其实不用担心dp[s]会有何种变化, 至少它的值是不变的.
+            // 只不过是最后一个火柴哪一根的问题, 但若是满足的情况下, 最终一定会找到的. 找到了即可
+            for (int k = 0; k < n; k++) {
+                if ((s & (1 << k)) == 0) {
+                    continue;
+                }
+                /*
+                 * ~(1 << k)
+                 * 若 (1 << k) = 0000100000000 则 1111011111111
+                 */
+                int s1 = s & ~(1 << k); // 相当于是不包含(1<<k)的那一条边的值
+                if (dp[s1] >= 0 && dp[s1] + matchsticks[k] <= len) {
+                    dp[s] = (dp[s1] + matchsticks[k]) % len; // 按照4条边, 依次填充每一条边
+                    break;
+                }
+            }
+        }
+        return dp[(1 << n) - 1] == 0;
+    }
+
 }

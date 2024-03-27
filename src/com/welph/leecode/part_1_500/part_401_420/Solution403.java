@@ -144,7 +144,7 @@ public class Solution403 {
     }
 
     /* 官方题解 ->理解i处的最大跳跃距离为i+1 */
-    private Boolean[][] rec;
+    private Boolean[][] rec; // 一维表示当前所处第i个石子, 二维表示上一次调到第i个石子时用的跳跃距离lastDis
 
     // 记忆化搜索+二分查找
     public boolean canCross2(int[] stones) {
@@ -164,14 +164,15 @@ public class Solution403 {
         }
 
         for (int curDis = lastDis - 1; curDis <= lastDis + 1; curDis++) {
-            if (curDis > 0) {
+            if (curDis > 0) { // 当前跳跃距离大于0
+                // 当前i个石子, 往后调stones[i] + curDis(跳跃距离)
                 int j = Arrays.binarySearch(stones, i + 1, stones.length, curDis + stones[i]);
                 if (j >= 0 && dfs(stones, j, curDis)) {
-                    return rec[i][lastDis] = true;
+                    return rec[i][lastDis] = true; // 别看错了 这里是赋值 不是比较
                 }
             }
         }
-        return rec[i][lastDis] = false;
+        return rec[i][lastDis] = false; // 别看错了 这里是赋值 不是比较
     }
 
     // 动态规划

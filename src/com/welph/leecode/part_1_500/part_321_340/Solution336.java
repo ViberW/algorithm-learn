@@ -207,11 +207,13 @@ public class Solution336 {
                 cur.suffixs.add(i);
             for (int j = 0; j < rev.length(); j++) {
                 char ch = rev.charAt(j);
-                if (cur.children[ch - 'a'] == null)
+                if (cur.children[ch - 'a'] == null) {
                     cur.children[ch - 'a'] = new Node();
+                }
                 cur = cur.children[ch - 'a'];
-                if (isPalindrome(rev.substring(j + 1)))
+                if (isPalindrome(rev.substring(j + 1))) {
                     cur.suffixs.add(i);
+                }
             }
             cur.words.add(i);
         }

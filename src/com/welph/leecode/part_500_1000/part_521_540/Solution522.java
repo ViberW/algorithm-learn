@@ -1,6 +1,5 @@
 package com.welph.leecode.part_500_1000.part_521_540;
 
-
 import java.util.*;
 
 /**
@@ -29,9 +28,9 @@ import java.util.*;
 public class Solution522 {
 
     public static void main(String[] args) {
-        System.out.println(findLUSlength(new String[]{"aba", "cdc", "eae"}));//3
-        System.out.println(findLUSlength(new String[]{"aaa", "aaa", "aa"}));//-1
-        System.out.println(findLUSlength(new String[]{"aabbcc", "aabbcc", "cb"}));//2
+        System.out.println(findLUSlength(new String[] { "aba", "cdc", "eae" }));// 3
+        System.out.println(findLUSlength(new String[] { "aaa", "aaa", "aa" }));// -1
+        System.out.println(findLUSlength(new String[] { "aabbcc", "aabbcc", "cb" }));// 2
     }
 
     /**
@@ -76,5 +75,48 @@ public class Solution522 {
             i2++;
         }
         return i1 == str1.length();
+    }
+
+    ////////////////////////////////
+    public int findLUSlength2(String[] strs) {
+        // 不为任意其他字符串子序列的最长字符串即为答案
+        int res = -1;
+        for (int i = 0; i < strs.length; i++) {
+            // 剪枝优化
+            if (res >= strs[i].length())
+                continue;
+            boolean flag = true;
+            for (int j = 0; j < strs.length; j++) {
+                if (i == j)
+                    continue;
+                if (isSubsequence(strs[i], strs[j])) {
+                    flag = false;
+                    break;
+                }
+            }
+            res = flag ? Math.max(res, strs[i].length()) : res;
+        }
+        return res;
+    }
+
+    // s是否是t的子序列
+    public boolean isSubsequence(String s, String t) {
+        int n = s.length(), m = t.length();
+        // s,t等长，只有相等才为子序列
+        if (n == m) {
+            return s.equals(t);
+        }
+        if (n > m) {
+            return false;
+        }
+        // 贪心匹配s[i]
+        int i = 0, j = 0;
+        while (i < n && j < m) {
+            if (s.charAt(i) == t.charAt(j)) {
+                i++;
+            }
+            j++;
+        }
+        return i == n;
     }
 }

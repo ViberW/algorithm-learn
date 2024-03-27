@@ -52,6 +52,20 @@ public class Solution398 {
             }
             return ret;
         }
+
+        //简化代码
+        public int pick1(int target) {
+            int ret = -1;
+            for (int i = 0, tl = 0; i < length; i++) {
+                if (nums[i] == target) {
+                    tl++;
+                    if (random.nextInt(tl) == 0) {
+                        ret = i;
+                    }
+                }
+            }
+            return ret;
+        }
     }
 
 }

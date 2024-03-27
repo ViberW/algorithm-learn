@@ -39,7 +39,7 @@ public class Solution445 {
      * 这里是: 高位存储
      */
     public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        //使用栈保存上一个节点
+        // 使用栈保存上一个节点
         Stack<Integer> s1 = new Stack<>();
         while (l1 != null) {
             s1.push(l1.val);
@@ -61,5 +61,46 @@ public class Solution445 {
             reduce = v / 10;
         }
         return node;
+    }
+
+    // 排名前面的做法, 反转+{@link Solution02} 就能快速解决了
+    public ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
+        ListNode new1 = reverse(l1);
+        ListNode new2 = reverse(l2);
+
+        ListNode head = null;
+
+        int temp = 0;
+        while (new1 != null || new2 != null || temp != 0) {
+
+            int a = new1 == null ? 0 : new1.val;
+            int b = new2 == null ? 0 : new2.val;
+
+            int sum = a + b + temp;
+            temp = sum / 10;
+
+            ListNode node = new ListNode(sum % 10);
+            node.next = head;
+            head = node;
+            new1 = new1 == null ? null : new1.next;
+            new2 = new2 == null ? null : new2.next;
+
+        }
+        return head;
+
+    }
+
+    ListNode reverse(ListNode head) {
+        ListNode pre = null;
+        ListNode curr = head;
+
+        while (curr != null) {
+            ListNode next = curr.next;
+            curr.next = pre;
+            pre = curr;
+            curr = next;
+        }
+
+        return pre;
     }
 }

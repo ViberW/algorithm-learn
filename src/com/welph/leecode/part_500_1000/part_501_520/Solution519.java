@@ -28,11 +28,11 @@ import java.util.Random;
  * <p>
  * 解释
  * Solution solution = new Solution(3, 1);
- * solution.flip();  // 返回 [1, 0]，此时返回 [0,0]、[1,0] 和 [2,0] 的概率应当相同
- * solution.flip();  // 返回 [2, 0]，因为 [1,0] 已经返回过了，此时返回 [2,0] 和 [0,0] 的概率应当相同
- * solution.flip();  // 返回 [0, 0]，根据前面已经返回过的下标，此时只能返回 [0,0]
+ * solution.flip(); // 返回 [1, 0]，此时返回 [0,0]、[1,0] 和 [2,0] 的概率应当相同
+ * solution.flip(); // 返回 [2, 0]，因为 [1,0] 已经返回过了，此时返回 [2,0] 和 [0,0] 的概率应当相同
+ * solution.flip(); // 返回 [0, 0]，根据前面已经返回过的下标，此时只能返回 [0,0]
  * solution.reset(); // 所有值都重置为 0 ，并可以再次选择下标返回
- * solution.flip();  // 返回 [2, 0]，此时返回 [0,0]、[1,0] 和 [2,0] 的概率应当相同
+ * solution.flip(); // 返回 [2, 0]，此时返回 [0,0]、[1,0] 和 [2,0] 的概率应当相同
  * <p>
  * <p>
  * 提示：
@@ -63,13 +63,13 @@ public class Solution519 {
             this.len = m * n;
         }
 
-        //仅仅存储len-1和i两个即可
+        // 仅仅存储len-1和i两个即可
         public int[] flip() {
             int i = random.nextInt(len);
             Integer actual = map.getOrDefault(i, i);
-            map.put(i, map.getOrDefault(len - 1, len - 1));
+            map.put(i, map.getOrDefault(len - 1, len - 1)); // 相当于是让当前被选中的i, 用最后一位去替代.
             len--;
-            return new int[]{actual / n, actual % n};
+            return new int[] { actual / n, actual % n };
         }
 
         public void reset() {
@@ -77,7 +77,6 @@ public class Solution519 {
             map.clear();
         }
     }
-
 
     /**
      * 这里试图将boolean 转化为int 存储的是下一个节点的位置?
@@ -96,18 +95,18 @@ public class Solution519 {
             this.len = m * n;
             dp = new int[len];
             reset();
-            //那么 i/m = i   i%n = j
+            // 那么 i/m = i i%n = j
         }
 
         public int[] flip() {
-            //每次获取就移动
+            // 每次获取就移动
             int i = random.nextInt(len);
             int actual = dp[i];
-            //交换最后一个和当前index位置
+            // 交换最后一个和当前index位置
             dp[i] = dp[len - 1];
             dp[len - 1] = actual;
             len--;
-            return new int[]{actual / n, actual % n};
+            return new int[] { actual / n, actual % n };
         }
 
         public void reset() {
@@ -134,7 +133,7 @@ public class Solution519 {
          * 这里会超时
          */
         public int[] flip() {
-            //水塘抽样
+            // 水塘抽样
             int ret = 1;
             int k;
             int mi = -1;
@@ -152,7 +151,7 @@ public class Solution519 {
                 }
             }
             dp[mi][ni] = true;
-            return new int[]{mi, ni};
+            return new int[] { mi, ni };
         }
 
         public void reset() {

@@ -35,7 +35,7 @@ public class Solution395 {
     public static int longestSubstring1(String s, int k) {
         int ret = 0;
         int n = s.length();
-        for (int t = 1; t <= 26; t++) {
+        for (int t = 1; t <= 26; t++) {// 窗口满足大于等于k的字符数, 可能情况的遍历
             int l = 0, r = 0;
             int[] cnt = new int[26];
             int tot = 0;
@@ -44,24 +44,25 @@ public class Solution395 {
                 // 这块用来记录 less 当前子串存在满足的字符 若是less == 0 说明字符i满足>k 这块想到了 但下面...
                 cnt[s.charAt(r) - 'a']++;
                 if (cnt[s.charAt(r) - 'a'] == 1) {
-                    tot++;
+                    tot++;//当前窗口中有多少不同的字符
                     less++;
                 }
                 if (cnt[s.charAt(r) - 'a'] == k) {
-                    less--;
+                    less--; //less代表出现次数小于k的字符数. 满足了就减少
                 }
 
                 while (tot > t) {
                     cnt[s.charAt(l) - 'a']--;
-                    if (cnt[s.charAt(l) - 'a'] == k - 1) {
+                    if (cnt[s.charAt(l) - 'a'] == k - 1) {//从满足条件变为不满足条件
                         less++;
                     }
-                    if (cnt[s.charAt(l) - 'a'] == 0) {
+                    if (cnt[s.charAt(l) - 'a'] == 0) {//字符完全剔除
                         tot--;
                         less--;
                     }
                     l++;
                 }
+                //此时tot至少是满足小于等于t的
                 if (less == 0) {// 若是less == 0 说明字符i满足>k
                     ret = Math.max(ret, r - l + 1);
                 }

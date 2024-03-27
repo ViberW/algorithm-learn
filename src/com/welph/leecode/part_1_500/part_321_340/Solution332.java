@@ -17,7 +17,8 @@ import java.util.*;
  * 输出：["JFK","MUC","LHR","SFO","SJC"]
  * <p>
  * 示例 2：
- * 输入：tickets = [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
+ * 输入：tickets =
+ * [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
  * 输出：["JFK","ATL","JFK","SFO","ATL","SFO"]
  * 解释：另一种有效的行程是 ["JFK","SFO","ATL","JFK","ATL","SFO"] ，但是它字典排序更大更靠后。
  * <p>
@@ -40,7 +41,6 @@ public class Solution332 {
 
         System.out.println(findItinerary(tickets));
 
-
         List<List<String>> tickets1 = new ArrayList<>();
         tickets1.add(Arrays.asList("JFK", "SFO"));
         tickets1.add(Arrays.asList("JFK", "ATL"));
@@ -51,10 +51,10 @@ public class Solution332 {
         System.out.println(findItinerary(tickets1));
     }
 
-    //所有机票必须处理一遍.
+    // 所有机票必须处理一遍.
     public static List<String> findItinerary(List<List<String>> tickets) {
         LinkedList<String> result = new LinkedList<>();
-        //每次尽可能寻找小的值
+        // 每次尽可能寻找小的值
         Map<String, Edge> route = new HashMap<>();
         tickets.forEach(ticket -> route.computeIfAbsent(ticket.get(0), s -> new Edge()).to.add(ticket.get(1)));
 
@@ -68,7 +68,7 @@ public class Solution332 {
     }
 
     public static List<String> findItinerary(Map<String, Edge> route, String from,
-                                             int depth, int expect, LinkedList<String> result) {
+            int depth, int expect, LinkedList<String> result) {
         if (depth == expect) {
             return result;
         }
@@ -98,6 +98,7 @@ public class Solution332 {
     }
 
     /* 官方题解 */
+    // 因为这里面的所有机票必须用一次 且只能用一次, 并且题目是保证有效的, 说明不用考虑是否走过, 考虑剔除就行
     Map<String, PriorityQueue<String>> map = new HashMap<String, PriorityQueue<String>>();
     List<String> itinerary = new LinkedList<String>();
 

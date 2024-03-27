@@ -18,7 +18,7 @@ package com.welph.leecode.part_1_500.part_461_480;
 public class Solution479 {
 
     public static void main(String[] args) {
-        System.out.println(largestPalindrome(5));
+        System.out.println(largestPalindrome(2));
 
     }
 
@@ -29,19 +29,19 @@ public class Solution479 {
         if (n == 1) {// 一个最大值就是9
             return 9;
         }
-        int max = (int) (Math.pow(10, n) - 1); //左半部分的
+        int max = (int) (Math.pow(10, n) - 1); // 左半部分的
         int ret = 0;
-        Label:
-        for (int i = max; i > 0; i--) {
-            //枚举
+        Label: for (int i = max; i > 0; i--) {
+            // 枚举
             long p = i;
-            //构建右半部分
+            // 构建右半部分
             for (long j = p; j > 0; j /= 10) {
                 p = p * 10 + j % 10;
             }
-            //构建出了一个回文串
-            //不断的找一个值,
-            for (long k = max; k * k >= p; k--) { //注意: 这里面的k需要用long来表示, 以为k*k可能会超过integer的最大值
+            // 此时p就是个回文串, 如i=9999 那么p经过处理就是 99999999
+            // 构建出了一个回文串
+            // 不断的找一个值,
+            for (long k = max; k * k >= p; k--) { // 注意: 这里面的k需要用long来表示, 以为k*k可能会超过integer的最大值
                 if (p % k == 0) {
                     ret = (int) (p % 1337);
                     break Label;

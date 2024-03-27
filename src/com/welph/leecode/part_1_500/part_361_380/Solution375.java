@@ -28,7 +28,7 @@ public class Solution375 {
      * 若是r-l<3 说明当前次一定是能够找到答案的. 1,2,3 只需要猜2就行
      * 注意: 这里没有guess的方法 目标值可能在任意位置上
      * ---------------
-     * 思考: 1~n的位置上, 我猜 m 则 下一次可能是1~m或m~n范围的猜数字  找到每种情况下最大值的最小值
+     * 思考: 1~n的位置上, 我猜 m 则 下一次可能是1~m或m~n范围的猜数字 找到每种情况下最大值的最小值
      * dp[i][j] 表示从i~j范围内的至少要求金额
      */
     public static int getMoneyAmount(int n) {
@@ -36,13 +36,14 @@ public class Solution375 {
         for (int j = 2; j <= n; j++) {
             for (int i = j - 1; i > 0; i--) {
                 if (j - i == 1) {
-                    dp[i][j] = i;
+                    dp[i][j] = i; // 猜小值
                 } else if (j - i == 2) {
-                    dp[i][j] = i + (j - i) / 2;
+                    dp[i][j] = i + (j - i) / 2; // 猜中间即可
                 } else {
                     dp[i][j] = Integer.MAX_VALUE;
                     for (int k = i; k <= j; k++) {
-                        //找到i~j范围内的 所有路程的最大值的 最小值
+                        // 找到i~j范围内的 所有路程的最大值的 最小值
+                        // 猜k值后的左右两边的最大值, 再根据结果取最小值
                         dp[i][j] = Math.min(dp[i][j], Math.max(dp[i][k - 1], dp[k + 1][j]) + k);
                     }
                 }

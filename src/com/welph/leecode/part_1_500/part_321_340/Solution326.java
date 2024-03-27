@@ -31,21 +31,23 @@ public class Solution326 {
     public static void main(String[] args) {
         System.out.println(isPowerOfThree(1));
         System.out.println(isPowerOfThree(9));
-        //11
-        //1001
-        //11011
-        //1010001
-        //11110011
-        /*System.out.println(Integer.toBinaryString(3));
-        System.out.println(Integer.toBinaryString((int) Math.pow(3, 2)));
-        System.out.println(Integer.toBinaryString((int) Math.pow(3, 3)));
-        System.out.println(Integer.toBinaryString((int) Math.pow(3, 4)));
-        System.out.println(Integer.toBinaryString((int) Math.pow(3, 5)));
-        System.out.println(Integer.toBinaryString((int) Math.pow(3, 6)));
-        System.out.println(Integer.toBinaryString((int) Math.pow(3, 7)));*/
+        // 11
+        // 1001
+        // 11011
+        // 1010001
+        // 11110011
+        /*
+         * System.out.println(Integer.toBinaryString(3));
+         * System.out.println(Integer.toBinaryString((int) Math.pow(3, 2)));
+         * System.out.println(Integer.toBinaryString((int) Math.pow(3, 3)));
+         * System.out.println(Integer.toBinaryString((int) Math.pow(3, 4)));
+         * System.out.println(Integer.toBinaryString((int) Math.pow(3, 5)));
+         * System.out.println(Integer.toBinaryString((int) Math.pow(3, 6)));
+         * System.out.println(Integer.toBinaryString((int) Math.pow(3, 7)));
+         */
     }
 
-    //先来一份递归的
+    // 先来一份递归的
     public static boolean isPowerOfThree(int n) {
         if (n == 0) {
             return false;
@@ -59,8 +61,18 @@ public class Solution326 {
         return isPowerOfThree(n / 3);
     }
 
+    // 上面的写法优化, 缩小了栈空间及出入栈的耗时F
+    public boolean isPowerOfThree2(int n) {
+        if (n <= 0)
+            return false;
+        while (n % 3 == 0)
+            n /= 3;
+        return n == 1;
+    }
+
     /**
      * 这里的1162261467为3的N次幂 在Integer范围内的最大值: 3^19次方
+     * 
      * @param n
      * @return
      */

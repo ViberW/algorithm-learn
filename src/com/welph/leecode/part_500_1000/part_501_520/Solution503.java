@@ -1,10 +1,13 @@
 package com.welph.leecode.part_500_1000.part_501_520;
 
 import java.util.Arrays;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Stack;
 
 /**
- * 给定一个循环数组 nums （ nums[nums.length - 1] 的下一个元素是 nums[0] ），返回 nums 中每个元素的 下一个更大元素 。
+ * 给定一个循环数组 nums （ nums[nums.length - 1] 的下一个元素是 nums[0] ），返回 nums 中每个元素的
+ * 下一个更大元素 。
  * 数字 x 的 下一个更大的元素 是按数组遍历顺序，这个数字之后的第一个比它更大的数，
  * 这意味着你应该循环地搜索它的下一个更大的数。如果不存在，则输出 -1 。
  * <p>
@@ -26,15 +29,18 @@ import java.util.Stack;
 public class Solution503 {
 
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(nextGreaterElements(new int[]{
+        System.out.println(Arrays.toString(nextGreaterElements(new int[] {
                 1, 2, 1
         })));
 
-        System.out.println(Arrays.toString(nextGreaterElements(new int[]{
+        System.out.println(Arrays.toString(nextGreaterElements(new int[] {
                 1, 2, 3, 4, 3
         })));
     }
 
+    /*
+     * {@link Solution496}
+     */
     public static int[] nextGreaterElements(int[] nums) {
         int[] result = new int[nums.length];
         Stack<Integer> stack = new Stack<>();
@@ -45,7 +51,7 @@ public class Solution503 {
             stack.push(i);
             result[i] = -1;
         }
-        //找到相同的1的位置数据信息.
+        // 找到相同的1的位置数据信息.
         for (int i = 0; i < nums.length || stack.isEmpty(); i++) {
             while (!stack.isEmpty() && nums[stack.peek()] < nums[i]) {
                 result[stack.pop()] = nums[i];
@@ -56,4 +62,20 @@ public class Solution503 {
         }
         return result;
     }
+
+    /* 官方题解 */
+    public int[] nextGreaterElements2(int[] nums) {
+        int n = nums.length;
+        int[] ret = new int[n];
+        Arrays.fill(ret, -1);
+        Deque<Integer> stack = new LinkedList<Integer>();
+        for (int i = 0; i < n * 2 - 1; i++) { // 相当于 遍历两次了
+            while (!stack.isEmpty() && nums[stack.peek()] < nums[i % n]) {
+                ret[stack.pop()] = nums[i % n];
+            }
+            stack.push(i % n);
+        }
+        return ret;
+    }
+
 }

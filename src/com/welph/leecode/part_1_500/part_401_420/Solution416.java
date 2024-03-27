@@ -20,7 +20,7 @@ package com.welph.leecode.part_1_500.part_401_420;
 public class Solution416 {
 
     public static void main(String[] args) {
-        System.out.println(canPartition(new int[]{1, 5, 11, 5}));
+        System.out.println(canPartition(new int[] { 1, 5, 11, 5 }));
     }
 
     /**
@@ -44,5 +44,29 @@ public class Solution416 {
             }
         }
         return dp[half] != 0;
+    }
+
+    public static boolean canPartition2(int[] nums) {
+        int sum = 0;
+        int maxValue = 0;
+        for (int num : nums) {
+            sum += num;
+            maxValue = Math.max(maxValue, num);
+        }
+        if ((sum & 1) == 1) {
+            return false;
+        }
+        int half = sum >> 1;
+        if (maxValue > half) { // 简单的判断, 说明肯定无法两分
+            return false;
+        }
+        boolean[] dp = new boolean[half + 1];
+        dp[0] = true;// 这里改成bool很好
+        for (int num : nums) {
+            for (int i = half; i >= num; i--) {
+                dp[i] = dp[i - num];
+            }
+        }
+        return dp[half];
     }
 }

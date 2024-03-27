@@ -31,16 +31,17 @@ import java.util.Arrays;
  * 1 <= target <= 1000
  * <p>
  * 进阶：如果给定的数组中含有负数会发生什么？问题会产生何种变化？如果允许负数出现，需要向题目中添加哪些限制条件？
+ * : 如果允许负数, 则必须限制排列的长度, 避免出现无限长的的排列, 才能计算排列数
  */
 public class Solution377 {
 
     public static void main(String[] args) {
-        System.out.println(combinationSum4(new int[]{1, 2, 3}, 4));
-        System.out.println(combinationSum4(new int[]{9}, 3));
+        System.out.println(combinationSum4(new int[] { 1, 2, 3 }, 4));
+        System.out.println(combinationSum4(new int[] { 9 }, 3));
     }
 
     /**
-     * 假设有N位, 每个位置的数据都是从nums [0~n]  元素互不相同
+     * 假设有N位, 每个位置的数据都是从nums [0~n] 元素互不相同
      */
     public static int combinationSum4(int[] nums, int target) {
         int[] dp = new int[target + 1];
@@ -63,9 +64,9 @@ public class Solution377 {
         dp[target] = sum;
         return sum;
     }
-    
+
     /* 官方题解 */
-    //动态规划 和上面方法原理一样
+    // 动态规划 和上面方法原理一样
     public int combinationSum4_2(int[] nums, int target) {
         int[] dp = new int[target + 1];
         dp[0] = 1;

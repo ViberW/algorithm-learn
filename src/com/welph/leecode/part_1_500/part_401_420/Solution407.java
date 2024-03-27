@@ -161,8 +161,9 @@ public class Solution407 {
                 if (nx < 0 || nx >= m || ny < 0 || ny >= n) {
                     continue;
                 }
+                // 每当发现(i,j)的接水高度小于周围, 那么周围的水就要被逸散出去, 它的接水高度就会变改变
                 if (water[x][y] < water[nx][ny] && water[nx][ny] > heightMap[nx][ny]) {
-                    water[nx][ny] = Math.max(water[x][y], heightMap[nx][ny]);
+                    water[nx][ny] = Math.max(water[x][y], heightMap[nx][ny]); // 接水高度改变(变小)
                     qu.offer(new int[] { nx, ny });
                 }
             }

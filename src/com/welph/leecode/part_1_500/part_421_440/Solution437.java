@@ -25,6 +25,10 @@ import com.welph.leecode.common.TreeNode;
  */
 public class Solution437 {
 
+    /*
+     * {@link Solution112}
+     * {@link Solution113}
+     */
     public static void main(String[] args) {
         TreeNode root = TreeNode.createTestData("[10,5,-3,3,2,null,11,3,-2,null,1]");
         System.out.println(pathSum(root, 8));
@@ -49,9 +53,9 @@ public class Solution437 {
         tail.next = new Node(0);
         Node cur = head.next;
         while (cur != null) {
-            cur.val += root.val;
+            cur.val += root.val; // 相当于是前缀和了, 相当于是包含root节点的往上不断找符合的前缀和
             if (cur.val == targetSum) {
-                ret++;
+                ret++; // 因为val是存在负值. 所以还要继续遍历
             }
             cur = cur.next;
         }
@@ -124,7 +128,7 @@ public class Solution437 {
         // 若存在前缀和pi为 curr - targetSum, 那么pi+1->...->node总和为 targetSum
         // 因为 [root->node] = [root->pi] + [pi+1->node]
         // 对应 curr = (curr - targetSum) + targetSum
-        ret = prefix.getOrDefault(curr - targetSum, 0);
+        ret = prefix.getOrDefault(curr - targetSum, 0); // 关键点, 牛的
         prefix.put(curr, prefix.getOrDefault(curr, 0) + 1);
         ret += dfs(root.left, prefix, curr, targetSum);
         ret += dfs(root.right, prefix, curr, targetSum);

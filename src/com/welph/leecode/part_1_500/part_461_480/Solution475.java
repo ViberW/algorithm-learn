@@ -29,14 +29,14 @@ import java.util.Arrays;
 public class Solution475 {
 
     public static void main(String[] args) {
-        System.out.println(findRadius(new int[]{1, 2, 3, 4}, new int[]{1, 4}));
+        System.out.println(findRadius(new int[] { 1, 2, 3, 4 }, new int[] { 1, 4 }));
     }
 
     public static int findRadius(int[] houses, int[] heaters) {
         int ans = 0;
         Arrays.sort(heaters);
         for (int house : houses) {
-            int i = binarySearch(heaters, house);//最左边的数据
+            int i = binarySearch(heaters, house);// 最左边的数据
             int j = i + 1;
             int leftDistance = i < 0 ? Integer.MAX_VALUE : house - heaters[i];
             int rightDistance = j >= heaters.length ? Integer.MAX_VALUE : heaters[j] - house;
@@ -62,16 +62,16 @@ public class Solution475 {
         return left;
     }
 
-    //有点贪心的逻辑在
+    // 有点贪心的逻辑在
     public int findRadius2(int[] houses, int[] heaters) {
         Arrays.sort(houses);
         Arrays.sort(heaters);
         int ans = 0;
         for (int i = 0, j = 0; i < houses.length; i++) {
             int curDistance = Math.abs(houses[i] - heaters[j]);
-            while (j < heaters.length - 1 && Math.abs(houses[i] - heaters[j])
-                    >= Math.abs(houses[i] - heaters[j + 1])) {
+            while (j < heaters.length - 1 && Math.abs(houses[i] - heaters[j]) >= Math.abs(houses[i] - heaters[j + 1])) {
                 j++;
+                // 找到距离i的最近的取暖器的长度
                 curDistance = Math.min(curDistance, Math.abs(houses[i] - heaters[j]));
             }
             ans = Math.max(ans, curDistance);

@@ -27,7 +27,7 @@ public class Solution328 {
         ListNode.print(oddEvenList(node));
     }
 
-    //节点位置的奇偶性
+    // 节点位置的奇偶性
     public static ListNode oddEvenList(ListNode head) {
         if (head == null) {
             return head;
@@ -50,4 +50,24 @@ public class Solution328 {
         }
         return parent.next;
     }
+
+    /* 官方题解 */
+
+    //更加简洁
+    public ListNode oddEvenList2(ListNode head) {
+        if (head == null) {
+            return head;
+        }
+        ListNode evenHead = head.next;
+        ListNode odd = head, even = evenHead;
+        while (even != null && even.next != null) {
+            odd.next = even.next;
+            odd = odd.next;
+            even.next = odd.next;
+            even = even.next;
+        }
+        odd.next = evenHead;
+        return head;
+    }
+
 }

@@ -4,7 +4,8 @@ import com.welph.leecode.algorithm.thinking.LongestRiseSeq_27;
 
 /**
  * 给你一个整数数组 nums ，判断这个数组中是否存在长度为 3 的递增子序列。
- * 如果存在这样的三元组下标 (i, j, k) 且满足 i < j < k ，使得 nums[i] < nums[j] < nums[k] ，返回 true ；否则，返回 false 。
+ * 如果存在这样的三元组下标 (i, j, k) 且满足 i < j < k ，使得 nums[i] < nums[j] < nums[k] ，返回 true
+ * ；否则，返回 false 。
  * <p>
  * 示例 1：
  * 输入：nums = [1,2,3,4,5]
@@ -28,10 +29,10 @@ import com.welph.leecode.algorithm.thinking.LongestRiseSeq_27;
 public class Solution334 {
 
     public static void main(String[] args) {
-        System.out.println(increasingTriplet(new int[]{1, 2, 3, 4, 5}));
-        System.out.println(increasingTriplet(new int[]{5, 5, 5, 5, 6}));
-        System.out.println(increasingTriplet(new int[]{2, 1, 5, 0, 4, 6}));
-        System.out.println(increasingTriplet(new int[]{1, 2, 1, 2, 1, 2, 1, 2, 1, 2}));
+        System.out.println(increasingTriplet(new int[] { 1, 2, 3, 4, 5 }));
+        System.out.println(increasingTriplet(new int[] { 5, 5, 5, 5, 6 }));
+        System.out.println(increasingTriplet(new int[] { 2, 1, 5, 0, 4, 6 }));
+        System.out.println(increasingTriplet(new int[] { 1, 2, 1, 2, 1, 2, 1, 2, 1, 2 }));
     }
 
     /**
@@ -72,7 +73,7 @@ public class Solution334 {
     }
 
     /* 官方题解 --更适合的方法 */
-    //双向遍历
+    // 双向遍历
     public boolean increasingTriplet2(int[] nums) {
         int n = nums.length;
         if (n < 3) {
@@ -81,36 +82,37 @@ public class Solution334 {
         int[] leftMin = new int[n];
         leftMin[0] = nums[0];
         for (int i = 1; i < n; i++) {
-            leftMin[i] = Math.min(leftMin[i - 1], nums[i]); //每个点的最小值
+            leftMin[i] = Math.min(leftMin[i - 1], nums[i]); // 每个点的最小值
         }
         int[] rightMax = new int[n];
         rightMax[n - 1] = nums[n - 1];
         for (int i = n - 2; i >= 0; i--) {
-            rightMax[i] = Math.max(rightMax[i + 1], nums[i]); //每个点的最大值
+            rightMax[i] = Math.max(rightMax[i + 1], nums[i]); // 每个点的最大值
         }
+        // 主要是不考虑长度, 直接通过左右对比就可以了
         for (int i = 1; i < n - 1; i++) {
-            if (nums[i] > leftMin[i - 1] && nums[i] < rightMax[i + 1]) { //若存在说明符合
+            if (nums[i] > leftMin[i - 1] && nums[i] < rightMax[i + 1]) { // 若存在说明符合
                 return true;
             }
         }
         return false;
     }
 
-    //贪心算法
+    // 贪心算法 牛
     public boolean increasingTriplet3(int[] nums) {
         int n = nums.length;
         if (n < 3) {
             return false;
         }
-        //first 表示三元中的第一个数   second表示三元中的第二个数
+        // first 表示三元中的第一个数 second表示三元中的第二个数
         int first = nums[0], second = Integer.MAX_VALUE;
         for (int i = 1; i < n; i++) {
             int num = nums[i];
             if (num > second) {
                 return true;
-            } else if (num > first) {//相当于尽可能的去缩小second
+            } else if (num > first) {// 相当于尽可能的去缩小second
                 second = num;
-            } else {//相当于尽可能的去缩小first
+            } else {// 相当于尽可能的去缩小first, 此时仅仅缩小了first, 并不影响后续的second的true判断
                 first = num;
             }
         }

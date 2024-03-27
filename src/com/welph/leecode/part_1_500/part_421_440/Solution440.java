@@ -24,7 +24,7 @@ public class Solution440 {
         // System.out.println(findKthNumber(681692778, 351251360));//416126219
         System.out.println("===============================");
         // System.out.println(findKthNumber1(13, 2));
-        System.out.println(findKthNumber1(100, 54));
+        System.out.println(findKthNumber1(105, 54));
         System.out.println(findKthNumber_440(100, 54));
         // System.out.println(findKthNumber1(681692778, 351251360));
         // System.out.println(Integer.MAX_VALUE);//2147483647
@@ -46,7 +46,7 @@ public class Solution440 {
         // 需要考虑(mod k*10) 的 与n的最大值是否超过了
         int cur = 1;
         --k;// 初始化为cur = 1，k需要自减1
-        while (k > 0) {
+        while (k > 0) { // 别忘了这里有一道循环操作, 这里的找子树就是 1-> 10~19 -> 100~109等等
             long step = 0, first = cur, last = cur + 1;
             // 统计这棵子树下所有节点数（step）
             while (first <= n) {
@@ -99,7 +99,7 @@ public class Solution440 {
     public static int findKthNumber_440(int n, int k) {
         int number = 1;
         for (int i = 0; i < n; i++) {
-            if (--k == 0) {
+            if (--k == 0) { // 本质也是一个个的试
                 return number;
             }
             if (number * 10 <= n) {

@@ -41,6 +41,13 @@ public class Solution330 {
         int ans = 0;
         for (int i = 0; i < nums.length && res < n;) {
             int num = nums[i];
+            // 也很好思考
+            /*
+             * |------------|----------|
+             * 若是到达中间res, 那么以一个位置k(没有就插入) 则一定通过当前k和res范围表达出[k,k+res]
+             * 因为从到达res, 那么代表[1,res]能通过其中任何值表达出来. 我们只需要关注k之后的即可
+             * --------------------------- 贪心算法
+             */
             if (num - res <= 1) { // 因为nums是已排序好的.不用担心重复的数值插入
                 if (num > mid) {
                     return ans;
@@ -48,7 +55,7 @@ public class Solution330 {
                 res += num;
                 i++;
             } else {
-                ans++; //插入一个值, 这个值为 res+1
+                ans++; // 插入一个值, 这个值为 res+1
                 if (res > mid) {
                     return ans;
                 }
@@ -71,8 +78,7 @@ public class Solution330 {
      * 则区间 [1,2x−1][内的所有数字也都被覆盖
      * ---------------------------------------
      * 贪心逻辑:
-     * 每次找到未被数组 nums 覆盖的最小的整数 x，在数组中补充 x，然后寻找下一个未被覆盖的最小的整数，
-     * 重复上述步骤直到区间 [1,n]中的所有数字都被覆盖。
+     * 
      */
     public int minPatches2(int[] nums, int n) {
         int patches = 0;

@@ -134,7 +134,9 @@ public class Solution406 {
             }
         });
         List<int[]> ans = new ArrayList<int[]>();
+        // 因为后面的值不断比前面的值小, 所以后面的值可以按照person[1]想要的位置插入即可
         for (int[] person : people) {
+            // 因为倒序, 所以前面的person[1]至少很小
             ans.add(person[1], person);// 选择对应的位置插入
         }
         return ans.toArray(new int[ans.size()][]);

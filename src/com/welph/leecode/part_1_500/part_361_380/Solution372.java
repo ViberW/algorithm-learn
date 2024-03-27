@@ -27,16 +27,18 @@ package com.welph.leecode.part_1_500.part_361_380;
 public class Solution372 {
 
     public static void main(String[] args) {
-       /* System.out.println(superPow(1337, new int[]{3}));
-        System.out.println(superPow(2, new int[]{1, 0}));
-        System.out.println(superPow(1, new int[]{4, 3, 3, 8, 5, 2}));*/
-        System.out.println(superPow(2147483647, new int[]{2, 0, 0}));
+        /*
+         * System.out.println(superPow(1337, new int[]{3}));
+         * System.out.println(superPow(2, new int[]{1, 0}));
+         * System.out.println(superPow(1, new int[]{4, 3, 3, 8, 5, 2}));
+         */
+        System.out.println(superPow(2147483647, new int[] { 2, 0, 0 }));
     }
 
     /**
      * a^(200) = ((a^20)^10) * (a^4) = ((((a^2)^10) * (a^0))^10) * (a^4)
      * ------------
-     * ( a^b ) % 1337 = (a%1337)^b = 余数^b; 
+     * ( a^b ) % 1337 = (a%1337)^b = 余数^b;
      */
     public static int superPow(int a, int[] b) {
         int ans = 1;
@@ -47,7 +49,7 @@ public class Solution372 {
     }
 
     /**
-     * 为什么要自己实现,  否则会因为精度问题 导致计算结果错误
+     * 为什么要自己实现, 否则会因为精度问题 导致计算结果错误
      */
     static int pow(int a, int b) {
         int ans = 1;
@@ -57,5 +59,27 @@ public class Solution372 {
             ans %= 1337;
         }
         return ans;
+    }
+
+    /* 官方题解 */
+
+    public int superPow2(int a, int[] b) {
+        int ans = 1;
+        for (int e : b) {
+            ans = (int) ((long) pow(ans, 10) * pow(a, e) % 1337);
+        }
+        return ans;
+    }
+
+    public int pow2(int x, int n) {
+        int res = 1;
+        while (n != 0) {
+            if (n % 2 != 0) {
+                res = (int) ((long) res * x % 1337);
+            }
+            x = (int) ((long) x * x % 1337); // 通过对n的除2 缩减计算遍历(相较于我上面的遍历方式)
+            n /= 2;
+        }
+        return res;
     }
 }

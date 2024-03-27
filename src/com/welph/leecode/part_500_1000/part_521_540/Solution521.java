@@ -1,7 +1,7 @@
 package com.welph.leecode.part_500_1000.part_521_540;
 
 /**
- * 给你两个字符串 a 和 b，请返回 这两个字符串中 最长的特殊序列  的长度。如果不存在，则返回 -1 。
+ * 给你两个字符串 a 和 b，请返回 这两个字符串中 最长的特殊序列 的长度。如果不存在，则返回 -1 。
  * <p>
  * 「最长特殊序列」 定义如下：该序列为 某字符串独有的最长子序列（即不能是其他字符串的子序列） 。
  * <p>
@@ -37,7 +37,6 @@ public class Solution521 {
         System.out.println(findLUSlength("aba", "cdc"));
     }
 
-
     /**
      * 题目给我看麻了
      */
@@ -47,4 +46,33 @@ public class Solution521 {
         }
         return Math.max(a.length(), b.length());
     }
+
+    // 这个至少是一种算法-动态规划 当然不如上面的快速判断
+    public int findLUSlength2(String a, String b) {
+        if (a == b)
+            return -1;
+        int m = a.length(), n = b.length();
+
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 0; i <= m; i++) {
+            // 二维数组中第一行和第一列为特殊值
+            dp[i][0] = i;
+        }
+        for (int i = 0; i <= n; i++) {
+            dp[0][i] = i;
+        }
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (a.charAt(i - 1) == b.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] == 0 ? 0 // 此时i-1和j-1基本是相等的, 无特殊子串, 那么最后点相等,则为0
+                      
+                            : Math.max(Math.max(dp[i][j - 1], dp[i - 1][j]), dp[i - 1][j - 1] + 1);
+                } else {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                }
+            }
+        }
+        return dp[m][n];
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.welph.leecode.part_1_500.part_401_420;
 
+import java.util.TreeSet;
+
 /**
  * 给你一个非空数组，返回此数组中 第三大的数 。如果不存在，则返回数组中最大的数。
  * <p>
@@ -36,7 +38,7 @@ public class Solution414 {
      * 类似第k大数字, 这里为了方便就直接使用三个值来代表
      */
     public static int thirdMax(int[] nums) {
-        int[] arr = new int[3];
+        int[] arr = new int[3]; // 其实这里可以使用treeSet替代
         int size = 0;
         LABEL: for (int num : nums) {
             for (int i = 0; i < size; i++) {
@@ -56,13 +58,19 @@ public class Solution414 {
         return size < 3 ? arr[0] : arr[2];
     }
 
-    private static void swap(int[] arr, int i, int j) {
-        int temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
+    /* 官方题解 */
+    // 有序集合
+    public int thirdMax3(int[] nums) {
+        TreeSet<Integer> s = new TreeSet<Integer>();
+        for (int num : nums) {
+            s.add(num);
+            if (s.size() > 3) {
+                s.remove(s.first());
+            }
+        }
+        return s.size() == 3 ? s.first() : s.last();
     }
 
-    /* 官方题解 */
     // 一次遍历
     public int thirdMax2(int[] nums) {
         Integer a = null, b = null, c = null;

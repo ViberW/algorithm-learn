@@ -36,18 +36,20 @@ import java.util.Arrays;
 public class Solution321 {
 
     public static void main(String[] args) {
-        /*int[] nums1 = {3, 4, 6, 5};
-        int[] nums2 = {9, 1, 2, 5, 8, 3};
-        System.out.println(Arrays.toString(maxNumber1(nums1, nums2, 5)));
-        int[] nums3 = {6, 7};
-        int[] nums4 = {6, 0, 4};
-        System.out.println(Arrays.toString(maxNumber1(nums3, nums4, 5)));
-        int[] nums5 = {3, 9};
-        int[] nums6 = {8, 9};
-        System.out.println(Arrays.toString(maxNumber1(nums5, nums6, 3)));*/
+        /*
+         * int[] nums1 = {3, 4, 6, 5};
+         * int[] nums2 = {9, 1, 2, 5, 8, 3};
+         * System.out.println(Arrays.toString(maxNumber1(nums1, nums2, 5)));
+         * int[] nums3 = {6, 7};
+         * int[] nums4 = {6, 0, 4};
+         * System.out.println(Arrays.toString(maxNumber1(nums3, nums4, 5)));
+         * int[] nums5 = {3, 9};
+         * int[] nums6 = {8, 9};
+         * System.out.println(Arrays.toString(maxNumber1(nums5, nums6, 3)));
+         */
 
-        int[] nums7 = {7, 6, 1, 9, 3, 2, 3, 1, 1};
-        int[] nums8 = {4, 0, 9, 9, 0, 5, 5, 4, 7};
+        int[] nums7 = { 7, 6, 1, 9, 3, 2, 3, 1, 1 };
+        int[] nums8 = { 4, 0, 9, 9, 0, 5, 5, 4, 7 };
         System.out.println(Arrays.toString(maxNumber1(nums7, nums8, 9)));
     }
 
@@ -95,7 +97,7 @@ public class Solution321 {
             return new int[0];
         }
         int[] res = new int[expect];
-        int pop = nums.length - expect; //不需要的字符的数量
+        int pop = nums.length - expect; // 不需要的字符的数量
         int index = -1;
         for (int num : nums) {
             while (pop > 0 && index >= 0 && res[index] < num) {
@@ -115,9 +117,9 @@ public class Solution321 {
 
     /**
      * nums1 : 从l1~r1 范围内, 从(r1-(K-(r2-l2)))向前找到最大值
-     * nums2 : 从l2~r2 范围内,  从(r2-(K-(r1-l1)))向前找到最大值
+     * nums2 : 从l2~r2 范围内, 从(r2-(K-(r1-l1)))向前找到最大值
      * //找到两者之间的最大值.作为下一次的数据 ---------
-     * todo 这种方案 失败!!!!  [{3, 9}{8, 9}] 导致可能得到的结果为939 而不是989
+     * todo 这种方案 失败!!!! [{3, 9}{8, 9}] 导致可能得到的结果为939 而不是989
      * //todo 这个方法应该还要考验max值相等的时候的向前判断,,,,,
      */
     public static int[] maxNumber(int[] nums1, int[] nums2, int k) {
@@ -130,12 +132,12 @@ public class Solution321 {
         int max1 = -1;
         int max2 = -1;
         for (int i = 0; i < k; i++) {
-            //若是能想办法每次计算好就不错了
+            // 若是能想办法每次计算好就不错了
             max1 = max1 == -1 ? maxNumber(nums1, l1, r1 - (Math.max(0, mk - (r2 - l2) - 1))) : max1;
             max2 = max2 == -1 ? maxNumber(nums2, l2, r2 - (Math.max(0, mk - (r1 - l1) - 1))) : max2;
             if (max2 == -1 || (max1 != -1 && nums1[max1] > nums2[max2])) {
                 l1 = max1 + 1;
-                //todo 有些问题
+                // todo 有些问题
                 res[i] = nums1[max1];
                 max1 = -1;
             } else if (max1 == -1 || nums1[max1] < nums2[max2]) {
@@ -143,7 +145,7 @@ public class Solution321 {
                 res[i] = nums2[max2];
                 max2 = -1;
             } else {
-                //若是前面较大的值. 则说明应该选择当前范围;较小的,
+                // 若是前面较大的值. 则说明应该选择当前范围;较小的,
             }
             mk--;
         }
@@ -161,4 +163,77 @@ public class Solution321 {
         }
         return res;
     }
+
+    /* 官方题解 */
+
+    // 单调栈 和我的方法差不多
+    public int[] maxNumber3(int[] nums1, int[] nums2, int k) {
+        int m = nums1.length, n = nums2.length;
+        int[] maxSubsequence = new int[k];
+        int start = Math.max(0, k - n), end = Math.min(k, m);
+        for (int i = start; i <= end; i++) {
+            int[] subsequence1 = maxSubsequence(nums1, i);
+            int[] subsequence2 = maxSubsequence(nums2, k - i);
+            int[] curMaxSubsequence = merge(subsequence1, subsequence2);
+            if (compare(curMaxSubsequence, 0, maxSubsequence, 0) > 0) {
+                System.arraycopy(curMaxSubsequence, 0, maxSubsequence, 0, k);
+            }
+        }
+        return maxSubsequence;
+    }
+
+    public int[] maxSubsequence(int[] nums, int k) {
+        int length = nums.length;
+        int[] stack = new int[k];
+        int top = -1;
+        int remain = length - k;
+        for (int i = 0; i < length; i++) {
+            int num = nums[i];
+            while (top >= 0 && stack[top] < num && remain > 0) {
+                top--;
+                remain--;
+            }
+            if (top < k - 1) {
+                stack[++top] = num;
+            } else {
+                remain--;
+            }
+        }
+        return stack;
+    }
+
+    public int[] merge(int[] subsequence1, int[] subsequence2) {
+        int x = subsequence1.length, y = subsequence2.length;
+        if (x == 0) {
+            return subsequence2;
+        }
+        if (y == 0) {
+            return subsequence1;
+        }
+        int mergeLength = x + y;
+        int[] merged = new int[mergeLength];
+        int index1 = 0, index2 = 0;
+        for (int i = 0; i < mergeLength; i++) {
+            if (compare(subsequence1, index1, subsequence2, index2) > 0) {
+                merged[i] = subsequence1[index1++];
+            } else {
+                merged[i] = subsequence2[index2++];
+            }
+        }
+        return merged;
+    }
+
+    public int compare(int[] subsequence1, int index1, int[] subsequence2, int index2) {
+        int x = subsequence1.length, y = subsequence2.length;
+        while (index1 < x && index2 < y) {
+            int difference = subsequence1[index1] - subsequence2[index2];
+            if (difference != 0) {
+                return difference;
+            }
+            index1++;
+            index2++;
+        }
+        return (x - index1) - (y - index2);
+    }
+
 }

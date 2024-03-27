@@ -94,7 +94,7 @@ public class Solution420 {
                     cur = ch;
                 }
             }
-            //针对最后的情况
+            // 针对最后的情况
             if (remove > 0 && cnt >= 3) {
                 if (cnt % 3 == 0) {
                     --remove;
@@ -105,12 +105,17 @@ public class Solution420 {
             }
             replace += cnt / 3;
 
+            // 下面是分别针对连续2n+1 和2n+2的情况处理
+            // 我们可以分别讨论
+            // 若是没有2n+2时2n+1的rm2是个什么情况, 只需要删除2个字符, 若是不够删除数,就替换
+            // 若是没有2n+1时2n+2是个什么情况, 需要删除每5个字符删除3个字符. 不够的删除的就替换
+
             // 使用 k % 3 = 1 的组的数量，由剩余的替换次数、组数和剩余的删除次数共同决定
             int use2 = Math.min(Math.min(replace, rm2), remove / 2);
-            replace -= use2;
+            replace -= use2; // 能够删除掉的2n+1, 剩下的replace就是要替换
             remove -= use2 * 2;
             // 由于每有一次替换次数就一定有 3 个连续相同的字符（k / 3 决定），因此这里可以直接计算出使用 k % 3 = 2 的组的数量
-            int use3 = Math.min(replace, remove / 3);
+            int use3 = Math.min(replace, remove / 3); // 剩下的替换和剩下的删除看看还能帮助替换减少多少
             replace -= use3;
             remove -= use3 * 3;
             return (n - 20) + Math.max(replace, 3 - categories);

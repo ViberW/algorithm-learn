@@ -1,6 +1,7 @@
 package com.welph.leecode.part_1_500.part_321_340;
 
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * 给你一个整数数组nums，将它重新排列成nums[0] < nums[1] > nums[2] < nums[3]...的顺序。
@@ -125,4 +126,53 @@ public class Solution324 {
     }
 
     //todo 还有三种官方解法......
+    
+    //三向切分
+    Random random = new Random();
+
+    public void wiggleSort4(int[] nums) {
+        int n = nums.length;
+        int x = (n + 1) / 2;
+        int mid = x - 1;
+        int target = findKthLargest(nums, n - mid);
+        for (int k = 0, i = 0, j = n - 1; k <= j; k++) {
+            if (nums[k] > target) {
+                while (j > k && nums[j] > target) {
+                    j--;
+                }
+                swap(nums, k, j--);
+            }
+            if (nums[k] < target) {
+                swap(nums, k, i++);
+            }
+        }
+        int[] arr = nums.clone();
+        for (int i = 0, j = x - 1, k = n - 1; i < n; i += 2, j--, k--) {
+            nums[i] = arr[j];
+            if (i + 1 < n) {
+                nums[i + 1] = arr[k];
+            }
+        }
+    }
+
+    public int findKthLargest(int[] nums, int k) {
+        return quickSelect(nums, 0, nums.length - 1, nums.length - k);
+    }
+
+    public int quickSelect(int[] a, int l, int r, int index) {
+        int q = randomPartition(a, l, r);
+        if (q == index) {
+            return a[q];
+        } else {
+            return q < index ? quickSelect(a, q + 1, r, index) : quickSelect(a, l, q - 1, index);
+        }
+    }
+
+    public int randomPartition(int[] a, int l, int r) {
+        int i = random.nextInt(r - l + 1) + l;
+        swap(a, i, r);
+        return partition(a, l, r);
+    }
+
+
 }

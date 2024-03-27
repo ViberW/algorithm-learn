@@ -68,6 +68,9 @@ public class Solution392 {
             }
             dp[i][c] = i;
         }
+        /*
+         * 通过遍历后, 就出现了每一个index下标中 到之后任意一个字母的跳转索引下标.
+         */
         // 从前往后找
         int index = 0;
         int k;
