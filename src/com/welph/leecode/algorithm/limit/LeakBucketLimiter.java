@@ -31,8 +31,8 @@ public class LeakBucketLimiter {
             surplus = Math.max(0, surplus - generate); //固定流出
             lastTimestamp = now;
         }
-        if (surplus < capacity) {//任意速率流入
-            surplus++;
+        if (surplus < capacity) {//任意速率流入,这样就能 保证一秒钟不超过capacity的存在
+            surplus++; //todo 这里需要改进, 和时间相关
             return true;
         }
         return false;

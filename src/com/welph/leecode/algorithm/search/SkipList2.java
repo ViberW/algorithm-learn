@@ -6,9 +6,9 @@ import java.util.Random;
  * @author Viber
  * @version 1.0
  * @apiNote 更加方便理解--来自{wangzheng}
- * 1，跳表的一种实现方法，用于练习。跳表中存储的是正整数，并且存储的是不重复的。
- * 2，优化了添加方法
- * 3，再看ConcurrentSkipListMap 源码，会有很大收获
+ *          1，跳表的一种实现方法，用于练习。跳表中存储的是正整数，并且存储的是不重复的。
+ *          2，优化了添加方法
+ *          3，再看ConcurrentSkipListMap 源码，会有很大收获
  * @since 2021/9/15 17:15
  */
 public class SkipList2 {
@@ -100,7 +100,7 @@ public class SkipList2 {
             // levelCount 会 > level，所以加上判断--这样能够逐步的找到对应的节点信息的
             if (level > i) {
                 if (p.forwards[i] == null) {
-                    p.forwards[i] = newNode;
+                    p.forwards[i] = newNode;// 并不会影响下一次循环, 因为对应的i发生变化, 下次不是newNode
                 } else {
                     Node next = p.forwards[i];
                     p.forwards[i] = newNode;
@@ -139,7 +139,7 @@ public class SkipList2 {
          *
          * 1，说明：层是从下到上的，这里最下层编号是0，最上层编号是15
          * 2，这里没有从已有数据最大层（编号最大）开始找，（而是随机层的最大层）导致有些问题。
-         *    如果数据量为1亿，随机level=1 ，那么插入时间复杂度为O（n）
+         * 如果数据量为1亿，随机level=1 ，那么插入时间复杂度为O（n）
          */
         Node p = head;
         for (int i = level - 1; i >= 0; --i) {
@@ -159,7 +159,8 @@ public class SkipList2 {
         }
 
         // 更新层高
-        if (levelCount < level) levelCount = level;
+        if (levelCount < level)
+            levelCount = level;
     }
 
     public void delete(int value) {
@@ -271,24 +272,26 @@ public class SkipList2 {
         list.printAll();
         /**
          * 结果如下：
-         * 									    null:15-------
-         * 									    null:14-------
-         * 									    null:13-------
-         * 									    null:12-------
-         * 									    null:11-------
-         * 									    null:10-------
-         * 										   5:9-------
-         * 										   5:8-------
-         * 										   5:7-------
-         * 										   5:6-------
-         * 										   5:5-------
-         * 										   5:4-------					 8:4-------
-         * 							     4:3-------5:3-------6:3-------7:3-------8:3-------
-         * 1:2-------2:2-------		     4:2-------5:2-------6:2-------7:2-------8:2-------
+         * null:15-------
+         * null:14-------
+         * null:13-------
+         * null:12-------
+         * null:11-------
+         * null:10-------
+         * 5:9-------
+         * 5:8-------
+         * 5:7-------
+         * 5:6-------
+         * 5:5-------
+         * 5:4------- 8:4-------
+         * 4:3-------5:3-------6:3-------7:3-------8:3-------
+         * 1:2-------2:2------- 4:2-------5:2-------6:2-------7:2-------8:2-------
          * 1:1-------2:1-------3:1-------4:1-------5:1-------6:1-------7:1-------8:1-------
          * 1:0-------2:0-------3:0-------4:0-------5:0-------6:0-------7:0-------8:0-------
-         * { data: 1; levels: 3 } { data: 2; levels: 3 } { data: 3; levels: 2 } { data: 4; levels: 4 }
-         * { data: 5; levels: 10 } { data: 6; levels: 4 } { data: 7; levels: 4 } { data: 8; levels: 5 }
+         * { data: 1; levels: 3 } { data: 2; levels: 3 } { data: 3; levels: 2 } { data:
+         * 4; levels: 4 }
+         * { data: 5; levels: 10 } { data: 6; levels: 4 } { data: 7; levels: 4 } { data:
+         * 8; levels: 5 }
          */
         // 优化后insert()
 
@@ -303,7 +306,6 @@ public class SkipList2 {
         list2.insert2(5);
         System.out.println();
         list2.printAll_beautiful();
-
 
     }
 }

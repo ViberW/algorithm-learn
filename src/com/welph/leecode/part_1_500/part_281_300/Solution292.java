@@ -40,7 +40,7 @@ public class Solution292 {
         System.out.println(canWinNim(8));
     }
 
-    //巴什博奕，n%(m+1)!=0时，先手总是会赢的
+    //巴什博弈，n%(m+1)!=0时，先手总是会赢的
     //todo 这数学弄的. 脑筋急转弯
     public static boolean canWinNim(int n) {
         return n % (3 + 1) != 0;
