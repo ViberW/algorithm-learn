@@ -23,7 +23,7 @@ import java.util.Arrays;
 public class Solution66 {
 
     public static void main(String[] args) {
-        int[] digits = {4, 3, 2, 1};
+        int[] digits = { 4, 3, 2, 1 };
 
         System.out.println(Arrays.toString(plusOne(digits)));
     }
@@ -48,5 +48,20 @@ public class Solution66 {
             return result;
         }
         return digits;
+    }
+
+    public static int[] plusOne2(int[] digits) {
+        for (int i = digits.length - 1; i >= 0; i--) {
+            if (digits[i] < 9) { // 小优化, 因为这里只是加1
+                digits[i]++;
+                return digits;
+            } else {
+                digits[i] = 0;
+            }
+        }
+        int[] result = new int[digits.length + 1];
+        result[0] = 1;
+        System.arraycopy(digits, 0, result, 1, digits.length);
+        return result;
     }
 }

@@ -38,7 +38,7 @@ import java.util.Map;
 public class Solution659 {
 
     public static void main(String[] args) {
-        System.out.println(isPossible(new int[]{1, 2, 3, 3, 4, 5}));
+        System.out.println(isPossible(new int[]{1, 2, 3, 4, 5}));
         System.out.println(isPossible(new int[]{1, 2, 3, 3, 4, 4, 5, 5}));
         System.out.println(isPossible(new int[]{1, 2, 3, 4, 4, 5}));
     }

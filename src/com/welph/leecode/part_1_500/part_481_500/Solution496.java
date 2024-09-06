@@ -1,6 +1,8 @@
 package com.welph.leecode.part_1_500.part_481_500;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -40,17 +42,17 @@ public class Solution496 {
 
     public static void main(String[] args) {
         System.out.println(Arrays.toString(nextGreaterElement(
-                new int[]{4, 1, 2}, new int[]{1, 3, 4, 2})));
+                new int[] { 4, 1, 2 }, new int[] { 1, 3, 4, 2 })));
         System.out.println(Arrays.toString(nextGreaterElement(
-                new int[]{2, 4}, new int[]{1, 2, 3, 4})));
+                new int[] { 2, 4 }, new int[] { 1, 2, 3, 4 })));
     }
 
     /**
-     * 题目意思: 从num1中找到对应num2中的数据,  并从该数据后面找到第一个比它大的数值(非索引), 填进num1中
+     * 题目意思: 从num1中找到对应num2中的数据, 并从该数据后面找到第一个比它大的数值(非索引), 填进num1中
      * todo 金典 单调栈
      */
     public static int[] nextGreaterElement(int[] nums1, int[] nums2) {
-        //单调栈-递减 并配合hash表存储 递减出栈的数据
+        // 单调栈-递减 并配合hash表存储 递减出栈的数据
         Map<Integer, Integer> map = new HashMap<>();
         Stack<Integer> decrementStack = new Stack<>();
         for (int i : nums2) {
@@ -64,5 +66,23 @@ public class Solution496 {
             ret[i] = map.getOrDefault(nums1[i], -1);
         }
         return ret;
+    }
+
+    public int[] nextGreaterElement1(int[] nums1, int[] nums2) {
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        Deque<Integer> stack = new ArrayDeque<Integer>();
+        for (int i = nums2.length - 1; i >= 0; --i) {
+            int num = nums2[i];
+            while (!stack.isEmpty() && num >= stack.peek()) {
+                stack.pop();
+            }
+            map.put(num, stack.isEmpty() ? -1 : stack.peek());
+            stack.push(num);
+        }
+        int[] res = new int[nums1.length];
+        for (int i = 0; i < nums1.length; ++i) {
+            res[i] = map.get(nums1[i]);
+        }
+        return res;
     }
 }

@@ -25,7 +25,7 @@ public class Solution350 {
 
     public static void main(String[] args) {
         System.out.println(Arrays.toString(intersect(
-                new int[]{1, 2, 2, 1}, new int[]{2, 2})));
+                new int[] { 1, 2, 2, 1 }, new int[] { 2, 2 })));
     }
 
     public static int[] intersect(int[] nums1, int[] nums2) {
@@ -52,5 +52,26 @@ public class Solution350 {
             r[k++] = re;
         }
         return r;
+    }
+
+    // 若是两个数组是有序的, 只需要双指针即可
+    public static int[] intersect2(int[] nums1, int[] nums2) {
+        int i = 0, j = 0, k = 0;
+        // 先弄成有序的
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        while (i < nums1.length && j < nums2.length) {
+            if (nums1[i] > nums2[j]) {
+                j++;
+            } else if (nums1[i] < nums2[j]) {
+                i++;
+            } else {
+                nums1[k] = nums2[i];
+                i++;
+                j++;
+                k++;
+            }
+        }
+        return Arrays.copyOfRange(nums1, 0, k);
     }
 }

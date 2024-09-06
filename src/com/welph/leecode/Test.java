@@ -14,6 +14,7 @@ public class Test {
         int[] arr = new int[]{2, 1, 5, 6, 2, 3};
         System.out.println(0/10);
         System.out.println(largestRectangleArea(arr));
+        System.out.println(maxArea(arr));
     }
 
     public static int largestRectangleArea(int[] height) {
@@ -38,5 +39,21 @@ public class Test {
         return maxArea;
     }
 
+    public static int maxArea(int[] height) {
+        //双指针  从左右往中间靠拢
+        int l = 0;
+        int r = height.length - 1;
+        int h;
+        int maxArea = 0;
+        while (l < r) {
+            h = Math.min(height[l], height[r]);
+            maxArea = Math.max(maxArea, h * (r - l));
+            //精髓在这
+            //不断往中间趋近,因为宽一直减少,所以高度不变 面积就一直减少
+            while (height[l] <= h && l < r) ++l;
+            while (height[r] <= h && l < r) --r;
+        }
+        return maxArea;
+    }
 
 }

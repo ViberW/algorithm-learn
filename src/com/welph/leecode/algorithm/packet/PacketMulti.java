@@ -16,6 +16,7 @@ public class PacketMulti {
         int[] v = { 10, 20, 30, 10, 15, 5 };
         int[] c = { 2, 3, 3, 4, 1, 2 };
         System.out.println(maximumValue(w, v, c, 5));
+        System.out.println(maximumValue5(w, v, c, 5));
     }
 
     /**
@@ -138,33 +139,41 @@ public class PacketMulti {
      * -------------------
      * 通过单调队列, 保证 f[j+kv]-kw的最大值, 用于下一次的k+1的使用
      */
+    // {@link https://www.acwing.com/solution/content/6500/}
     public static int maximumValue5(int[] w, int[] v, int[] c, int n) {
         int m = w.length;
         int[] f = new int[n + 1];
         int[] q = new int[n + 1];// 单调队列
+        int[] pre = new int[f.length];// 记录前一类f数组的状态
         for (int i = 0; i < m; ++i) {
             // j个单调队列
-            int[] pre = new int[f.length];// 记录前一类f数组的状态
-            System.arraycopy(f, 0, q, 0, f.length);
+            System.arraycopy(f, 0, pre, 0, f.length);
+            // 表示装满当前i物品后, 最终不能超过t 且t<i的重量的. 因为若是剩余大于w[i] 则还能装i
             for (int t = 0; t < w[i]; t++) {// 表示当前i的每轮剩余t的计算, 分别有{t个单调队列}
                 // 用于滑动窗口的左端点和右端点
-                int hh = 0, jj = -1;
-                for (int j = t; j <= n; j += w[i]) {// 真实的容量j(j%w[i] =t)
+                int head = 0, tail = -1;
+
+                // 剩余t的情况下, 逐渐装载i物品的个数
+                for (int k = t; k <= n; k += w[i]) {// 真实的容量k(k%w[i] =t)
                     // 滑动窗口, 窗口大小为c[i] * w[i], 不断的移动hh 其实就是w[i]
                     // 相当于不断满足剩余的数量为其他的物品填充
-                    if (hh <= jj && j - c[i] * w[i] > q[hh]) {
-                        hh++;
+                    if (head <= tail && k - c[i] * w[i] > q[head]) { // 窗口的左端点不断滑动, 保证窗口内的体积不超过c*w
+                        head++;
                     }
-                    // 若当前容量j大于前面jj的价值时, jj-- 相当于慢慢替换 说明q为单调减队列
-                    while (hh <= jj && pre[q[jj]] - (q[jj] - t) / w[i] * v[i] <= pre[j] - (j - t) / w[i] * v[i]) {
-                        jj--;
+                    // 若当前容量j大于前面jj的价值时+, tail-- 相当于慢慢替换 说明q为单调减队列
+                    // 单调栈的转移方程: dp[j+k*v] - k*w k = t+k'*w[i]
+                    // 这里不用担心k> c[i] * w[i]的问题, 仅仅是个状态转移, 最终对于k来说,
+                    // 它的结果都是单调栈中结果加上k'*w[i]固定值.所以这里是为了单调计算
+                    while (head <= tail
+                            && pre[q[tail]] - (q[tail] - t) / w[i] * v[i] <= pre[k] - (k - t) / w[i] * v[i]) {
+                        tail--; //看在head到tail中能不能找到一个替换的.
                     }
                     // 更新最大值(hh为最大值的标记)
-                    if (hh <= jj) {
-                        f[j] = Math.max(f[j], pre[q[hh]] + (j - q[hh]) / w[i] * v[i]);
+                    if (head <= tail) {
+                        f[k] = Math.max(f[k], pre[q[head]] + (k - q[head]) / w[i] * v[i]);
                     }
 
-                    q[++jj] = j;
+                    q[++tail] = k;
                 }
             }
         }
