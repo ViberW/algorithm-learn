@@ -1,5 +1,7 @@
 package com.welph.leecode.part_500_1000.part_541_560;
 
+import java.util.Arrays;
+
 /**
  * 可以用字符串表示一个学生的出勤记录，其中的每个字符用来标记当天的出勤情况（缺勤、迟到、到场）。记录中只含下面三种字符：
  * 'A'：Absent，缺勤
@@ -40,31 +42,31 @@ public class Solution552 {
 
     /**
      * 动态规划
-     * dp[i] = dp[i-1] + 'A'  少于1的可能, 前面就必须没有'A'
-     * dp[i-1] + 'L'  i-1及i-2不为'L'  => dp[i-1]['L']
-     * dp[i-1] + 'P'  所有
+     * dp[i] = dp[i-1] + 'A' 少于1的可能, 前面就必须没有'A'
+     * dp[i-1] + 'L' i-1及i-2不为'L' => dp[i-1]['L']
+     * dp[i-1] + 'P' 所有
      * 连续两天的'L'
      * 存在'A' 的量
      */
-    public static int checkRecord(int n) {//"PP" , "AP", "LP", "PL", "AL", "LL", "PA", "LA"
+    public static int checkRecord(int n) {// "PP" , "AP", "LP", "PL", "AL", "LL", "PA", "LA"
         int MOD = (int) (Math.pow(10, 9) + 7);
-        //前面有多少个a 有多少个l
+        // 前面有多少个a 有多少个l
         int[][] dp = new int[2][3];
         int[][] dp1;
         dp[0][0] = 1;
         for (int i = 1; i <= n; i++) {
             dp1 = new int[2][3];
-            //最后p ,a不变 l为0
+            // 最后p ,a不变 l为0
             for (int j = 0; j < 2; j++) {
                 for (int k = 0; k < 3; k++) {
                     dp1[j][0] = (dp1[j][0] + dp[j][k]) % MOD;
                 }
             }
-            //最后a ,l为0
+            // 最后a ,l为0
             for (int k = 0; k < 3; k++) {
                 dp1[1][0] = (dp1[1][0] + dp[0][k]) % MOD;
             }
-            //最后l, a不变
+            // 最后l, a不变
             for (int j = 0; j < 2; j++) {
                 for (int k = 1; k < 3; k++) {
                     dp1[j][k] = (dp1[j][k] + dp[j][k - 1]) % MOD;
@@ -80,4 +82,51 @@ public class Solution552 {
         }
         return sum % MOD;
     }
+
+    /*
+     * 
+     * 官方题解 -链接矩阵 & 快速幂
+     * dp[i][j×3+k] 表示前 i 天有 j 个 ‘A’ 且结尾有连续 k 个 ‘L’ 的可奖励的出勤记录的数量
+     */
+    static final int MOD = 1000000007;
+
+    public int checkRecord2(int n) {
+        long[][] mat = {
+                { 1, 1, 0, 1, 0, 0 },
+                { 1, 0, 1, 1, 0, 0 },
+                { 1, 0, 0, 1, 0, 0 },
+                { 0, 0, 0, 1, 1, 0 },
+                { 0, 0, 0, 1, 0, 1 },
+                { 0, 0, 0, 1, 0, 0 } };
+        long[][] res = pow(mat, n);
+        long sum = Arrays.stream(res[0]).sum();
+        return (int) (sum % MOD);
+    }
+
+    public long[][] pow(long[][] mat, int n) {
+        long[][] ret = { { 1, 0, 0, 0, 0, 0 } };
+        while (n > 0) {
+            if ((n & 1) == 1) {
+                ret = multiply(ret, mat);
+            }
+            n >>= 1;
+            mat = multiply(mat, mat);
+        }
+        return ret;
+    }
+
+    public long[][] multiply(long[][] a, long[][] b) {
+        int rows = a.length, columns = b[0].length, temp = b.length;
+        long[][] c = new long[rows][columns];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                for (int k = 0; k < temp; k++) {
+                    c[i][j] += a[i][k] * b[k][j];
+                    c[i][j] %= MOD;
+                }
+            }
+        }
+        return c;
+    }
+
 }

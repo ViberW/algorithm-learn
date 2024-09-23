@@ -25,11 +25,11 @@ package com.welph.leecode.part_500_1000.part_581_600;
 public class Solution581 {
 
     public static void main(String[] args) {
-        System.out.println(findUnsortedSubarray(new int[]{2, 6, 4, 8, 10, 9, 15}));
-        System.out.println(findUnsortedSubarray(new int[]{1, 2, 3, 4, 5}));
-        System.out.println(findUnsortedSubarray(new int[]{1}));
-        System.out.println(findUnsortedSubarray(new int[]{2, 3, 3, 2, 4}));
-        System.out.println(findUnsortedSubarray(new int[]{1, 2, 4, 5, 3}));
+        System.out.println(findUnsortedSubarray(new int[] { 2, 6, 4, 8, 10, 9, 15 }));
+        System.out.println(findUnsortedSubarray(new int[] { 1, 2, 3, 4, 5 }));
+        System.out.println(findUnsortedSubarray(new int[] { 1 }));
+        System.out.println(findUnsortedSubarray(new int[] { 2, 3, 3, 2, 4 }));
+        System.out.println(findUnsortedSubarray(new int[] { 1, 2, 4, 5, 3 }));
     }
 
     /**
@@ -42,7 +42,7 @@ public class Solution581 {
         int max = nums[0];
         for (int i = 1; i < nums.length; i++) {
             if (nums[i] < max) {
-                //向前找到最小值
+                // 向前找到最小值
                 for (; l >= 0; l--) {
                     if (nums[i] >= nums[l]) {
                         break;
@@ -57,4 +57,28 @@ public class Solution581 {
         }
         return r - l;
     }
+
+    /*
+     * 官方题解
+     */
+    public int findUnsortedSubarray1(int[] nums) {
+        int n = nums.length;
+        int maxn = Integer.MIN_VALUE, right = -1;
+        int minn = Integer.MAX_VALUE, left = -1;
+        for (int i = 0; i < n; i++) {
+            if (maxn > nums[i]) {
+                right = i;
+            } else {
+                maxn = nums[i];
+            }
+            //相当于是将left从右往左,找到最终变化的目标  和right的原理一样的
+            if (minn < nums[n - i - 1]) {
+                left = n - i - 1;
+            } else {
+                minn = nums[n - i - 1];
+            }
+        }
+        return right == -1 ? 0 : right - left + 1;
+    }
+
 }

@@ -60,6 +60,7 @@ public class AcTrie {
                 if (p == root) {
                     pc.fail = root;
                 } else {
+                    //看看父节点的失败节点, 因为父节点的失败节点是有最长后缀匹配子串的.
                     AcNode q = p.fail;
                     while (q != null) {// 按层遍历, p的子节点pc, q的子节点qc,
                         //当p的失败指针指向q, 若是能够找得到q中存在pc的相同字符的qc节点, 则把pc的失败指针指向qc

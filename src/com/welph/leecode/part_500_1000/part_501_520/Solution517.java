@@ -116,4 +116,28 @@ public class Solution517 {
         return ans;
     }
 
+    // 可能官方题解理解比较困难
+    /*
+     * 1.由于每次只能移动一次衣服, 那么对于衣服最多的需要移动num-avg次
+     * 2.由于只能移动一件衣服, 对于前i个总和为sum, 那么需要至少abs(sum-i*avg)次转移.
+     * 2.1 若sum-i*avg> 0 则将前i个移动到后面去
+     * 2.2 若sum-i*avg< 0 则将后面移动到前i个去
+     * ------------------------
+     * 根据下面的推理公式, 每次对sum减去avg 就得到上面的简化公式了
+     */
+    public int findMinMoves3(int[] machines) {
+        int tot = Arrays.stream(machines).sum();
+        int n = machines.length;
+        if (tot % n != 0) {
+            return -1;
+        }
+        int avg = tot / n;
+        int ans = 0, sum = 0;
+        for (int i = 0; i < machines.length; i++) {
+            sum += machines[i];
+            ans = Math.max(ans, Math.max(Math.abs(sum - (i + 1) * avg), machines[i] - avg));
+        }
+        return ans;
+    }
+
 }

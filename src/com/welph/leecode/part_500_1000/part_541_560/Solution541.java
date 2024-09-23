@@ -54,4 +54,14 @@ public class Solution541 {
             chars[j] = tmp;
         }
     }
+
+    public static String reverseStr1(String s, int k) {
+        int n = s.length();
+        char[] arr = s.toCharArray();
+        for (int i = 0; i < n; i += 2 * k) { // 这里直接加2k
+            swap(arr, i, Math.min(i + k, n) - 1); // 右的最大值
+        }
+        return new String(arr);
+    }
+
 }

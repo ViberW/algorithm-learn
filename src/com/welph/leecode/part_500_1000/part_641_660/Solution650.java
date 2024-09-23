@@ -91,6 +91,7 @@ public class Solution650 {
      * 2、合数次数为将其分解到所有不能再分解的质数的操作次数的和
      * 例如: 30，可以分解为：3*2*5。什么意思呢？
      * 我们演示一遍：首先复制1，进行2次粘贴得到3。然后复制3，进行1次粘贴得到6。然后复制6，进行4次粘贴得到30
+     * 
      * @param n
      * @return
      */
@@ -104,4 +105,47 @@ public class Solution650 {
         }
         return res;
     }
+
+    /* 官方题解 */
+    int INF = 0x3f3f3f3f;
+
+    public int minSteps4(int n) {
+        int[][] f = new int[n + 1][n + 1];
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= n; j++) {
+                f[i][j] = INF;
+            }
+        }
+        f[1][0] = 0;
+        f[1][1] = 1;
+        for (int i = 2; i <= n; i++) {
+            int min = INF;
+            for (int j = 0; j <= i / 2; j++) {
+                f[i][j] = f[i - j][j] + 1; // 最后刷j个字符
+                min = Math.min(min, f[i][j]);
+            }
+            f[i][i] = min + 1;
+        }
+        int ans = INF;
+        for (int i = 0; i <= n; i++)
+            ans = Math.min(ans, f[n][i]);
+        return ans;
+    }
+
+
+    public int minSteps5(int n) {
+        //对上面进行优化
+        int[] f = new int[n + 1];
+        for (int i = 2; i <= n; ++i) {
+            f[i] = Integer.MAX_VALUE;
+            for (int j = 1; j * j <= i; ++j) {
+                if (i % j == 0) {// 因数
+                    f[i] = Math.min(f[i], f[j] + i / j);
+                    f[i] = Math.min(f[i], f[i / j] + j);
+                }
+            }
+        }
+        return f[n];
+    }
+
 }

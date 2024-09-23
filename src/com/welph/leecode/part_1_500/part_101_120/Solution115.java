@@ -45,6 +45,7 @@ public class Solution115 {
 
     public static void main(String[] args) {
         System.out.println(numDistinct("rabbbit", "rabbit"));
+        System.out.println(numDistinct("babgbag", "bag"));
     }
 
 
@@ -69,7 +70,7 @@ public class Solution115 {
         char cur;
         for (int i = 1; i <= n; i++) {
             cur = t.charAt(i - 1);
-            for (int j = 1; j <= m; j++) {
+            for (int j = i; j <= m; j++) {
                 if (cur == s.charAt(j - 1)) {
                     dp[i][j] = dp[i - 1][j - 1] + dp[i][j - 1];
                 } else {

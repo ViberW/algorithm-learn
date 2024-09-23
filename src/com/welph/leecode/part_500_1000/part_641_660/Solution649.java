@@ -1,5 +1,8 @@
 package com.welph.leecode.part_500_1000.part_641_660;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * Dota2 的世界里有两个阵营：Radiant（天辉）和 Dire（夜魇）
  * <p>
@@ -48,9 +51,8 @@ public class Solution649 {
 
     public static String predictPartyVictory(String senate) {
 
-
-        //循环处理: r +1  d -1  计算可能的值 kill 若(kill<0且R)OR(kill>0且D)就跳过当前.
-        //使用两个指针  保证下一轮的值 使用存在senate的最前面
+        // 循环处理: r +1 d -1 计算可能的值 kill 若(kill<0且R)OR(kill>0且D)就跳过当前.
+        // 使用两个指针 保证下一轮的值 使用存在senate的最前面
         char[] chars = senate.toCharArray();
         int total = chars.length;
         int kill = 0;
@@ -80,5 +82,27 @@ public class Solution649 {
             }
         }
         return chars[0] == 'R' ? "Radiant" : "Dire";
+    }
+
+    public String predictPartyVictory1(String senate) {
+        int n = senate.length();
+        Queue<Integer> radiant = new LinkedList<Integer>();
+        Queue<Integer> dire = new LinkedList<Integer>();
+        for (int i = 0; i < n; ++i) {
+            if (senate.charAt(i) == 'R') {
+                radiant.offer(i);
+            } else {
+                dire.offer(i);
+            }
+        }
+        while (!radiant.isEmpty() && !dire.isEmpty()) {
+            int radiantIndex = radiant.poll(), direIndex = dire.poll();
+            if (radiantIndex < direIndex) {
+                radiant.offer(radiantIndex + n); //第二轮
+            } else {
+                dire.offer(direIndex + n);
+            }
+        }
+        return !radiant.isEmpty() ? "Radiant" : "Dire";
     }
 }

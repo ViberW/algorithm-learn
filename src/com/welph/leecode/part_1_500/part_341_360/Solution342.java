@@ -29,7 +29,7 @@ public class Solution342 {
         System.out.println(isPowerOfFour(32));
         System.out.println(isPowerOfFour(16));
         System.out.println(isPowerOfFour(5));
-        System.out.println(isPowerOfFour(0));
+        System.out.println(isPowerOfFour2(64));
     }
 
     /**
@@ -47,9 +47,9 @@ public class Solution342 {
     }
 
     /*官方题解 */
-    public boolean isPowerOfFour2(int n) {
-        //这里0xaaaaaaaa 二进制为 10101010101010101010101010101010 , 相当于时若n的二进制奇数位为1,则代表4的幂次
-        return n > 0 && (n & (n - 1)) == 0 && (n & 0xaaaaaaaa) == 0;
+    public static boolean isPowerOfFour2(int n) {
+        //这里0xaaaaaaab 二进制为 10101010101010101010101010101011 , 相当于时若n的二进制奇数位为1,则代表4的幂次
+        return n > 0 && (n & (n - 1)) == 0 && (n & 0xaaaaaaab) == 0;
     }
 
     /*

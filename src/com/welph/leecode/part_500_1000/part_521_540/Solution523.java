@@ -1,5 +1,10 @@
 package com.welph.leecode.part_500_1000.part_521_540;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * 给你一个整数数组 nums 和一个整数 k ，编写一个函数来判断该数组是否含有同时满足下述条件的连续子数组：
  * <p>
@@ -340,7 +345,7 @@ public class Solution523 {
                 if (delta % k == 0) {
                     return true;
                 }
-                if (delta < k) {
+                if (delta < k) { // 这里还是有问题,因为会有0的情况
                     break;
                 }
             }
@@ -348,6 +353,44 @@ public class Solution523 {
             // if (preSum[i + 2] - preSum[i] == 0) { //0 始终视为 k 的一个倍数
             // return true;
             // }
+        }
+        return false;
+    }
+
+    // 官方题解
+    public boolean checkSubarraySum3(int[] nums, int k) {
+        int m = nums.length;
+        if (m < 2) {
+            return false;
+        }
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        map.put(0, -1);
+        int remainder = 0;
+        for (int i = 0; i < m; i++) {
+            remainder = (remainder + nums[i]) % k; // 前缀和的余数
+            if (map.containsKey(remainder)) {
+                int prevIndex = map.get(remainder);
+                if (i - prevIndex >= 2) {
+                    return true;
+                }
+            } else {
+                map.put(remainder, i);
+            }
+        }
+        return false;
+    }
+
+    // 别人的题解, 对官方题解的简化
+    public boolean checkSubarraySum2(int[] nums, int k) {
+        int n = nums.length;
+        int[] sum = new int[n + 1];
+        for (int i = 1; i <= n; i++)
+            sum[i] = sum[i - 1] + nums[i - 1];
+        Set<Integer> set = new HashSet<>();
+        for (int i = 2; i <= n; i++) {
+            set.add(sum[i - 2] % k); // 存储余数
+            if (set.contains(sum[i] % k)) // 若是正好存在余数 说明一定是存在的
+                return true;
         }
         return false;
     }

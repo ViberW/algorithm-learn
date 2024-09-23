@@ -80,6 +80,43 @@ public class Solution514 {
         return Arrays.stream(dp[key.length() - 1]).min().getAsInt();
     }
 
+    // 针对上面的小优化, dp仅仅记录到key当前位置需要的最小步数, 不记录按下去的1 ,最后统一加上key.lenth
+    public static int findRotateSteps3(String ring, String key) {
+        // 构建相同字符有多少个位置
+        List<Integer>[] pos = new List[26];
+        for (int i = 0; i < pos.length; i++) {
+            pos[i] = new ArrayList<>();
+        }
+        for (int i = 0; i < ring.length(); i++) {
+            pos[ring.charAt(i) - 'a'].add(i); // 这个字符在哪个位置
+        }
+        int[] dp = new int[ring.length()];
+        for (Integer i : pos[key.charAt(0) - 'a']) {
+            dp[i] = Math.min(i, key.length() - i);
+        }
+        for (int i = 1; i < key.length(); i++) {
+            // 相同时最小距离就是立马再按一次, 而且若是将它放下去遍历的话 会影响k和j的关系
+            if (pos[key.charAt(i) - 'a'] == pos[key.charAt(i - 1) - 'a']) {
+                continue;
+            }
+            for (Integer j : pos[key.charAt(i) - 'a']) {
+                dp[j] = Integer.MAX_VALUE; // 因为已经不关注上一次的数据信息了
+                for (Integer k : pos[key.charAt(i - 1) - 'a']) {
+                    dp[j] = Math.min(dp[j],
+                            dp[k] + Math.min(Math.abs(j - k), // 顺时针
+                                    ring.length() - Math.abs(j - k) // 逆时针
+                            ));
+                }
+            }
+        }
+        int ans = Integer.MAX_VALUE;
+        // 最终和ring的j位置吻合的最小路径中的各个点的最小值
+        for (int i : pos[key.charAt(key.length() - 1) - 'a']) {
+            ans = Math.min(ans, dp[i]);
+        }
+        return ans + key.length();
+    }
+
     /**
      * 表示当前到 i 本身出于ring的j位置, 找到当前位置的数据信息
      * ------------

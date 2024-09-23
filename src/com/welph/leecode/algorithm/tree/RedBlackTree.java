@@ -56,8 +56,8 @@ public class RedBlackTree {
         //找到中继节点(所属子节点)
         if (node.left != null && node.right != null) {
             Node next = successor(node);
-            node.value = next.value;
-            node = next;
+            node.value = next.value; //中继节点的值已经被塞入
+            node = next; //关注节点变为中继节点.
         }
 
         Node replace = node.left != null ? node.left : node.right;
@@ -150,10 +150,13 @@ public class RedBlackTree {
         setColor(node, BLACK);//能进来都是黑色节点
     }
 
+    /*
+     * 找到比node节点大的第一个数
+     */
     private Node successor(Node node) {
         if (null == node) {
             return null;
-        } else if (null != node.right) {
+        } else if (null != node.right) {  //上面保证了right不为空且left不为空
             Node target = node.right;
             while (target.left != null) {
                 target = target.left;
@@ -209,12 +212,19 @@ public class RedBlackTree {
      * 叔叔节点为空或黑色，且祖父节点、父节点和新节点不处于一条斜线上。
      */
     private void fixAfterInsert(Node node) {
-        node.color = RED;
+        node.color = RED;  //插入的新节点一定是红色的
 
         while (node != null && node != root && node.parent.color == RED) {
             //左节点
             if (parent(node) == left(parent(parent(node)))) {
                 Node uncle = right(parent(parent(node)));
+                /*
+                 * 如果关注节点是 a，它的叔叔节点 d 是红色
+                 * -------------------------
+                 * 将关注节点 a 的父节点 b、叔叔节点 d 的颜色都设置成黑色；
+                 * 将关注节点 a 的祖父节点 c 的颜色设置成红色；
+                 * 关注节点变成 a 的祖父节点 c；
+                 */
                 if (color(uncle) == RED) {
                     //父节点设置为黑色 祖父设置为红色
                     setColor(parent(node), BLACK);
@@ -222,14 +232,31 @@ public class RedBlackTree {
                     setColor(parent(parent(node)), RED);
                     node = parent(parent(node));
                 } else {
+                    /*
+                     * 如果关注节点是 a，它的叔叔节点 d 是黑色，
+                     * 关注节点 a 是其父节点 b 的右子节点(意味着和叔叔节点相对, 若父节点为右节点,则关注a是否Wie左节点)，
+                     * 即: 祖父节点、父节点和新节点不处于一条斜线上
+                     * -----------------------------
+                     * 关注节点变成节点 a 的父节点 b
+                     * 围绕新的关注节点b 左旋  即相当于是把a作为父节点, 旧节点b下降为左节点, 
+                     * --------
+                     * 相当于围绕新的关注节点b是保证了祖父节点、父节点和新节点处于一条斜线上
+                     */
                     //因为父节点为左节点, 若新节点为父节点的右节点,需要左旋一次
                     if (node == right(parent(node))) {
                         node = parent(node);
                         rotateLeft(node);//左旋
                     }
+                    /*
+                     * 如果关注节点是 a，它的叔叔节点 d 是黑色，关注节点 a 是其父节点 b 的左子节点
+                     * 即: 祖父节点、父节点和新节点不处于一条斜线上
+                     * ------------------------
+                     * 围绕关注节点 a 的祖父节点 c 右旋
+                     * 将关注节点 a 的父节点 b、兄弟节点 c 的颜色互换
+                     */
                     setColor(parent(node), BLACK);
                     setColor(parent(parent(node)), RED);
-                    rotateRight(parent(parent(node)));//右旋
+                    rotateRight(parent(parent(node)));//右旋, 自己作为左节点的右子树
                 }
             } else {
                 Node uncle = left(parent(parent(node)));
@@ -245,7 +272,7 @@ public class RedBlackTree {
                     }
                     setColor(parent(node), BLACK);
                     setColor(parent(parent(node)), RED);
-                    rotateLeft(parent(parent(node)));  //祖父节点进行
+                    rotateLeft(parent(parent(node)));  //祖父节点进行, 左旋 自己作为右节点的左子树
                 }
             }
         }

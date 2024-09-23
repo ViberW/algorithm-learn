@@ -22,8 +22,8 @@ package com.welph.leecode.part_500_1000.part_661_680;
 public class Solution665 {
 
     public static void main(String[] args) {
-        System.out.println(checkPossibility(new int[]{4, 2, 3}));
-        System.out.println(checkPossibility(new int[]{4, 2, 1}));
+        System.out.println(checkPossibility(new int[] { 4, 2, 3 }));
+        System.out.println(checkPossibility(new int[] { 4, 2, 1 }));
     }
 
     public static boolean checkPossibility(int[] nums) {
@@ -31,7 +31,7 @@ public class Solution665 {
         int negative = 0;
         for (int i = 1; i <= n; i++) {
             if (nums[i] < nums[i - 1]) {
-                //说明有转折
+                // 说明有转折
                 if (++negative > 1) {
                     return false;
                 }
@@ -42,4 +42,23 @@ public class Solution665 {
         }
         return true;
     }
+
+    // 官方题解
+    public boolean checkPossibility1(int[] nums) {
+        int n = nums.length, cnt = 0;
+        for (int i = 0; i < n - 1; ++i) {
+            int x = nums[i], y = nums[i + 1];
+            if (x > y) {
+                cnt++;
+                if (cnt > 1) {
+                    return false;
+                }
+                if (i > 0 && y < nums[i - 1]) {
+                    nums[i + 1] = x;
+                }
+            }
+        }
+        return true;
+    }
+
 }

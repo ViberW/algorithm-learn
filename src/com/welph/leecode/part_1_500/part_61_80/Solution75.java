@@ -23,7 +23,7 @@ import java.util.Arrays;
 public class Solution75 {
 
     public static void main(String[] args) {
-        int[] nums = {1, 2, 0};
+        int[] nums = { 1, 2, 0 };
         sortColors2(nums);
         System.out.println(Arrays.toString(nums));
     }
@@ -87,6 +87,31 @@ public class Solution75 {
                     }
                 }
             }
+        }
+    }
+
+    /*
+     * 官方题解
+     */
+    public void sortColors3(int[] nums) {
+        int n = nums.length;
+        // 0的位置 2的位置
+        int p0 = 0, p2 = n - 1;
+        // 遍历到2的位置就可以了
+        for (int i = 0; i <= p2; ++i) {
+            while (i <= p2 && nums[i] == 2) {
+                int temp = nums[i];
+                nums[i] = nums[p2];
+                nums[p2] = temp;
+                --p2;// 把当前和p2的位置交换, p2-1
+            }
+            if (nums[i] == 0) {
+                int temp = nums[i];
+                nums[i] = nums[p0];
+                nums[p0] = temp;
+                ++p0; // 若是当前0 ,则交换p0的位置 +1
+            }
+            // 剩下的就是1
         }
     }
 }

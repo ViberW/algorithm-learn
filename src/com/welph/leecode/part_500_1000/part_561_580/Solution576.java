@@ -24,13 +24,13 @@ package com.welph.leecode.part_500_1000.part_561_580;
 public class Solution576 {
 
     public static void main(String[] args) {
-//        System.out.println(findPaths(2, 2, 2, 0, 0));
-//        System.out.println(findPaths(1, 3, 3, 0, 1));
+        // System.out.println(findPaths(2, 2, 2, 0, 0));
+        // System.out.println(findPaths(1, 3, 3, 0, 1));
         System.out.println(findPaths(8, 50, 23, 5, 26));
-        //914783380
-        //2147483647
-        //1000000007
-        //1776894990
+        // 914783380
+        // 2147483647
+        // 1000000007
+        // 1776894990
     }
 
     /**
@@ -44,7 +44,7 @@ public class Solution576 {
     public static int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
         int mod = 1000000007;
         int[][][] dp = new int[m][n][maxMove + 1];
-        //一旦有n+1 m+1 或者 0 就是1 可以的
+        // 一旦有n+1 m+1 或者 0 就是1 可以的
         for (int k = 1; k <= maxMove; k++) {
             for (int r = 0; r < m; r++) {
                 for (int c = 0; c < n; c++) {
@@ -63,10 +63,42 @@ public class Solution576 {
     }
 
     private static int dpInt(int[][][] dp, int r, int c, int k, int m, int n) {
-        if (r < 0 || c < 0 || r == m || c == n) {  //说明来到了边界
+        if (r < 0 || c < 0 || r == m || c == n) { // 说明来到了边界
             return k == 0 ? 1 : 0;
         } else {
             return dp[r][c][k];
         }
     }
+
+    /*
+     * 官方题解
+     */
+    public int findPaths1(int m, int n, int maxMove, int startRow, int startColumn) {
+        final int MOD = 1000000007;
+        int[][] directions = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+        int outCounts = 0;
+        int[][] dp = new int[m][n];
+        dp[startRow][startColumn] = 1; // 代表1步能到达的点
+        for (int i = 0; i < maxMove; i++) {
+            int[][] dpNew = new int[m][n];
+            for (int j = 0; j < m; j++) {
+                for (int k = 0; k < n; k++) {
+                    int count = dp[j][k];
+                    if (count > 0) {// 说明经过i步能够到达jk处
+                        for (int[] direction : directions) {
+                            int j1 = j + direction[0], k1 = k + direction[1];
+                            if (j1 >= 0 && j1 < m && k1 >= 0 && k1 < n) { // 还在圈内到j1k1的可能条数
+                                dpNew[j1][k1] = (dpNew[j1][k1] + count) % MOD;
+                            } else {
+                                outCounts = (outCounts + count) % MOD; // 说明出去了,结果加上去
+                            }
+                        }
+                    }
+                }
+            }
+            dp = dpNew;
+        }
+        return outCounts;
+    }
+
 }

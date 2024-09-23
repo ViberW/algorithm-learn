@@ -41,4 +41,26 @@ public class Solution668 {
         }
         return 0;
     }
+
+
+    //官方题解
+    public int findKthNumber1(int m, int n, int k) {
+        int left = 1, right = m * n;
+        while (left < right) {
+            int x = left + (right - left) / 2;
+            //因为从上往下.每一行最大值是 i * n  所以这里计算x/n 是完全大于的最大行数
+            int count = (x / n) * n; //最大行数乘以n
+            for (int i = x / n + 1; i <= m; ++i) {
+                //每一行它的值都是k * i  此处k位{1, 2,3,4,5}
+                count += x / i;
+            }
+            if (count >= k) {
+                right = x;
+            } else {
+                left = x + 1;
+            }
+        }
+        return left;
+    }
+
 }

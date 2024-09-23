@@ -93,6 +93,58 @@ public class Solution421 {
         return max;
     }
 
+    // 对上面的简化
+    public static int findMaximumXOR3(int[] nums) {
+        // 构建trie树
+        TrieNode root = new TrieNode();
+        TrieNode current;
+        int max = 0;
+        for (int j = 1; j < nums.length; j++) {
+            int num = nums[j - 1];
+            // 把上一个节点放入树种
+            current = root;
+            for (int i = 31; i >= 0; i--) {
+                if (((num >> i) & 1) == 0) {
+                    if (current.left == null) {
+                        current.left = new TrieNode();
+                    }
+                    current = current.left;
+                } else {
+                    if (current.right == null) {
+                        current.right = new TrieNode();
+                    }
+                    current = current.right;
+                }
+            }
+            // current.left = new TrieNode(num);
+            // 当前数字判断
+            current = root;
+            int val = 0; // 通过val直接手动计算目标值
+            for (int i = 31; i >= 0; i--) {
+                // 相反方向走
+                if (((num >> i) & 1) == 0) {
+                    if (current.right != null) {
+                        current = current.right;
+                        val = val << 1 | 1; // 相反异或为1,原数字进位
+                    } else {
+                        current = current.left;
+                        val = val << 1;
+                    }
+                } else {
+                    if (current.left != null) {
+                        current = current.left;
+                        val = val << 1 | 1;
+                    } else {
+                        current = current.right;
+                        val = val << 1;
+                    }
+                }
+            }
+            max = Math.max(max, val);
+        }
+        return max;
+    }
+
     public static class TrieNode {
         public int data;
         public TrieNode left;

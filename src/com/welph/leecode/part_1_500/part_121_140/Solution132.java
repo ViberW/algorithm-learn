@@ -31,7 +31,8 @@ public class Solution132 {
             min = dp[0][i] + 1;
             dp[i][i + 1] = 1;
             for (int j = i - 1; j >= 0; j--) {
-                if ((j == i - 1 || dp[j + 1][i] > 0) && s.charAt(j) == s.charAt(i)) {
+                //这里按理说dp[j + 1][i] ==1  但写成大于0也没问题, 应该区间范围的也只有这处设置值
+                if ((j == i - 1 || dp[j + 1][i] == 1) && s.charAt(j) == s.charAt(i)) {
                     dp[j][i + 1] = 1;
                     min = Math.min(min, dp[0][j] + 1);
                 }

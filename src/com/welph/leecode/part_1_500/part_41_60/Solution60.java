@@ -87,16 +87,18 @@ public class Solution60 {
         int[] valid = new int[n + 1];
         Arrays.fill(valid, 1);
         for (int i = 1; i <= n; ++i) {//减少递归调用, 上面方法基本上都是层级调用,没有其他路径
+            // 相当于是每次找出首位的数字是多少. 如以1为首位的排列有(n-1)!个
             int order = k / factorial[n - i] + 1;
+            //找到了order, 再看看是否被使用过. 通过valid能跳过被使用过的
             for (int j = 1; j <= n; ++j) {
                 order -= valid[j]; //比较好的一个点, 减少一些代码
                 if (order == 0) {
-                    ans.append(j);
+                    ans.append(j);//找到了
                     valid[j] = 0;
                     break;
                 }
             }
-            k %= factorial[n - i];
+            k %= factorial[n - i]; //k自身也需要取余. 重复
         }
         return ans.toString();
     }

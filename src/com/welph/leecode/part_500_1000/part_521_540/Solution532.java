@@ -35,19 +35,19 @@ import java.util.Arrays;
 public class Solution532 {
 
     public static void main(String[] args) {
-        System.out.println(findPairs(new int[]{3, 1, 4, 1, 5}, 2));
-        System.out.println(findPairs(new int[]{1, 2, 3, 4, 5}, 1));
-        System.out.println(findPairs(new int[]{1, 3, 1, 5, 4}, 0));
+        System.out.println(findPairs(new int[] { 3, 1, 4, 1, 5 }, 2));
+        System.out.println(findPairs(new int[] { 1, 2, 3, 4, 5 }, 1));
+        System.out.println(findPairs(new int[] { 1, 3, 1, 5, 4 }, 0));
     }
 
     /**
-     * 最容易想到的就是 先排序  通过双指针 前后判断就好.  这里需要不同的数据
+     * 最容易想到的就是 先排序 通过双指针 前后判断就好. 这里需要不同的数据
      */
     public static int findPairs(int[] nums, int k) {
         Arrays.sort(nums);
         int total = 0;
         int j;
-        for (int i = 0; i < nums.length - 1; ) { //这里是n-1
+        for (int i = 0; i < nums.length - 1;) { // 这里是n-1
             j = i + 1;
             total += binarySearch(nums, j, nums.length - 1, nums[i] + k);
             for (; j < nums.length && nums[i] == nums[j]; j++) {
@@ -69,4 +69,22 @@ public class Solution532 {
         }
         return nums[l] == target ? 1 : 0;
     }
+
+    // 官方题解, 就不需要再二分法了
+    public int findPairs1(int[] nums, int k) {
+        Arrays.sort(nums);
+        int n = nums.length, y = 0, res = 0;
+        for (int x = 0; x < n; x++) {
+            if (x == 0 || nums[x] != nums[x - 1]) {
+                while (y < n && (nums[y] < nums[x] + k || y <= x)) {
+                    y++;
+                }
+                if (y < n && nums[y] == nums[x] + k) {
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+
 }
