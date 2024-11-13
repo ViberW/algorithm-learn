@@ -7,12 +7,6 @@ package com.welph.leecode.algorithm.marscode;
 public class GoodEvenArray {
 
     public static int solution(int n) {
-        if (n == 1) {
-            return 0;
-        }
-        if (n == 2) {
-            return 2;
-        }
         int mod = 1000000007;
         int even = 0;
         for (int i = 1; i <= n; i++) {
@@ -21,41 +15,25 @@ public class GoodEvenArray {
             }
         }
         int odd = n - even;
-        //odd至少需要 odd-1个偶数
-        if (even < odd - 1) {
-            return 0;
-        }
-        int delta = even - odd + 1;
-        int odds = 1; //奇数选择的可能
-        int selectEvens = 1; //保证乘积偶数的排序选择
-        int deltaEvens = 1;
+        long odds = 1; //奇数选择的可能
         for (int i = 1; i <= odd; i++) {
             odds = (odds * i) % mod;
-            if (i == odd - 1) {
-                selectEvens = odds;
-            }
-            if (i == delta) {
-                deltaEvens = odds;
-            }
         }
-        int enens = selectEvens;
-        for (int i = odd - 1; i <= even; i++) {
-            enens = (enens * i) % mod;
-            if (i == delta) {
-                deltaEvens = enens;
-            }
+        long evens = 1;
+        for (int i = 1; i <= even; i++) {
+            evens = (evens * i) % mod; //所有偶数的排序可能
         }
-        //从evens! /((even - (odd-1))! *  (odd-1)!)
-        //从even中选择odd-1的可能
-        int cEvens = (enens / ((deltaEvens * selectEvens) % mod)) % mod;
-        int remainEvens = 1;
-        for (int i = 0, k = 2 * odd; i < delta; i++, k++) {
-            remainEvens = (remainEvens * k) % mod;
+        //在每一种排序中 找到连续的
+        if (odd == even) { //C(even+1, even)的可能行
+            //C(even+1, odd) 在event+1个空位中找出odd个空位, 如5个找出4个. 5!/(4!*(5-4)!) = 5
+            return (int) ((((odds * evens) % mod) * (even + 1)) % mod);
+        } else {
+            return (int) ((odds * evens) % mod);
         }
-        return (((odds * cEvens) % mod) * remainEvens) % mod;
     }
 
     public static void main(String[] args) {
+        System.out.println(solution(1));
         System.out.println(solution(2) == 2);
         System.out.println(solution(3) == 2);
         System.out.println(solution(5) == 12);

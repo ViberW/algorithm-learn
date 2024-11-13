@@ -1,5 +1,9 @@
 package com.welph.leecode.algorithm.marscode;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 小U 和 小R 各自拥有一个长度相等的二进制字符串 A 和 B。现在，他们想要将这两个字符串修改成相同的字符串。每次修改可以选择以下两种操作：
  * <p>
@@ -9,6 +13,58 @@ package com.welph.leecode.algorithm.marscode;
  */
 public class ConvertStrSame {
     public static int solution(String str1, String str2) {
+        int n = str1.length();
+        List<Integer> ones = new ArrayList<>();
+        List<Integer> zeros = new ArrayList<>();
+
+        // 构建差异数组
+        for (int i = 0; i < n; i++) {
+            if (str1.charAt(i) != str2.charAt(i)) {
+                if (str1.charAt(i) == '1') {
+                    ones.add(i);
+                } else {
+                    zeros.add(i);
+                }
+            }
+        }
+
+        int onesCount = ones.size();
+        int zerosCount = zeros.size();
+
+        //处理到第i个1和第j个0时的最小成本。
+        //问题变成: 如何通过最少的操作使这两个列表变为空（即消除所有差异）
+        int[][] dp = new int[onesCount + 1][zerosCount + 1];
+
+        // 初始状态
+        for (int i = 0; i <= onesCount; i++) {
+            for (int j = 0; j <= zerosCount; j++) {
+                dp[i][j] = Integer.MAX_VALUE;
+            }
+        }
+        dp[0][0] = 0;
+
+        for (int i = 0; i <= onesCount; i++) {
+            for (int j = 0; j <= zerosCount; j++) {
+                if (i < onesCount && j < zerosCount) {
+                    // 交换操作, 不用管是否在4的范围, 因为始终能够在后续的取反或交换找到最佳值
+                    dp[i + 1][j + 1] = Math.min(dp[i + 1][j + 1], dp[i][j] + Math.abs(ones.get(i) - zeros.get(j)));
+                }
+                if (i < onesCount) {
+                    // 取反操作 (ones)
+                    dp[i + 1][j] = Math.min(dp[i + 1][j], dp[i][j] + 2); // 当前i处直接使用2
+                }
+                if (j < zerosCount) {
+                    // 取反操作 (zeros)
+                    dp[i][j + 1] = Math.min(dp[i][j + 1], dp[i][j] + 2); // 当前j处直接使用2
+                }
+            }
+        }
+
+        return dp[onesCount][zerosCount];
+    }
+
+    //这个题解有问题, 因为没有考虑到 110  的情况, 按照这个方法思想是4 , 但最佳是第二号和三号互换, 最佳为3
+    public static int solution1(String str1, String str2) {
         // Edit your code here
         int length = str1.length();
         int[] next = new int[length];
@@ -52,9 +108,11 @@ public class ConvertStrSame {
     public static void main(String[] args) {
         // Add your test cases here
 
+        System.out.println(solution("1010", "0001"));
         System.out.println(solution("10001", "10000") == 2);
         System.out.println(solution("100100", "100001") == 2);
         System.out.println(solution("1010", "0011") == 3);
         System.out.println(solution("1100", "0011") == 4);
+        System.out.println(solution("1101000000001101", "0010110111100010"));
     }
 }

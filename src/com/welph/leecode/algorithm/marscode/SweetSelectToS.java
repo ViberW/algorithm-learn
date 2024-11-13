@@ -24,7 +24,7 @@ public class SweetSelectToS {
                 break;
             }
             if (pre != val) {
-                for (int q = pre + 1; q <= val; q++) {
+                for (int q = pre + 1; C < s && q <= val; q++) {
                     C *= q;
                 }
                 pre = val;
@@ -53,7 +53,9 @@ public class SweetSelectToS {
         int[] like1 = {1, 2, 3};
         int[] like2 = {1, 1, 1};
 
-        System.out.println(solution(3, 2, 6, like1) == 5);
-        System.out.println(solution(3, 1, 1, like2) == 6);
+//        System.out.println(solution(3, 2, 6, like1) == 5);
+//        System.out.println(solution(3, 1, 1, like2) == 6);
+//        System.out.println(solution(6, 14, 24, new int[]{18, 18, 8, 15, 8, 15}));
+        System.out.println(solution(5, 3, 24, new int[]{1, 2, 3, 4, 5}));
     }
 }

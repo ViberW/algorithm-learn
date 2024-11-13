@@ -26,6 +26,7 @@ public class ToSourceByChess {
         int step = 0;
         while (!queue.isEmpty()) {
             int size = queue.size();
+            int min = 0;
             for (int i = 0; i < size; i++) {
                 int[] poll = queue.poll();
                 int currentAdd = poll[1] + poll[0];
@@ -50,8 +51,11 @@ public class ToSourceByChess {
                 //这一步放后面,防止马能一步到位
                 //尝试走象, 两个点的对象线互相垂直, 且垂直点是个正整数
                 if ((endAdd - currentSubtract) % 2 == 0 || (currentAdd - endSubtract) % 2 == 0) {
-                    return step + 2;
+                    min = 2;
                 }
+            }
+            if (min != 0) {
+                return step + min;
             }
             step++;
         }
@@ -63,5 +67,6 @@ public class ToSourceByChess {
         System.out.println(solution(0, 0, 2, 1) == 1);
         System.out.println(solution(0, 0, 3, 3) == 1);
         System.out.println(solution(-3, -2, 2, 1) == 2);
+        System.out.println(solution(6, 3, 10, 10) == 2);
     }
 }

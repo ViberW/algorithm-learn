@@ -8,6 +8,13 @@ package com.welph.leecode.algorithm.marscode;
  */
 public class IntervalOrSet {
 
+    /**
+     * [l,r]共n个值,
+     * 1. 选择1个.共n种可能
+     * 2. 选择2个连续数组, 共n-1可能
+     * ...
+     * 一共  n × (n + 1) / 2种
+     */
     public static int solution(int[] a) {
 
         return 0;

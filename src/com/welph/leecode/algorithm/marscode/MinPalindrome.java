@@ -25,7 +25,7 @@ public class MinPalindrome {
             }
         }
         if (cost == 0) {
-            if (s.length() % 2 == 0) {
+            if (s.length() % 2 == 1) {
                 mid++;
             }
             for (int i = 0; i < mid; i++) { //有多个cost,则尝试替换两对
@@ -42,6 +42,7 @@ public class MinPalindrome {
     }
 
     public static void main(String[] args) {
+        System.out.println(solution("acccaacaacccc"));
         System.out.println(solution("acca").equals("aaaa"));
         System.out.println(solution("racecar").equals("aacecaa"));
         System.out.println(solution("fecdef").equals("feccef"));

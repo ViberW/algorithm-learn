@@ -14,7 +14,11 @@ import java.util.Queue;
  * 请计算有多少种构造数组b的方式,答案需要对10°+7取模。
  */
 public class BuildArray {
-    //dfs
+
+    /**
+     * {@link com.welph.leecode.algorithm.z7z8.PutApple}
+     */
+    //dfs  超时了说明解法没问题, 但时间长
     public static int solution(int n, int[] a) {
         // write code here
         int sum = Arrays.stream(a).sum();
@@ -39,7 +43,7 @@ public class BuildArray {
         return (int) queue.stream().filter(v -> v != a[n - 1]).count();
     }
 
-    //DP 动态规划
+    //DP 动态规划 速度好一点
     public static int solution1(int n, int[] a) {
         int MOD = 1000000007;
         int sum = Arrays.stream(a).sum();

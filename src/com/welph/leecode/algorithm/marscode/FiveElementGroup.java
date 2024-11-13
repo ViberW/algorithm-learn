@@ -17,7 +17,7 @@ public class FiveElementGroup {
             map.computeIfAbsent(a.get(i), V -> new ArrayList<>()).add(i);
         }
         int MOD = 1_000_000_007;
-        int ret = 0;
+        long ret = 0;
         while (map.size() > 1) {
             Map.Entry<Integer, List<Integer>> entry = map.pollFirstEntry();
             List<Integer> value = entry.getValue();
@@ -39,13 +39,13 @@ public class FiveElementGroup {
                             if (r == items.size() || r - l < 2) {
                                 continue;
                             }
-                            ret += (l + 1) * (items.size() - r) * (r - l - 1);
+                            ret = (ret + ((l + 1) * (items.size() - r) * (r - l - 1)) % MOD) % MOD;
                         }
                     }
                 }
             }
         }
-        return ret;
+        return (int) ret;
     }
 
     private static int banarySearch(List<Integer> value, Integer target, int l, boolean less) {

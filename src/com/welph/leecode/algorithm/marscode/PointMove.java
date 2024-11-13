@@ -1,9 +1,6 @@
 package com.welph.leecode.algorithm.marscode;
 
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * 小M有n个点,每个点的坐标为(2;y)。她可以从一个点出发,平行于坐标轴移动,直到到达另一个点。具体来说,她可以从
@@ -15,47 +12,61 @@ import java.util.Set;
  */
 public class PointMove {
     public static int solution(int n, int[][] points) {
-        Arrays.sort(points, new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                int i = o1[0] - o2[0];
-                return i == 0 ? o1[1] - o2[1] : i;
-            }
-        });
-        Set<Integer> ySet = new HashSet<>();
-        int preX = points[0][0];
-        int ret = 0;
-        ySet.add(points[0][1]);
-        for (int i = 1; i < n; i++) { //扫描线
-            if (preX != points[i][0]) {
-                ret++;
-                int currentX = points[i][0];
-                for (; i < n; i++) {
-                    if (currentX != points[i][0]) {
-                        i--;
-                        break;
-                    }
-                    if (ySet.contains(points[i][1])) {
-                        ret--;
-                        break;
-                    }
-                    ySet.add(points[i][1]);
-                    while (i + 1 < n && points[i][0] == points[i + 1][0] && points[i][1] == points[i + 1][1]) {
-                        i++;
+        //并查集
+        int[] father = new int[n];
+        int[] treeSize = new int[n];
+        for (int i = 0; i < n; i++) {
+            father[i] = i;
+            treeSize[i] = 1;
+        }
+        int rootI;
+        int rootJ;
+        for (int i = 1; i < n; i++) {
+            //找到和i出相等的位置
+            int x = points[i][0];
+            int y = points[i][1];
+            for (int j = i - 1; j >= 0; j--) {
+                if (x != points[j][0] && y != points[j][1]) {
+                    continue;
+                }
+                if ((rootI = findFather(father, i)) != (rootJ = findFather(father, j))) {
+                    int weight = treeSize[rootI] + treeSize[rootJ];
+                    // 将结点数少的集合作为结点数多的集合的儿子节点
+                    if (treeSize[rootI] < treeSize[rootJ]) {
+                        father[rootI] = rootJ;
+                        treeSize[rootJ] = weight;
+                    } else {
+                        father[rootJ] = rootI;
+                        treeSize[rootI] = weight;
                     }
                 }
-                preX = currentX;
-            } else {
-                ySet.add(points[i][1]);
             }
         }
+        for (int i = 0; i < n; i++) {
+            findFather(father, i);
+        }
+        return (int) Arrays.stream(father).distinct().count() - 1; //有count个数的不相交的范围, 就需要count-1个点连接
+    }
 
-        return ret;
+    public static int findFather(int[] father, int i) {
+        int root = i, temp;
+        // 查找s的最顶层根
+        while (father[root] != root) {
+            root = father[root];
+        }
+        // 路径压缩，提高后续查找效率
+        while (i != root) {
+            temp = father[i];
+            father[i] = root;
+            i = temp;
+        }
+        return root;
     }
 
     public static void main(String[] args) {
         System.out.println(solution(2, new int[][]{{1, 1}, {2, 2}}) == 1);
         System.out.println(solution(3, new int[][]{{1, 2}, {2, 3}, {4, 1}}) == 2);
         System.out.println(solution(4, new int[][]{{3, 4}, {5, 6}, {3, 6}, {5, 4}}) == 0);
+        System.out.println(solution(14, new int[][]{{15, 6}, {15, 4}, {11, 12}, {3, 4}, {6, 14}, {5, 12}, {9, 17}, {2, 6}, {16, 16}, {5, 3}, {16, 11}, {10, 13}, {16, 8}, {14, 1}}));
     }
 }
