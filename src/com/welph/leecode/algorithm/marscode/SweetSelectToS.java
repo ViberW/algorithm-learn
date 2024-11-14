@@ -24,7 +24,7 @@ public class SweetSelectToS {
                 break;
             }
             if (pre != val) {
-                for (int q = pre + 1; C < s && q <= val; q++) {
+                for (int q = pre + 1; C <= s && q <= val; q++) {
                     C *= q;
                 }
                 pre = val;
