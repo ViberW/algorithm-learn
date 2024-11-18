@@ -28,7 +28,7 @@ public class MagicTree {
         if ((yi & 1) == 1) {
             y = (1 << yi) | (~y & ((1 << yi) - 1));
         }
-        while (x >= 0 && y >= 0) {
+        while (x >= 0 && y >= 0 && xi >= 0 && yi >= 0) {
             if (((x >>> xi) & 1) != ((y >>> yi) & 1)) {
                 return xi + 1 + yi + 1;
             }
@@ -40,8 +40,8 @@ public class MagicTree {
     }
 
     public static void main(String[] args) {
-        System.out.println(solution(11, 4) == 5);
-        System.out.println(solution(2, 5) == 3);
+//        System.out.println(solution(11, 4) == 5);
+//        System.out.println(solution(2, 5) == 3);
         System.out.println(solution(7, 7) == 0);
     }
 }

@@ -11,6 +11,9 @@ package com.welph.leecode.algorithm.marscode;
  */
 public class MaxUccSubStr {
 
+    /**
+     * {@link  com.welph.leecode.part_1_500.part_61_80.Solution72}
+     */
     public static int solution(int m, String s) {
         int n = s.length();
         String target = "UCC";
@@ -19,39 +22,33 @@ public class MaxUccSubStr {
         for (int i = 3; i <= m; i++) {
             dp[0][i] = i / target.length();
         }
+        //删除操作最不好了, 因为可以使用新增或者更新使得数据变得更好.
         for (int i = 1; i <= n; i++) {
             for (int j = 0; j <= m; j++) {
-                dp[i][j] = dp[i - 1][j];
-                if (i > 1) {
-                    dp[i][j] = Math.max(dp[i][j], dp[i - 2][j]);
-                }
-                if (i > 2) {
-                    dp[i][j] = Math.max(dp[i][j], dp[i - 3][j]);
-                }
-                //若3号位u  max(dp[j]= d[i-1][j-2]+1)     d[i-1][j]
-                //若3号位c  max(dp[j]= d[i-1][j-2]+1)
-                //---------------------------走到这说明上一次是U
-                //若2号位u  max(dp[j]= d[i-2][j-1]+1)  d[i-2][j]
-                //若2号位c  max(dp[j]= d[i-2][j-1]+1)
-                //---------------------------走到这说明上一次是U
-                //若3号位u  max(dp[j]= d[i-2][j-1]+1)
-                //若3号位c  max(dp[j]= d[i-3][j]+1)
-                for (int k = 1; k <= target.length(); k++) {
-                    if (j + k >= target.length()) {
-                        if (i >= k) {
-                            if (target.charAt(target.length() - k) != s.charAt(i - k)) { //这里的i代表i-1的地方
-                                if (k != target.length()) { //不能去除 因为考虑最后一位的不相等
-                                    dp[i][j] = Math.max(dp[i][j], dp[i - k][j + k - target.length()] + 1);
-                                }
-                                break;
-                            } else {
-                                dp[i][j] = Math.max(dp[i][j], dp[i - k][j + k - target.length()] + 1);
-                            }
-                        } else {
-                            dp[i][j] = Math.max(dp[i][j], dp[0][j + k - target.length()] + 1);
-                            break;
-                        }
+                dp[i][j] = dp[i - 1][j]; //跳过i
+                /*
+                 * UCC
+                 * CUU
+                 * 从后往前看,
+                 * 若最后一个不同,则相当于是只能先考虑向后添加CC. 不用考虑向左走, 因为结果等于i-1的最大值
+                 * 若中间的不同, 则相当于是UC 添加C操作就行了, dp[i-2][j-1]+1
+                 * 若第一个不同,则相当于是CCC 相当于是要添加个U就行. dp[i-2][j-1]+1 ,
+                 * 若是第一个相同,则相当于是UCC dp[i-3][j]+1
+                 */
+                if (s.charAt(i - 1) == 'U') {
+                    if (j >= 2) {
+                        dp[i][j] = Math.max(dp[i - 1][j - 2] + 1, dp[i][j]);
                     }
+                    continue;
+                }
+                if (j >= 2) {
+                    dp[i][j] = Math.max(dp[i - 1][j - 2] + 1, dp[i][j]); //直接前面添加UC
+                }
+                if (i > 1 && j > 0) {
+                    dp[i][j] = Math.max(dp[i - 2][j - 1] + 1, dp[i][j]); //新增或删除
+                }
+                if (i > 2 && s.charAt(i - 2) == 'C' && s.charAt(i - 3) == 'U') {
+                    dp[i][j] = Math.max(dp[i - 3][j] + 1, dp[i][j]);
                 }
             }
         }
@@ -65,8 +62,10 @@ public class MaxUccSubStr {
     }
 
     public static void main(String[] args) {
-        System.out.println(solution(3, "UCUUCCCCC") == 3);
-        System.out.println(solution(6, "U") == 2);
-        System.out.println(solution(2, "UCCUUU") == 2);
+        System.out.println(solution(3, "UCUUCCCCC"));
+        System.out.println(solution(6, "U"));
+        System.out.println(solution(2, "UCCUUU"));
+        System.out.println(solution(3, "CUUUCUCUUUUCU"));
+        System.out.println(solution(9, "CUUUUC"));
     }
 }

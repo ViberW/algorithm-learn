@@ -1,4 +1,4 @@
-package com.welph.leecode.algorithm.z7z8;
+package com.welph.leecode.algorithm.marscode;
 
 import java.util.*;
 
