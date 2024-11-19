@@ -29,7 +29,7 @@ public class NumMultipleLonger {
         }
         int l = 2;
         Map<Integer, Integer> factorCount = new HashMap<>();
-        int ret = 0;
+        int ret = 1;
         for (int r = 2; r <= n; r++) {
             for (Integer prime : primes[r]) {
                 factorCount.put(prime, factorCount.getOrDefault(prime, 0) + 1);
@@ -54,5 +54,6 @@ public class NumMultipleLonger {
         System.out.println(solution(10, 3) == 6);
         System.out.println(solution(20, 5) == 12);
         System.out.println(solution(100, 4) == 10);
+        System.out.println(solution(1, 7) == 1);
     }
 }

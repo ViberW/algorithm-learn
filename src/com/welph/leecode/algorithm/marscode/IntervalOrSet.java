@@ -1,5 +1,8 @@
 package com.welph.leecode.algorithm.marscode;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * 小R有一个长度为n的数组a,她定义每个子区间[1,r]的权值a[1]|a[1+1] | ... a[r],即该区间内所有元素的按位或运算结果。
  * <p>
@@ -16,8 +19,15 @@ public class IntervalOrSet {
      * 一共  n × (n + 1) / 2种
      */
     public static int solution(int[] a) {
-
-        return 0;
+        Set<Integer> set = new HashSet<>();
+        int[] dp = new int[a.length];
+        for (int i = 0; i < a.length; i++) {
+            set.add(dp[i] = a[i]);
+            for (int j = 0; j < i; j++) {
+                set.add(dp[j] = dp[j] | a[i]);
+            }
+        }
+        return set.size();
     }
 
     public static void main(String[] args) {
