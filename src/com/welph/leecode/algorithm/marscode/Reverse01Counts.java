@@ -12,8 +12,28 @@ package com.welph.leecode.algorithm.marscode;
 public class Reverse01Counts {
 
     public static int solution(String s) {
+        // 这道题考虑的画图, 假定选择的某处切分, 那原本的长01子串被分割到左右,
+        // 但是注意了, 如果下一次再进行翻转, 这个子串又有机会合并, 但不会超过原本.
 
-        return 0;
+        //所以最大值为每个起点的最值. 和左右两端(值不一样)时的长度
+        int result = 1;
+        int curr = 1;
+        int first = 0;
+        for (int i = 1; i < s.length(); i++) {
+            if (s.charAt(i) != s.charAt(i - 1)) {
+                curr++;
+                result = Math.max(result, curr);
+            } else {
+                if (first == 0) {
+                    first = curr;
+                }
+                curr = 1;
+            }
+        }
+        if (s.charAt(0) == s.charAt(s.length() - 1)) {
+            return result;
+        }
+        return result == s.length() ? result : Math.max(result, first + curr);
     }
 
     public static void main(String[] args) {
@@ -21,7 +41,7 @@ public class Reverse01Counts {
         System.out.println(solution("011010") == 4);
         System.out.println(solution("1010101") == 7);
         System.out.println(solution("11001100") == 2);
-        System.out.println(solution("111") == 1);
+        System.out.println(solution("111"));
     }
 
 }
