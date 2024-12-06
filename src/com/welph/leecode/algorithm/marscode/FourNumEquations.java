@@ -9,11 +9,24 @@ package com.welph.leecode.algorithm.marscode;
  */
 public class FourNumEquations {
 
+    //不考虑无限遍历的情况.
     public static int solution(int n, int[] a) {
         int mod = 1000000007;
         long result = 0;
-
-
+        // a_k ⊕ a_l 要获取a_l = (a_i + a_j) ⊕ a_k
+        for (int i = n - 4; i >= 0; i--) {
+            for (int j = n - 3; j > i; j--) {
+                int total = a[i] + a[j];
+                for (int k = n - 2; k > j; k--) {
+                    int expect = total ^ a[k];
+                    for (int l = n - 1; l > k; l--) {
+                        if (expect == a[l]) {
+                            result++;
+                        }
+                    }
+                }
+            }
+        }
         return (int) result;
     }
 
