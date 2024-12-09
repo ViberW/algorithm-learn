@@ -14,9 +14,23 @@ package com.welph.leecode.algorithm.marscode;
 public class MinBinaryToKArray {
 
     public static int solution(int n, int k, int[] a) {
-        // 找出每个数值的2的情况, 然后相当于是k大小的包裹, 最小背包问题
-
-        return 0;
+        // 找出每个数值的2的情况,
+        int[] counts = new int[n];
+        for (int i = 0; i < n; i++) {
+            counts[i] = Integer.numberOfTrailingZeros(a[i]);
+        }
+        //因为需要连续子数组, 至少有k 且最短的
+        int result = n + 1;
+        int current = 0;
+        for (int i = 0, l = 0; i < n; i++) {
+            current += counts[i];
+            while (l <= i && current >= k) {
+                result = Math.min(result, i - l + 1);
+                current -= counts[l];
+                l++;
+            }
+        }
+        return result > n ? -1 : result;
     }
 
     public static void main(String[] args) {
