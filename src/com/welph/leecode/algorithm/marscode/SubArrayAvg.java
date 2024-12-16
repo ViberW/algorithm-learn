@@ -9,8 +9,31 @@ package com.welph.leecode.algorithm.marscode;
 public class SubArrayAvg {
 
     public static int solution(int n, int u, int v, int[] arr) {
+        //简化, 最大公约数
+        int gcd = gcd(u, v);
+        u = u / gcd;
+        v = v / gcd;
 
-        return 0;
+        //所以区间长度位v的整数倍
+        int result = 0;
+        //前缀和
+        int[] sum = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            sum[i] = sum[i - 1] + arr[i - 1];
+            for (int j = i - v, delta = 1; j >= 0; j -= v, delta++) {
+                if (sum[i] - sum[j] == delta * u) {
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
+
+    public static int gcd(int a, int b) {
+        if (b == 0)
+            return a;
+        else
+            return gcd(b, a % b);
     }
 
     public static void main(String[] args) {
