@@ -9,16 +9,38 @@ package com.welph.leecode.algorithm.marscode;
  */
 public class BuildArraysToSum {
     public static int solution(int n, int m, int p) {
-        //升序, 中间存在平台的那种, 或者是先升后降低
-        //n(n+1)<=2*m    n^2+n-2m<=0 解中的最大值 (-b ±√(b^2 - 4ac)) / 2a
-        //算出最大值N
-
-        return 0;
+        // p处的最大值, 说明是个凸形状
+        //可以多次遍历
+        /*
+            1. 最初每个位置放入1
+            2. 第一次p处+1,  消耗剩余的1, 第二次p-1,p,p+1处+1. 则消耗剩余的3. ....不断拓展. 不满足就当前最大值
+         */
+        m -= n;//第一次所有值为1
+        int result = 1;
+        int l = p - 1;
+        int r = p;
+        while (m >= r - l) {
+            result++;
+            m -= r - l;
+            if (r - l == n) { //快速处理
+                result += m / n;
+                break;
+            } else {
+                if (l > 0) {
+                    l--;
+                }
+                if (r < n) {
+                    r++;
+                }
+            }
+        }
+        return result;
     }
 
     public static void main(String[] args) {
         System.out.println(solution(4, 5, 2) == 2);
         System.out.println(solution(3, 7, 1) == 3);
         System.out.println(solution(5, 9, 3) == 3);
+        System.out.println(solution(2, 10, 1));
     }
 }
