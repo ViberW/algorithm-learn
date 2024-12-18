@@ -9,10 +9,24 @@ package com.welph.leecode.algorithm.marscode;
  */
 public class MinKBySubArrays {
     public static int solution(int n, int x, int k, int[] a) {
-        // 第k小的数是x  感觉是个单调栈的问题. 碰到等于x的时候去判断处理
-
-
-        return 0;
+        int[][] dp = new int[n][2];//[0]代表包含小于x的情况.  [1]代表等于x的情况
+        int result = 0;
+        for (int i = 0; i < n; i++) {
+            int index = a[i] < x ? 0 : a[i] > x ? -1 : 1;
+            for (int j = i; j >= 0; j--) {
+                if (index >= 0) {
+                    dp[j][index]++;
+                }
+                if (dp[j][0] < k) {
+                    if (dp[j][0] + dp[j][1] >= k) {
+                        result++;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     public static void main(String[] args) {
