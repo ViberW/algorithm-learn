@@ -12,20 +12,29 @@ package com.welph.leecode.algorithm.marscode;
  */
 public class ArrayChangeSum {
     public static int solution(int n, int k, int[] a, int[] b) {
+        if (n < 3) {
+            return 0;
+        }
         int mod = 1000000007;
-        //总长度为n 假设二进制n=14: 1110 可以发现,抛开最高位的1.
-        // 从低位开始遍历, 碰到1.则最后一段不参与计算, 若是碰到0,则当次合并长度不参与计算
-        // 如果之前有奇数, 需要用一个额外字段进行标记
-        /*
-         * 例如n=14=>1110: (bit为当前位bit, addition为标记之前为奇数个, end: 最终参与计算的截止索引, delta: 合并跨度)
-         * 第一次bit=0 addition=0 end=n  delta=2 : end-2 => 12
-         * 第二次bit=1 addition=0 delta=4: 不变  addition = 1;
-         * 第三次bit=1 addition=1 delta=8: end-4=>8
-         * 那么最终值x就是前8个值参与的计算, 多次遍历
-         */
-
-
+        //总长度为n 其实可以发现, 前面的基本上都是2的次方累加. 那么截至的位置就是最靠近的2的n次方长度
+        //如8最靠近的为4. 10最靠近的8  14最靠近的8  17最靠近为14
+        int count = 1 << (31 - Integer.numberOfLeadingZeros(n - 1));
         long x = 0;
+        long sum = 0;
+        long l = 0;
+        long r = 2;
+        for (int i = 0; i < k; i++) {
+            long c = a[i];
+            while (l + c >= r && r <= count) {
+                sum = (sum + (r - l) * b[i]) % mod;
+                x = (x + sum) % mod;
+                c -= (r - l);
+                l = r;
+                r = 2 * r;
+            }
+            sum = (sum + c * b[i]) % mod;
+            l += c;
+        }
         return (int) x;
     }
 
