@@ -22,19 +22,18 @@ public class SelectBinaryAndList {
                     result &= a[i];
                 }
             }
-            if ((result & (result - 1)) == 0) {
-                return m;
+            if ((result & (val - 1)) == 0) {
+                break;
             }
             m--;
         }
-        return 0;
+        return m;
     }
 
     public static void main(String[] args) {
-//        System.out.println(solution(5, new int[]{1, 2, 3, 20, 28}) == 2);
-//        System.out.println(solution(4, new int[]{16, 8, 4, 2}) == 4);
-//        System.out.println(solution(6, new int[]{7, 14, 28, 56, 112, 224}) == 5);
-        System.out.println(solution(8, new int[]{14, 9, 11, 17, 1, 9, 17, 14}) == 1);
-        System.out.println(14 & 9);
+        System.out.println(solution(5, new int[]{1, 2, 3, 20, 28}) == 2);
+        System.out.println(solution(4, new int[]{16, 8, 4, 2}) == 4);
+        System.out.println(solution(6, new int[]{7, 14, 28, 56, 112, 224}) == 5);
+        System.out.println(solution(8, new int[]{14, 9, 11, 17, 1, 9, 17, 14}) == 3);
     }
 }
