@@ -14,10 +14,25 @@ package com.welph.leecode.algorithm.marscode;
  */
 public class ArraySimilarSubArrayMinCost {
 
+    //{@link Solution72}
     public static int solution(int[] goal, int[] treasures) {
         //动态规划.
-
-        return 0;
+        int[][] dp = new int[goal.length + 1][treasures.length + 1];
+        //[i][j] 代表goal在i treasures在j时的最少插入操作
+        // [i][j] = 相等: [i-1][j-1]   不相等 [i-1][j]+1 或者[i][j-1]的最小值.
+        for (int i = 1; i <= goal.length; i++) {
+            dp[i][0] = i;
+        }
+        for (int i = 1; i <= goal.length; i++) {
+            for (int j = 1; j <= treasures.length; j++) {
+                if (goal[i - 1] == treasures[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = Math.min(Math.min(dp[i - 1][j - 1], dp[i - 1][j]) + 1, dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[goal.length][treasures.length];
     }
 
     public static void main(String[] args) {
