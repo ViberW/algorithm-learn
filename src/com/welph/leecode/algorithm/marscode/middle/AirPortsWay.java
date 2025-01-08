@@ -1,4 +1,4 @@
-package com.welph.leecode.algorithm.marscode.hard;
+package com.welph.leecode.algorithm.marscode.middle;
 
 import java.util.*;
 

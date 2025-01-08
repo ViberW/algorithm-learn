@@ -1,4 +1,4 @@
-package com.welph.leecode.algorithm.marscode.hard;
+package com.welph.leecode.algorithm.marscode.middle;
 
 /**
  * 小包非常喜欢吃甜点,他收到了一次性送来的$NS个甜点,每个个甜点都有一个对应的喜爱值。
