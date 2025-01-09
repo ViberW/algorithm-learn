@@ -21,8 +21,19 @@ public class GoodsStorageSort {
 
     public static int solution(int n, int m, String s, String c) {
         //倒序遍历? 考虑当前的[商品]是否需要被客户拿到手.
-
-        return 0;
+        int[] counts = new int[26];
+        for (int i = 0; i < n; i++) {
+            counts[s.charAt(i) - 'a']++;
+        }
+        int result = 0;
+        for (int i = 0; i < m; i++) {
+            int val = c.charAt(i) - 'a';
+            if (counts[val] > 0) {
+                result++;
+                counts[val]--;
+            }
+        }
+        return result;
     }
 
     public static void main(String[] args) {
