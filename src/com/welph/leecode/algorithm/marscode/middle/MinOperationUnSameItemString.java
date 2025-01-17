@@ -10,9 +10,22 @@ package com.welph.leecode.algorithm.marscode.middle;
 public class MinOperationUnSameItemString {
 
     public static int solution(String S) {
-
-
-        return 0;
+        int[] counts = new int[26];
+        for (int i = 0; i < S.length(); i++) {
+            counts[S.charAt(i) - 'a']++;
+        }
+        int exist = 0;
+        int result = 0;
+        for (int i = 0; i < 26; i++) {
+            if ((counts[i] & 1) == 1) {
+                exist++;
+            }
+            result += counts[i] >> 1;
+        }
+        if (result + exist > 26) {
+            result += (result + exist - 26);
+        }
+        return result;
     }
 
     public static void main(String[] args) {
