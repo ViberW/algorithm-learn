@@ -1,4 +1,4 @@
-package com.welph.leecode.algorithm.marscode.hard;
+package com.welph.leecode.algorithm.marscode.middle;
 
 import java.util.*;
 
@@ -24,32 +24,31 @@ public class MinOilCost {
      * {@link com.welph.leecode.part_1_500.part_121_140.Solution134}
      * 类似, 但这道题有限制, 难一点
      */
-    public static String solution(int distance, int n, List<List<Integer>> gasStations) {
-        if (gasStations.isEmpty()) {
-            return "Impossible";
+    public static int solution(int distance, int n, List<List<Integer>> gas_stations) {
+        if (gas_stations.isEmpty()) {
+            return -1;
         }
-        if (gasStations.stream().anyMatch(v -> v.size() != 2)) {
-            return "Impossible";
-        }
-        // Please write your code here
-        Collections.sort(gasStations, Comparator.comparingInt(v -> -v.get(0)));
-        gasStations.add(Arrays.asList(-200, Integer.MAX_VALUE));
+        /*if (gas_stations.stream().anyMatch(v -> v.size() != 2)) {
+            return -1;
+        }*/
+        List<List<Integer>> new_gas_stations = new ArrayList<>(gas_stations);
+        new_gas_stations.sort(Comparator.comparingInt(v -> -v.get(0)));
+        new_gas_stations.add(Arrays.asList(-200, Integer.MAX_VALUE));
         int current = 200;
-        int limit = 400;
         int totalCost = 0;
         int currentPosition = distance;
         int totalFuelAdded = 200;
         PriorityQueue<Integer> queue = new PriorityQueue<>(
-                Comparator.comparingInt(value -> gasStations.get(value).get(1)));
-        int maxFill = 0;
-        for (int i = 0; i < gasStations.size(); i++) {
-            List<Integer> integers = gasStations.get(i);
+                Comparator.comparingInt(value -> new_gas_stations.get(value).get(1)));
+        int maxFill = -1;
+        for (int i = 0; i < new_gas_stations.size(); i++) {
+            List<Integer> integers = new_gas_stations.get(i);
             Integer position = integers.get(0);
             int cost = currentPosition - position;// 花费的汽油
             // 若是无法到达下一站, 就想办法加油
             while (current < cost) {
                 if (queue.isEmpty()) {
-                    return "Impossible";
+                    return -1;
                 }
                 Integer peek = queue.peek(); //找到最便宜的油
                 if (maxFill >= peek) { //如果已经过了 则找maxFill后面的油去加
@@ -57,14 +56,14 @@ public class MinOilCost {
                     continue;
                 }
                 int fuelNeeded = cost - current;
-                int cap = limit - (gasStations.get(peek).get(0) - distance + totalFuelAdded); //需要加油的量
+                int cap = 400 - (new_gas_stations.get(peek).get(0) - distance + totalFuelAdded); //需要加油的量
                 int c = Math.min(fuelNeeded, cap);
                 if (c == cap) { // 加够了
                     queue.poll();
                     maxFill = peek;
                 }
                 totalFuelAdded += c; // 总加油量
-                totalCost += c * gasStations.get(peek).get(1);
+                totalCost += c * new_gas_stations.get(peek).get(1);
                 current += c;
             }
 
@@ -73,7 +72,7 @@ public class MinOilCost {
             queue.add(i);
 
         }
-        return String.valueOf(totalCost).intern();
+        return totalCost;
     }
 
     public static void main(String[] args) {
@@ -119,10 +118,33 @@ public class MinOilCost {
         gasStations4.add(Arrays.asList(103, 0));
         gasStations4.add(Arrays.asList(1, 1));
 
-        System.out.println(solution(500, 4, gasStations1) == "4300");
-        System.out.println(solution(500, 7, gasStations2) == "410700");
-        System.out.println(solution(500, 3, gasStations3) == "Impossible");
-        System.out.println(solution(100, 20, gasStations4) == "0");
-        System.out.println(solution(100, 0, new ArrayList<>()) == "Impossible");
+        System.out.println(solution(500, 4, gasStations1) == 4300);
+        System.out.println(solution(500, 7, gasStations2) == 410700);
+        System.out.println(solution(500, 3, gasStations3) == -1);
+        System.out.println(solution(100, 20, gasStations4) == 0);
+        System.out.println(solution(100, 0, new ArrayList<>()) == -1);
+
+
+        List<List<Integer>> gasStations5 = new ArrayList<>();
+        gasStations4.add(Arrays.asList(100, 1));
+        gasStations4.add(Arrays.asList(200, 30));
+        gasStations4.add(Arrays.asList(400, 40));
+        gasStations4.add(Arrays.asList(300, 20));
+        System.out.println(solution(500, 4, gasStations5));
+
+        System.out.println(solution(1000, 3, change(new int[][]{{300, 25}, {600, 35}, {900, 5}})));
+        System.out.println(solution(200, 2, change(new int[][]{{100, 50}, {150, 45}})));
+    }
+
+    private static List<List<Integer>> change(int[][] arr) {
+        List<List<Integer>> gasStation = new ArrayList<>();
+        for (int i = 0; i < arr.length; i++) {
+            List<Integer> s = new ArrayList<>();
+            for (int v : arr[i]) {
+                s.add(v);
+            }
+            gasStation.add(s);
+        }
+        return gasStation;
     }
 }
