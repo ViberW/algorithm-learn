@@ -48,19 +48,55 @@ public class Solution676 {
 
 
     static class MagicDictionary {
+        TrieNode root;
 
         public MagicDictionary() {
-
+            root = new TrieNode();
         }
 
         public void buildDict(String[] dictionary) {
-
+            for (String dic : dictionary) {
+                TrieNode curr = root;
+                for (int i = 0; i < dic.length(); i++) {
+                    int index = dic.charAt(i) - 'a';
+                    if (curr.children[index] == null) {
+                        curr.children[index] = new TrieNode();
+                    }
+                    curr = curr.children[index];
+                }
+                curr.isEndingChar = true;
+            }
         }
 
         public boolean search(String searchWord) {
+            return search(searchWord, root, 0, false);
+        }
 
-
+        public boolean search(String searchWord, TrieNode root, int i, boolean vague) {
+            if (i == searchWord.length()) {
+                return root.isEndingChar && vague;
+            }
+            int index = searchWord.charAt(i) - 'a';
+            if (root.children[index] != null) {
+                if (search(searchWord, root.children[index], i + 1, vague)) {
+                    return true;
+                }
+            }
+            if (!vague) { //未修改过
+                for (int j = 0; j < 26; j++) {
+                    if (j != index && root.children[j] != null) { //进行模糊操作
+                        if (search(searchWord, root.children[j], i + 1, true)) {
+                            return true;
+                        }
+                    }
+                }
+            }
             return false;
+        }
+
+        public static class TrieNode {
+            public TrieNode[] children = new TrieNode[26];
+            public boolean isEndingChar = false;
         }
     }
 }
